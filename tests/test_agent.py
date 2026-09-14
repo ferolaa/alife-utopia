@@ -30,12 +30,24 @@ def test_sense_has_one_value_per_input():
 
 
 def test_sense_values_stay_in_range():
+    from brain import SENSE_INDEX
     world, agent, _ = make(n_food=50)
-    food_dx, food_dy, closeness, energy, crowding = agent.sense(world, DEFAULT)
-    assert -1 <= food_dx <= 1 and -1 <= food_dy <= 1
-    assert 0 <= closeness <= 1
-    assert 0 <= energy <= 1
-    assert 0 <= crowding <= 1
+    senses = agent.sense(world, DEFAULT)
+    # Every input must arrive on the scale the network expects. A sense that drifts
+    # outside this range would quietly dominate the first layer.
+    for value in senses:
+        assert -1.0 <= value <= 1.0
+    for name in ("food_closeness", "energy", "age", "crowding", "nest_closeness", "pup_need"):
+        assert 0.0 <= senses[SENSE_INDEX[name]] <= 1.0
+
+
+def test_senses_are_zero_for_disabled_mechanisms():
+    from brain import SENSE_INDEX
+    world, agent, _ = make()
+    senses = agent.sense(world, DEFAULT)
+    # No nests exist and no pups exist, so those senses must report nothing.
+    for name in ("nest_dx", "nest_dy", "nest_closeness", "pup_dx", "pup_dy", "pup_need"):
+        assert senses[SENSE_INDEX[name]] == 0.0
 
 
 def test_living_costs_energy():

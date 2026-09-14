@@ -11,13 +11,16 @@ from __future__ import annotations
 
 import random
 
-from brain import MOVES, Brain
+from brain import MOVES, Brain, make_senses
 
 
 class Agent:
     """One creature."""
 
-    __slots__ = ("x", "y", "energy", "brain", "age", "alive", "children")
+    __slots__ = (
+        "x", "y", "energy", "brain", "age", "alive", "children",
+        "dependents", "dependent_until", "neglect_ticks", "nest",
+    )
 
     def __init__(self, x: int, y: int, energy: float, brain: Brain):
         self.x = x
@@ -28,19 +31,88 @@ class Agent:
         self.alive = True
         self.children = 0
 
+        # Young this agent is still responsible for. Stays empty unless parental care is
+        # switched on for the condition being run.
+        self.dependents: list["Agent"] = []
+
+        # Set on a newborn when parental care is on. Until this age it cannot act, and it
+        # dies if left unattended for too long.
+        self.dependent_until: int = 0
+        self.neglect_ticks: int = 0
+
+        # The nest square this agent is occupying, if any. Released when it grows up.
+        self.nest: tuple[int, int] | None = None
+
+    @property
+    def is_dependent(self) -> bool:
+        return self.age < self.dependent_until
+
     # ------------------------------------------------------------------- sensing
 
-    def sense(self, world, cfg) -> tuple[float, float, float, float, float]:
-        """Collect the five inputs the brain expects, in the order brain.SENSES lists."""
+    def sense(self, world, cfg) -> tuple[float, ...]:
+        """Collect every input the brain expects, in the order brain.SENSES lists.
+
+        Senses belonging to a mechanism that is switched off come back as zero. An agent in
+        a world with no nests simply receives no nest signal, which needs no special case
+        anywhere, because the world has no nests to report.
+        """
         food_dx, food_dy, food_closeness = world.nearest_food_direction(
             self.x, self.y, cfg.vision
         )
-        energy_level = min(1.0, self.energy / cfg.energy_max)
+        nest_dx, nest_dy, nest_closeness = world.nearest_free_nest_direction(
+            self.x, self.y, cfg.vision
+        )
         neighbours = world.count_neighbours(
             self.x, self.y, cfg.crowding_radius, exclude=self
         )
-        crowding = min(1.0, neighbours / cfg.crowding_scale)
-        return (food_dx, food_dy, food_closeness, energy_level, crowding)
+        pup_dx, pup_dy, pup_need = self._sense_pups(world, cfg)
+
+        return make_senses(
+            food_dx=food_dx,
+            food_dy=food_dy,
+            food_closeness=food_closeness,
+            energy=min(1.0, self.energy / cfg.energy_max),
+            age=min(1.0, self.age / cfg.max_age) if cfg.max_age else 0.0,
+            crowding=min(1.0, neighbours / cfg.crowding_scale),
+            nest_dx=nest_dx,
+            nest_dy=nest_dy,
+            nest_closeness=nest_closeness,
+            pup_dx=pup_dx,
+            pup_dy=pup_dy,
+            pup_need=pup_need,
+        )
+
+    def _sense_pups(self, world, cfg) -> tuple[float, float, float]:
+        """Where this agent's neediest dependent pup is, and how badly it needs attention.
+
+        Only the most neglected pup is reported rather than all of them. A single clear
+        signal is something a small network can act on. A list of pups is not.
+
+        Direction is scaled by vision, the same as the food and nest senses, so every
+        directional input arrives on the same scale. pup_need rises from zero towards one
+        as a pup approaches the point where neglect kills it, which is what gives evolution
+        something to respond to.
+        """
+        if not self.dependents:
+            return (0.0, 0.0, 0.0)
+
+        neediest = None
+        worst = -1
+        for pup in self.dependents:
+            if pup.alive and pup.neglect_ticks > worst:
+                worst = pup.neglect_ticks
+                neediest = pup
+        if neediest is None:
+            return (0.0, 0.0, 0.0)
+
+        dx, dy = world.offset(self.x, self.y, neediest.x, neediest.y)
+        scale = max(cfg.vision, 1)
+        need = min(1.0, worst / max(cfg.neglect_tolerance, 1))
+        return (
+            max(-1.0, min(1.0, dx / scale)),
+            max(-1.0, min(1.0, dy / scale)),
+            max(need, 0.05),   # a floor, so "I have a pup" is distinguishable from "none"
+        )
 
     # -------------------------------------------------------------------- acting
 

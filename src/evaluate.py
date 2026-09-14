@@ -9,15 +9,15 @@ from __future__ import annotations
 
 import random
 
-from brain import Brain
+from brain import Brain, make_senses
 
 # Each case gives the brain a clear situation: food is visible in one direction, the agent
 # is healthy, and nobody else is nearby. A food seeking brain should move that way.
 _FOOD_DIRECTION_CASES = {
-    "east": (1.0, 0.0, 0.9, 0.5, 0.0),
-    "west": (-1.0, 0.0, 0.9, 0.5, 0.0),
-    "north": (0.0, -1.0, 0.9, 0.5, 0.0),
-    "south": (0.0, 1.0, 0.9, 0.5, 0.0),
+    "east": make_senses(food_dx=1.0, food_closeness=0.9, energy=0.5),
+    "west": make_senses(food_dx=-1.0, food_closeness=0.9, energy=0.5),
+    "north": make_senses(food_dy=-1.0, food_closeness=0.9, energy=0.5),
+    "south": make_senses(food_dy=1.0, food_closeness=0.9, energy=0.5),
 }
 
 _MOVES = ("north", "south", "east", "west")
@@ -57,8 +57,8 @@ def crowding_response(brain: Brain, trials: int = 400, seed: int = 0) -> dict:
     results = {}
     for label, crowding in (("alone", 0.0), ("crowded", 1.0)):
         counts = {"reproduce": 0, "move": 0, "stay": 0}
+        senses = make_senses(energy=0.9, crowding=crowding)
         for _ in range(trials):
-            senses = (0.0, 0.0, 0.0, 0.9, crowding)
             action = brain.decide(senses, rng)
             if action == "reproduce":
                 counts["reproduce"] += 1

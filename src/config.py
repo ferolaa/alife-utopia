@@ -48,6 +48,31 @@ class SimConfig:
     crowding_cost_enabled: bool = False
     crowding_energy_cost: float = 0.12  # per neighbour, per tick
 
+    # ---------------------------- ageing, the first Calhoun mechanism -------------
+    # Without ageing a population can never decline the way Calhoun's did, because nothing
+    # ever dies of old age. Maturity matters too: a newborn that can breed immediately
+    # makes the population dynamics far too fast.
+    ageing_enabled: bool = False
+    max_age: int = 900                 # an agent dies once it passes this age
+    max_age_spread: float = 0.2        # lifespans vary by this fraction, so deaths spread out
+    maturity_age: int = 120            # cannot reproduce before this age
+    fertility_end_age: int = 700       # cannot reproduce after this age
+
+    # ---------------------------- nest sites, the second mechanism ----------------
+    # A fixed number of squares where young can be raised. Nests are what agents compete
+    # over once food is unlimited.
+    nests_enabled: bool = False
+    n_nests: int = 60
+
+    # ---------------------------- parental care, the third mechanism --------------
+    # Newborns are helpless. They cannot act, and they die if no parent stays close. This
+    # is the mechanism whose breakdown drove the real collapse, through neglected litters
+    # that never grew into functioning adults.
+    parental_care_enabled: bool = False
+    dependency_ticks: int = 60         # how long a pup stays helpless
+    care_radius: int = 3               # how close a parent counts as present
+    neglect_tolerance: int = 25        # ticks a pup survives unattended before dying
+
     # -------------------------------------------------------------- the evolution
     mutation_std: float = 0.12         # standard deviation of the mutation noise
     action_temperature: float = 1.0    # softmax temperature when sampling an action

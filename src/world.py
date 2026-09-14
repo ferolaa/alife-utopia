@@ -38,6 +38,13 @@ class World:
         # constant time lookups for "is there food on this square".
         self.food: set[tuple[int, int]] = set()
 
+        # Nest sites. A fixed set of squares where young can be raised. Empty unless the
+        # condition being run enables them. When they exist they are the scarce resource
+        # that agents compete over, which is closer to the original pen than food scarcity
+        # is, since food there was never the constraint.
+        self.nests: set[tuple[int, int]] = set()
+        self.occupied_nests: set[tuple[int, int]] = set()
+
         # The simulation puts agents in here. The world only needs their positions.
         self.agents: list = []
 
@@ -63,6 +70,26 @@ class World:
         if self.wrap_edges:
             return (x % self.width, y % self.height)
         return (max(0, min(self.width - 1, x)), max(0, min(self.height - 1, y)))
+
+    def offset(self, from_x: int, from_y: int, to_x: int, to_y: int) -> tuple[int, int]:
+        """The shortest step difference from one square to another.
+
+        On a wrapped grid the direct difference is not always the shortest way. Going three
+        steps left can be shorter than going thirty seven steps right. This returns
+        whichever is shorter on each axis, which is what an agent should be sensing.
+        """
+        dx = to_x - from_x
+        dy = to_y - from_y
+        if self.wrap_edges:
+            if dx > self.width // 2:
+                dx -= self.width
+            elif dx < -(self.width // 2):
+                dx += self.width
+            if dy > self.height // 2:
+                dy -= self.height
+            elif dy < -(self.height // 2):
+                dy += self.height
+        return dx, dy
 
     # ---------------------------------------------------------------------- food
 
@@ -146,6 +173,53 @@ class World:
             return (0.0, 0.0, 0.0)
         dx, dy = best
         closeness = 1.0 - (best_dist / (2 * vision))  # one means adjacent, zero means far
+        return (dx / vision, dy / vision, closeness)
+
+    def scatter_nests(self, n: int) -> None:
+        """Place n nest sites on random squares. Called once when the world is built."""
+        attempts = 0
+        while len(self.nests) < n and attempts < n * 20:
+            attempts += 1
+            self.nests.add(self.random_square())
+
+    def is_free_nest(self, x: int, y: int) -> bool:
+        square = (x, y)
+        return square in self.nests and square not in self.occupied_nests
+
+    def claim_nest(self, x: int, y: int) -> bool:
+        """Take a nest square. Returns False if it is not a nest, or already taken."""
+        if not self.is_free_nest(x, y):
+            return False
+        self.occupied_nests.add((x, y))
+        return True
+
+    def release_nest(self, x: int, y: int) -> None:
+        self.occupied_nests.discard((x, y))
+
+    def nearest_free_nest_direction(
+        self, x: int, y: int, vision: int
+    ) -> tuple[float, float, float]:
+        """Where the closest unoccupied nest is, in the same form as the food sense.
+
+        Returns zeros when this condition has no nests at all, so an agent in a world
+        without nests simply receives no nest signal.
+        """
+        if not self.nests:
+            return (0.0, 0.0, 0.0)
+        best = None
+        best_dist = None
+        for ox in range(-vision, vision + 1):
+            for oy in range(-vision, vision + 1):
+                square = self.normalise(x + ox, y + oy)
+                if square in self.nests and square not in self.occupied_nests:
+                    dist = abs(ox) + abs(oy)
+                    if best_dist is None or dist < best_dist:
+                        best_dist = dist
+                        best = (ox, oy)
+        if best is None:
+            return (0.0, 0.0, 0.0)
+        dx, dy = best
+        closeness = 1.0 - (best_dist / (2 * vision))
         return (dx / vision, dy / vision, closeness)
 
     def count_neighbours(self, x: int, y: int, radius: int, exclude=None) -> int:

@@ -8,9 +8,12 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from brain import ACTIONS, SENSES, Brain  # noqa: E402
+from brain import ACTIONS, SENSES, Brain, make_senses  # noqa: E402
 
-SOME_SENSES = (0.5, -0.2, 0.8, 0.6, 0.1)
+# Built by name rather than as a bare tuple. A positional tuple breaks silently whenever
+# the sense list changes, which is exactly what happened when the brain gained inputs for
+# nests and pups.
+SOME_SENSES = make_senses(food_dx=0.5, food_dy=-0.2, food_closeness=0.8, energy=0.6, crowding=0.1)
 
 
 def test_random_brain_has_the_expected_number_of_weights():
@@ -20,6 +23,19 @@ def test_random_brain_has_the_expected_number_of_weights():
         Brain.N_INPUTS * Brain.N_HIDDEN + Brain.N_HIDDEN
         + Brain.N_HIDDEN * Brain.N_OUTPUTS + Brain.N_OUTPUTS
     )
+
+
+def test_make_senses_rejects_unknown_names():
+    try:
+        make_senses(not_a_sense=1.0)
+    except ValueError:
+        return
+    raise AssertionError("expected a ValueError for an unknown sense name")
+
+
+def test_make_senses_matches_the_sense_list():
+    assert len(make_senses()) == len(SENSES)
+    assert all(v == 0.0 for v in make_senses())
 
 
 def test_wrong_weight_count_is_rejected():

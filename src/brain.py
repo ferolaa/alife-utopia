@@ -1,14 +1,13 @@
 """The small neural network that decides what a creature does.
 
-A few numbers describing what the creature senses go in. A choice of action comes out.
+A vector describing what the creature senses goes in. A choice of action comes out.
 
-The network is tiny on purpose. Its weights are not trained with backpropagation. They are
-evolved instead. A creature that lives long enough to reproduce passes a mutated copy of
-its weights to its child, and selection does the rest. Small networks evolve much faster
-than large ones, because random mutation is a far weaker search method than gradient
-descent.
+The weights are not trained with backpropagation. They are evolved. A creature that lives
+long enough to reproduce passes a mutated copy of its weights to its child, and selection
+does the rest. Small networks evolve much faster than large ones, because random mutation
+is a far weaker search method than gradient descent.
 
-All the weights live in one flat vector. That is why mutation is a single line. We add
+All the weights live in one flat vector, which is why mutation is a single line. We add
 gaussian noise to the whole vector at once.
 """
 
@@ -18,15 +17,31 @@ import random
 
 import numpy as np
 
-# The inputs to the network. Listing them here makes it obvious what the network has to
-# work with.
+# The inputs to the network, in order.
+#
+# The list is long because the creature has three separate concerns to balance: feeding
+# itself, securing a nest, and caring for its young. Each concern needs its own inputs,
+# and the interesting behaviour is in how evolution trades them off against each other.
 SENSES = (
-    "food_dx",         # is the nearest visible food left or right     (minus one to one)
-    "food_dy",         # is it above or below                          (minus one to one)
-    "food_closeness",  # how near it is, zero means none in sight      (zero to one)
-    "energy",          # the creature's own energy, scaled             (zero to one)
-    "crowding",        # how many neighbours are nearby, scaled        (zero to one)
+    # finding food
+    "food_dx",          # direction to nearest visible food, left or right  (-1 to 1)
+    "food_dy",          # direction to nearest visible food, up or down     (-1 to 1)
+    "food_closeness",   # how near it is, zero means none in sight          (0 to 1)
+    # the creature's own state
+    "energy",           # own energy, scaled                                (0 to 1)
+    "age",              # own age as a fraction of maximum lifespan         (0 to 1)
+    "crowding",         # neighbours nearby, scaled                         (0 to 1)
+    # finding somewhere to raise young
+    "nest_dx",          # direction to nearest free nest                    (-1 to 1)
+    "nest_dy",
+    "nest_closeness",   # zero means no free nest in sight                  (0 to 1)
+    # looking after young already born
+    "pup_dx",           # direction to own nearest dependent pup            (-1 to 1)
+    "pup_dy",
+    "pup_need",         # zero means no dependent pup, rises as it is left alone (0 to 1)
 )
+
+SENSE_INDEX = {name: i for i, name in enumerate(SENSES)}
 
 # The outputs of the network. The order matters, because the output scores are read in
 # this order.
@@ -42,11 +57,24 @@ MOVES = {
 }
 
 
+def make_senses(**values) -> tuple[float, ...]:
+    """Build a sense vector by name, with anything unspecified left at zero.
+
+    Tests and behaviour probes use this instead of writing tuples out by hand. Positional
+    tuples silently break whenever the sense list changes, and this list has changed once
+    already.
+    """
+    unknown = set(values) - set(SENSES)
+    if unknown:
+        raise ValueError(f"unknown senses: {sorted(unknown)}")
+    return tuple(float(values.get(name, 0.0)) for name in SENSES)
+
+
 class Brain:
     """A feed forward network with one hidden layer. It maps senses to an action."""
 
     N_INPUTS = len(SENSES)
-    N_HIDDEN = 8
+    N_HIDDEN = 12
     N_OUTPUTS = len(ACTIONS)
 
     # How many weights make up one brain. Two weight matrices plus two bias vectors.
@@ -57,22 +85,20 @@ class Brain:
 
     def __init__(self, weights: np.ndarray):
         if weights.shape != (self.N_WEIGHTS,):
-            raise ValueError(
-                f"expected {self.N_WEIGHTS} weights, got {weights.shape}"
-            )
+            raise ValueError(f"expected {self.N_WEIGHTS} weights, got {weights.shape}")
         self.weights = weights.astype(np.float64)
 
     # ------------------------------------------------------------------ creation
 
     @classmethod
     def random(cls, rng: random.Random | None = None) -> "Brain":
-        """A new brain with random weights. This is what the first generation starts with."""
+        """A new brain with random weights. What the first generation starts with."""
         seed = None if rng is None else rng.randrange(2**32)
         np_rng = np.random.default_rng(seed)
         return cls(np_rng.normal(0.0, 1.0, size=cls.N_WEIGHTS))
 
     def mutated_copy(self, mutation_std: float, rng: random.Random | None = None) -> "Brain":
-        """A child's brain. It is this brain plus gaussian noise.
+        """A child's brain. This brain plus gaussian noise.
 
         mutation_std is the standard deviation of that noise. Too small and the population
         never explores anything new. Too large and good solutions are destroyed as fast as
@@ -100,7 +126,7 @@ class Brain:
         """Run the senses through the network. Returns one score per action."""
         x = np.asarray(senses, dtype=np.float64)
         W1, b1, W2, b2 = self._unpack()
-        hidden = np.tanh(x @ W1 + b1)      # tanh keeps activations between minus one and one
+        hidden = np.tanh(x @ W1 + b1)     # tanh keeps activations between minus one and one
         return hidden @ W2 + b2
 
     def decide(self, senses, rng: random.Random | None = None, temperature: float = 1.0) -> str:
@@ -112,11 +138,11 @@ class Brain:
         choice it would repeat the same move forever and only ever sweep one row of the
         grid. Sampling makes it wander, and wandering is how it finds food.
 
-        temperature controls how random the choice is. Low values approach always picking
+        temperature controls how random the choice is. Low values approach always taking
         the best action. High values approach picking uniformly at random.
         """
         scores = self.action_scores(senses) / max(temperature, 1e-6)
-        scores = scores - scores.max()              # subtract the max to avoid overflow in exp
+        scores = scores - scores.max()             # subtract the max to avoid overflow in exp
         probs = np.exp(scores)
         probs /= probs.sum()
         r = (rng or random).random()
