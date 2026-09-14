@@ -14,15 +14,39 @@ import random
 from brain import MOVES, Brain, make_senses
 
 
+def draw_lifespan(cfg, rng: random.Random) -> float:
+    """How long this particular creature gets to live.
+
+    Lifespans vary between individuals rather than every creature dying at exactly the same
+    age. Without that spread, a generation born together would also die together, producing
+    artificial waves of death that have nothing to do with anything we are studying.
+
+    When ageing is switched off the lifespan is infinite, which is how the ablation runs
+    remove this mechanism without any special cases elsewhere.
+    """
+    if not cfg.ageing_enabled:
+        return float("inf")
+    spread = cfg.max_age_spread
+    return cfg.max_age * rng.uniform(1.0 - spread, 1.0 + spread)
+
+
 class Agent:
     """One creature."""
 
     __slots__ = (
         "x", "y", "energy", "brain", "age", "alive", "children",
         "dependents", "dependent_until", "neglect_ticks", "nest", "neighbours",
+        "lifespan",
     )
 
-    def __init__(self, x: int, y: int, energy: float, brain: Brain):
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        energy: float,
+        brain: Brain,
+        lifespan: float = float("inf"),
+    ):
         self.x = x
         self.y = y
         self.energy = energy
@@ -30,6 +54,9 @@ class Agent:
         self.age = 0
         self.alive = True
         self.children = 0
+
+        # The age this creature dies at. Infinite when ageing is switched off.
+        self.lifespan = lifespan
 
         # Young this agent is still responsible for. Stays empty unless parental care is
         # switched on for the condition being run.
@@ -162,8 +189,8 @@ class Agent:
         if world.take_food(self.x, self.y):
             self.energy = min(cfg.energy_max, self.energy + cfg.energy_from_food)
 
-        # 5. No energy left means death.
-        if self.energy <= 0:
+        # 5. Death, from either starvation or old age.
+        if self.energy <= 0 or self.age >= self.lifespan:
             self.alive = False
 
         return child
@@ -188,6 +215,13 @@ class Agent:
         if self.energy < cfg.reproduce_threshold:
             return None
 
+        # Too young or too old to breed. Maturity matters because a newborn that can breed
+        # at once makes population growth far too fast to resemble anything real, and the
+        # upper limit matters because a population where nobody ages out of breeding can
+        # always recover, which would rule out the collapse before we start looking for it.
+        if cfg.ageing_enabled and not (cfg.maturity_age <= self.age <= cfg.fertility_end_age):
+            return None
+
         self.energy -= cfg.reproduce_cost
         self.children += 1
 
@@ -198,4 +232,5 @@ class Agent:
             y=cy,
             energy=cfg.reproduce_cost,     # the energy the parent spent goes to the child
             brain=self.brain.mutated_copy(cfg.mutation_std, rng),
+            lifespan=draw_lifespan(cfg, rng),
         )

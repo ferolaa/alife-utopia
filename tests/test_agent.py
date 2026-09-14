@@ -159,6 +159,66 @@ def test_refunding_a_birth_restores_the_parent():
     assert agent.children == 0             # and it does not count as a child
 
 
+def test_lifespan_is_infinite_when_ageing_is_off():
+    from agent import draw_lifespan
+    assert draw_lifespan(DEFAULT, random.Random(0)) == float("inf")
+
+
+def test_lifespans_vary_between_individuals():
+    from agent import draw_lifespan
+    cfg = DEFAULT.variant("ageing", ageing_enabled=True)
+    rng = random.Random(0)
+    spans = [draw_lifespan(cfg, rng) for _ in range(200)]
+    assert len(set(spans)) > 100                      # they are not all identical
+    low = cfg.max_age * (1 - cfg.max_age_spread)
+    high = cfg.max_age * (1 + cfg.max_age_spread)
+    assert all(low <= s <= high for s in spans)
+
+
+def test_reaching_your_lifespan_kills_you():
+    cfg = DEFAULT.variant("ageing", ageing_enabled=True)
+    world, agent, rng = make(cfg)
+    agent.lifespan = 5
+    agent.energy = 1000                               # plenty of energy, so only age can kill
+    for _ in range(5):
+        agent.act(world, cfg, rng)
+    assert agent.alive is False
+
+
+def test_the_young_cannot_breed():
+    cfg = DEFAULT.variant("ageing", ageing_enabled=True)
+    world, agent, rng = make(cfg)
+    agent.energy = cfg.reproduce_threshold + 10
+    agent.age = cfg.maturity_age - 1
+    assert agent._try_reproduce(world, cfg, rng) is None
+
+
+def test_the_old_cannot_breed():
+    cfg = DEFAULT.variant("ageing", ageing_enabled=True)
+    world, agent, rng = make(cfg)
+    agent.energy = cfg.reproduce_threshold + 10
+    agent.age = cfg.fertility_end_age + 1
+    assert agent._try_reproduce(world, cfg, rng) is None
+
+
+def test_breeding_works_inside_the_fertile_window():
+    cfg = DEFAULT.variant("ageing", ageing_enabled=True)
+    world, agent, rng = make(cfg)
+    agent.energy = cfg.reproduce_threshold + 10
+    agent.age = (cfg.maturity_age + cfg.fertility_end_age) // 2
+    child = agent._try_reproduce(world, cfg, rng)
+    assert child is not None
+    assert child.lifespan != float("inf")             # the child ages too
+
+
+def test_age_limits_are_ignored_when_ageing_is_off():
+    cfg = DEFAULT                                      # ageing disabled
+    world, agent, rng = make(cfg)
+    agent.energy = cfg.reproduce_threshold + 10
+    agent.age = 0                                      # far below maturity
+    assert agent._try_reproduce(world, cfg, rng) is not None
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

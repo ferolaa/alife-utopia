@@ -12,6 +12,24 @@ condition in the ablation study.
 from __future__ import annotations
 
 import random
+from functools import lru_cache
+
+
+@lru_cache(maxsize=32)
+def _offsets_nearest_first(radius: int) -> tuple[tuple[int, int], ...]:
+    """Every offset within a radius, ordered by how many steps away it is.
+
+    Scanning in this order means the first food found is the nearest food, so the search
+    can stop the moment it finds anything instead of examining the whole patch. With food
+    reasonably common that turns a scan of eighty one squares into a handful.
+    """
+    offsets = [
+        (ox, oy)
+        for ox in range(-radius, radius + 1)
+        for oy in range(-radius, radius + 1)
+    ]
+    offsets.sort(key=lambda o: (abs(o[0]) + abs(o[1])))
+    return tuple(offsets)
 
 
 class World:
@@ -159,21 +177,26 @@ class World:
         more plausible, and it keeps the cost per agent per tick constant instead of
         growing with the size of the world.
         """
-        best = None
-        best_dist = None
-        for ox in range(-vision, vision + 1):
-            for oy in range(-vision, vision + 1):
-                square = self.normalise(x + ox, y + oy)
-                if square in self.food:
-                    dist = abs(ox) + abs(oy)          # manhattan distance, in grid steps
-                    if best_dist is None or dist < best_dist:
-                        best_dist = dist
-                        best = (ox, oy)
-        if best is None:
-            return (0.0, 0.0, 0.0)
-        dx, dy = best
-        closeness = 1.0 - (best_dist / (2 * vision))  # one means adjacent, zero means far
-        return (dx / vision, dy / vision, closeness)
+        food = self.food
+        width, height, wrap = self.width, self.height, self.wrap_edges
+
+        for ox, oy in _offsets_nearest_first(vision):
+            # The wrapping is written out here rather than calling normalise. This loop runs
+            # millions of times per run, and at that volume the function call itself was a
+            # measurable share of the total runtime.
+            if wrap:
+                square = ((x + ox) % width, (y + oy) % height)
+            else:
+                sx = x + ox
+                sy = y + oy
+                if not (0 <= sx < width and 0 <= sy < height):
+                    continue
+                square = (sx, sy)
+            if square in food:
+                dist = abs(ox) + abs(oy)                  # manhattan distance, in steps
+                closeness = 1.0 - (dist / (2 * vision))   # one means adjacent, zero far
+                return (ox / vision, oy / vision, closeness)
+        return (0.0, 0.0, 0.0)
 
     def scatter_nests(self, n: int) -> None:
         """Place n nest sites on random squares. Called once when the world is built."""
@@ -206,21 +229,23 @@ class World:
         """
         if not self.nests:
             return (0.0, 0.0, 0.0)
-        best = None
-        best_dist = None
-        for ox in range(-vision, vision + 1):
-            for oy in range(-vision, vision + 1):
-                square = self.normalise(x + ox, y + oy)
-                if square in self.nests and square not in self.occupied_nests:
-                    dist = abs(ox) + abs(oy)
-                    if best_dist is None or dist < best_dist:
-                        best_dist = dist
-                        best = (ox, oy)
-        if best is None:
-            return (0.0, 0.0, 0.0)
-        dx, dy = best
-        closeness = 1.0 - (best_dist / (2 * vision))
-        return (dx / vision, dy / vision, closeness)
+        nests, taken = self.nests, self.occupied_nests
+        width, height, wrap = self.width, self.height, self.wrap_edges
+
+        for ox, oy in _offsets_nearest_first(vision):
+            if wrap:
+                square = ((x + ox) % width, (y + oy) % height)
+            else:
+                sx = x + ox
+                sy = y + oy
+                if not (0 <= sx < width and 0 <= sy < height):
+                    continue
+                square = (sx, sy)
+            if square in nests and square not in taken:
+                dist = abs(ox) + abs(oy)
+                closeness = 1.0 - (dist / (2 * vision))
+                return (ox / vision, oy / vision, closeness)
+        return (0.0, 0.0, 0.0)
 
     def count_neighbours(self, x: int, y: int, radius: int, exclude=None) -> int:
         """Count the other agents within radius squares of a position.
@@ -229,12 +254,25 @@ class World:
         is defined once here and reused everywhere rather than recomputed ad hoc.
         """
         total = 0
-        for ox in range(-radius, radius + 1):
-            for oy in range(-radius, radius + 1):
-                square = self.normalise(x + ox, y + oy)
-                for other in self._occupancy.get(square, ()):
-                    if other is not exclude:
-                        total += 1
+        occupancy = self._occupancy
+        if not occupancy:
+            return 0
+        width, height, wrap = self.width, self.height, self.wrap_edges
+
+        for ox, oy in _offsets_nearest_first(radius):
+            if wrap:
+                square = ((x + ox) % width, (y + oy) % height)
+            else:
+                sx = x + ox
+                sy = y + oy
+                if not (0 <= sx < width and 0 <= sy < height):
+                    continue
+                square = (sx, sy)
+            here = occupancy.get(square)
+            if here:
+                total += len(here)
+                if exclude is not None and exclude in here:
+                    total -= 1
         return total
 
     # -------------------------------------------------------------------- upkeep

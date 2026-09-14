@@ -15,18 +15,30 @@ from __future__ import annotations
 import random
 import time
 
-from agent import Agent
+from agent import Agent, draw_lifespan
 from brain import Brain
 from config import SimConfig
 from world import World
 
 
 def _new_population(world: World, cfg: SimConfig, rng: random.Random) -> list[Agent]:
-    """The first generation. Random positions, random brains."""
+    """The first generation. Random positions, random brains, random starting ages.
+
+    The founders are given random ages rather than all starting at zero. Otherwise the
+    entire first generation matures at the same moment, breeds at the same moment and dies
+    at the same moment, and the population spends the rest of the run oscillating in
+    lockstep from that one shared birthday.
+    """
     agents = []
     for _ in range(cfg.n_initial_agents):
         x, y = world.random_square()
-        agents.append(Agent(x, y, cfg.energy_start, Brain.random(rng)))
+        agent = Agent(
+            x, y, cfg.energy_start, Brain.random(rng),
+            lifespan=draw_lifespan(cfg, rng),
+        )
+        if cfg.ageing_enabled:
+            agent.age = rng.randrange(0, max(1, cfg.fertility_end_age))
+        agents.append(agent)
     return agents
 
 
