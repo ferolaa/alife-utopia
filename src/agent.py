@@ -160,6 +160,14 @@ class Agent:
         """
         self.age += 1
 
+        # A nest is held only while the young one in it still needs it. Once it has grown
+        # past that age the nest goes back into circulation. Nests are the scarce resource
+        # in this world, so holding one longer than necessary would quietly strangle the
+        # whole population.
+        if self.nest is not None and self.age >= cfg.dependency_ticks:
+            world.release_nest(*self.nest)
+            self.nest = None
+
         # Count neighbours once, here, and reuse the answer everywhere else this tick.
         self.neighbours = world.count_neighbours(
             self.x, self.y, cfg.crowding_radius, exclude=self
@@ -222,15 +230,32 @@ class Agent:
         if cfg.ageing_enabled and not (cfg.maturity_age <= self.age <= cfg.fertility_end_age):
             return None
 
+        # Young can only be raised in a nest, and there are not enough nests to go round.
+        # The parent must be standing on a free one. This is what turns space itself into
+        # something worth competing over, which is the situation the original enclosure was
+        # really in: food was never short, but good places to raise young were.
+        nest_square = None
+        if cfg.nests_enabled:
+            if not world.claim_nest(self.x, self.y):
+                return None
+            nest_square = (self.x, self.y)
+
         self.energy -= cfg.reproduce_cost
         self.children += 1
 
-        dx, dy = rng.choice([(0, 1), (0, -1), (1, 0), (-1, 0), (0, 0)])
-        cx, cy = world.normalise(self.x + dx, self.y + dy)
-        return Agent(
+        if nest_square is not None:
+            # The child stays in the nest it was born in.
+            cx, cy = nest_square
+        else:
+            dx, dy = rng.choice([(0, 1), (0, -1), (1, 0), (-1, 0), (0, 0)])
+            cx, cy = world.normalise(self.x + dx, self.y + dy)
+
+        child = Agent(
             x=cx,
             y=cy,
             energy=cfg.reproduce_cost,     # the energy the parent spent goes to the child
             brain=self.brain.mutated_copy(cfg.mutation_std, rng),
             lifespan=draw_lifespan(cfg, rng),
         )
+        child.nest = nest_square
+        return child

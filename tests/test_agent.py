@@ -219,6 +219,63 @@ def test_age_limits_are_ignored_when_ageing_is_off():
     assert agent._try_reproduce(world, cfg, rng) is not None
 
 
+
+NESTS = DEFAULT.variant("nests", nests_enabled=True, ageing_enabled=False)
+
+
+def test_breeding_needs_a_nest_when_nests_are_on():
+    world, agent, rng = make(NESTS)
+    world.scatter_nests(5)
+    agent.energy = NESTS.reproduce_threshold + 10
+    # The agent is not standing on a nest, so it cannot breed however healthy it is.
+    assert not world.is_free_nest(agent.x, agent.y)
+    assert agent._try_reproduce(world, NESTS, rng) is None
+    assert agent.energy == NESTS.reproduce_threshold + 10   # and it paid nothing
+
+
+def test_breeding_on_a_nest_claims_it_for_the_child():
+    world, agent, rng = make(NESTS)
+    world.nests.add((agent.x, agent.y))
+    agent.energy = NESTS.reproduce_threshold + 10
+    child = agent._try_reproduce(world, NESTS, rng)
+    assert child is not None
+    assert child.nest == (agent.x, agent.y)
+    assert (agent.x, agent.y) in world.occupied_nests
+    assert child.x, child.y == (agent.x, agent.y)           # born in the nest
+
+
+def test_a_nest_cannot_be_used_twice_at_once():
+    world, agent, rng = make(NESTS)
+    world.nests.add((agent.x, agent.y))
+    agent.energy = 1000
+    assert agent._try_reproduce(world, NESTS, rng) is not None
+    # The nest is taken now, so a second attempt on the same square fails.
+    assert agent._try_reproduce(world, NESTS, rng) is None
+
+
+def test_growing_up_frees_the_nest():
+    world, agent, rng = make(NESTS)
+    square = (agent.x, agent.y)
+    world.nests.add(square)
+    agent.energy = 1000
+    child = agent._try_reproduce(world, NESTS, rng)
+    world.agents.append(child)
+    assert square in world.occupied_nests
+    child.age = NESTS.dependency_ticks          # old enough to leave the nest
+    child.act(world, NESTS, rng)
+    assert square not in world.occupied_nests
+    assert child.nest is None
+
+
+def test_nests_are_ignored_when_the_mechanism_is_off():
+    cfg = DEFAULT                                # nests disabled
+    world, agent, rng = make(cfg)
+    agent.energy = cfg.reproduce_threshold + 10
+    child = agent._try_reproduce(world, cfg, rng)
+    assert child is not None
+    assert child.nest is None
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

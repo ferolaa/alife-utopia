@@ -14,7 +14,7 @@ RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 
 COLUMNS = [
     "tick", "population", "births", "deaths",
-    "mean_energy", "mean_age", "mean_neighbours", "density", "food",
+    "mean_energy", "mean_age", "mean_neighbours", "density", "food", "nests_free",
 ]
 
 
@@ -40,7 +40,8 @@ def load_history(name: str, results_dir: Path | None = None) -> list[dict]:
         for raw in csv.DictReader(handle):
             row = {}
             for key, value in raw.items():
-                row[key] = int(value) if key in ("tick", "population", "births", "deaths", "food") else float(value)
+                integer = key in ("tick", "population", "births", "deaths", "food", "nests_free")
+            row[key] = int(value) if integer else float(value)
             rows.append(row)
     return rows
 

@@ -61,6 +61,8 @@ def run(cfg: SimConfig, progress_every: int = 0) -> dict:
         wrap_edges=cfg.wrap_edges,
         rng=rng,
     )
+    if cfg.nests_enabled:
+        world.scatter_nests(cfg.n_nests)
     world.agents = _new_population(world, cfg, rng)
 
     history: list[dict] = []
@@ -96,10 +98,24 @@ def run(cfg: SimConfig, progress_every: int = 0) -> dict:
                 else:
                     # At the cap the birth cannot happen, so give the parent back what it
                     # spent. The cap protects the program from running away, and it should
-                    # not act as an invisible tax on breeding.
+                    # not act as an invisible tax on breeding. The nest the child claimed
+                    # has to go back too, or it stays locked away by a creature that was
+                    # never born.
+                    if child.nest is not None:
+                        world.release_nest(*child.nest)
+                        child.nest = None
                     agent.refund_birth(cfg)
 
-        survivors = [a for a in world.agents if a.alive]
+        survivors = []
+        for agent in world.agents:
+            if agent.alive:
+                survivors.append(agent)
+            elif agent.nest is not None:
+                # A creature that dies in its nest frees it. Without this the nests leak
+                # away one by one until nothing in the world can breed at all, which looks
+                # exactly like a population collapse and would be entirely our own doing.
+                world.release_nest(*agent.nest)
+                agent.nest = None
         deaths = len(world.agents) - len(survivors)
         world.agents = survivors + newborns
 
@@ -145,6 +161,7 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int)
             "tick": tick, "population": 0, "births": births, "deaths": deaths,
             "mean_energy": 0.0, "mean_age": 0.0, "mean_neighbours": 0.0,
             "density": 0.0, "food": len(world.food),
+            "nests_free": len(world.nests) - len(world.occupied_nests),
         }
 
     # Crowding is read back from what each agent actually measured when it acted, rather
@@ -163,4 +180,5 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int)
         "mean_neighbours": (sum(measured) / len(measured)) if measured else 0.0,
         "density": world.density,
         "food": len(world.food),
+        "nests_free": len(world.nests) - len(world.occupied_nests),
     }
