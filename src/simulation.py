@@ -18,22 +18,37 @@ import time
 from agent import Agent, draw_lifespan
 from brain import Brain
 from config import SimConfig
+from population import draw_founders
 from world import World
 
 
-def _new_population(world: World, cfg: SimConfig, rng: random.Random) -> list[Agent]:
-    """The first generation. Random positions, random brains, random starting ages.
+def _new_population(
+    world: World,
+    cfg: SimConfig,
+    rng: random.Random,
+    founders: list | None = None,
+) -> list[Agent]:
+    """The first generation.
 
-    The founders are given random ages rather than all starting at zero. Otherwise the
-    entire first generation matures at the same moment, breeds at the same moment and dies
-    at the same moment, and the population spends the rest of the run oscillating in
-    lockstep from that one shared birthday.
+    If a saved population of brains is supplied, the founders are drawn from it, so the run
+    begins with creatures that already know how to feed themselves and raise young. Without
+    one, brains are random and the run starts from nothing.
+
+    Founders are given random ages rather than all starting at zero. Otherwise the entire
+    first generation matures at the same moment, breeds at the same moment and dies at the
+    same moment, and the population spends the rest of the run oscillating in lockstep from
+    that one shared birthday.
     """
+    if founders:
+        brains = draw_founders(founders, cfg.n_initial_agents, rng)
+    else:
+        brains = [Brain.random(rng) for _ in range(cfg.n_initial_agents)]
+
     agents = []
-    for _ in range(cfg.n_initial_agents):
+    for brain in brains:
         x, y = world.random_square()
         agent = Agent(
-            x, y, cfg.energy_start, Brain.random(rng),
+            x, y, cfg.energy_start, brain,
             lifespan=draw_lifespan(cfg, rng),
         )
         if cfg.ageing_enabled:
@@ -42,10 +57,14 @@ def _new_population(world: World, cfg: SimConfig, rng: random.Random) -> list[Ag
     return agents
 
 
-def run(cfg: SimConfig, progress_every: int = 0) -> dict:
+def run(cfg: SimConfig, progress_every: int = 0, founders: list | None = None) -> dict:
     """Run one condition from start to finish.
 
     Returns a dict with the config name, the per tick history, and some summary numbers.
+
+    founders is an optional population of already evolved brains to start from. Every
+    experimental condition is given the same one, so that differences between conditions
+    come from the conditions and not from how lucky each run was at the beginning.
 
     The rng is seeded from the config, so the same config always produces exactly the same
     run. That matters for a report. Anyone can reproduce the figures.
@@ -63,7 +82,7 @@ def run(cfg: SimConfig, progress_every: int = 0) -> dict:
     )
     if cfg.nests_enabled:
         world.scatter_nests(cfg.n_nests)
-    world.agents = _new_population(world, cfg, rng)
+    world.agents = _new_population(world, cfg, rng, founders)
 
     history: list[dict] = []
     started = time.time()
