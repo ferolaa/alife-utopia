@@ -15,6 +15,7 @@ RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 COLUMNS = [
     "tick", "population", "births", "deaths",
     "mean_energy", "mean_age", "mean_neighbours", "density", "food", "nests_free",
+    "died_starving", "died_old", "died_neglected", "dependents",
 ]
 
 
@@ -40,7 +41,10 @@ def load_history(name: str, results_dir: Path | None = None) -> list[dict]:
         for raw in csv.DictReader(handle):
             row = {}
             for key, value in raw.items():
-                integer = key in ("tick", "population", "births", "deaths", "food", "nests_free")
+                integer = key in (
+                "tick", "population", "births", "deaths", "food", "nests_free",
+                "died_starving", "died_old", "died_neglected", "dependents",
+            )
             row[key] = int(value) if integer else float(value)
             rows.append(row)
     return rows
@@ -69,5 +73,8 @@ def summarise(result: dict) -> dict:
         "mean_neighbours_late": sum(r["mean_neighbours"] for r in late) / len(late),
         "total_births": sum(r["births"] for r in history),
         "total_deaths": sum(r["deaths"] for r in history),
+        "died_starving": sum(r.get("died_starving", 0) for r in history),
+        "died_old": sum(r.get("died_old", 0) for r in history),
+        "died_neglected": sum(r.get("died_neglected", 0) for r in history),
         "extinct_at": result.get("extinct_at"),
     }

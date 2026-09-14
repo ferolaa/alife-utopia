@@ -1,0 +1,76 @@
+{
+ "summary": {
+  "name": "full_stress",
+  "ticks_run": 889,
+  "peak_population": 43,
+  "peak_tick": 65,
+  "final_population": 0,
+  "collapse_ratio": 0.0,
+  "mean_neighbours_late": 0.2219568712866283,
+  "total_births": 24,
+  "total_deaths": 64,
+  "died_starving": 22,
+  "died_old": 21,
+  "died_neglected": 21,
+  "extinct_at": 888
+ },
+ "seconds": 0.52,
+ "trace": [
+  {
+   "tick": 0,
+   "population": 40,
+   "births": 0,
+   "deaths": 0,
+   "mean_age": 308.75,
+   "mean_neighbours": 0.65,
+   "nests_free": 60,
+   "died_neglected": 0,
+   "died_old": 0,
+   "died_starving": 0,
+   "dependents": 0,
+   "mean_energy": 26.472
+  },
+  {
+   "tick": 400,
+   "population": 23,
+   "births": 1,
+   "deaths": 0,
+   "mean_age": 553.9565217391304,
+   "mean_neighbours": 0.5454545454545454,
+   "nests_free": 59,
+   "died_neglected": 0,
+   "died_old": 0,
+   "died_starving": 0,
+   "dependents": 1,
+   "mean_energy": 50.070000000000014
+  },
+  {
+   "tick": 800,
+   "population": 4,
+   "births": 0,
+   "deaths": 0,
+   "mean_age": 791.5,
+   "mean_neighbours": 0.0,
+   "nests_free": 60,
+   "died_neglected": 0,
+   "died_old": 0,
+   "died_starving": 0,
+   "dependents": 0,
+   "mean_energy": 23.297500000000014
+  },
+  {
+   "tick": 888,
+   "population": 0,
+   "births": 0,
+   "deaths": 1,
+   "mean_age": 0.0,
+   "mean_neighbours": 0.0,
+   "nests_free": 60,
+   "died_neglected": 0,
+   "died_old": 0,
+   "died_starving": 1,
+   "dependents": 0,
+   "mean_energy": 0.0
+  }
+ ]
+}

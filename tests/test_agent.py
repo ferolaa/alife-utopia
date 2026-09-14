@@ -276,6 +276,119 @@ def test_nests_are_ignored_when_the_mechanism_is_off():
     assert child.nest is None
 
 
+
+CARE = DEFAULT.variant("care", parental_care_enabled=True)
+
+
+def _parent_and_pup(cfg=CARE):
+    world, parent, rng = make(cfg)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, cfg, rng)
+    world.agents.append(pup)
+    world.rebuild_occupancy(cfg.crowding_radius)
+    return world, parent, pup, rng
+
+
+def test_a_newborn_starts_dependent_and_knows_its_parent():
+    world, parent, pup, rng = _parent_and_pup()
+    assert pup.is_dependent is True
+    assert pup.parent is parent
+    assert parent.dependents == [pup]
+
+
+def test_a_pup_does_not_act_for_itself():
+    world, parent, pup, rng = _parent_and_pup()
+    before = (pup.x, pup.y, pup.energy)
+    for _ in range(10):
+        pup.act(world, CARE, rng)
+    # It cannot move and it pays no energy. It is being fed.
+    assert (pup.x, pup.y, pup.energy) == before
+
+
+def test_an_attended_pup_stays_healthy():
+    world, parent, pup, rng = _parent_and_pup()
+    for _ in range(CARE.neglect_tolerance * 2):
+        pup.act(world, CARE, rng)          # parent is right next to it
+    assert pup.alive is True
+    assert pup.neglect_ticks == 0
+
+
+def test_an_abandoned_pup_dies_of_neglect():
+    world, parent, pup, rng = _parent_and_pup()
+    parent.x, parent.y = 0, 0              # far away
+    pup.x, pup.y = 15, 15
+    for _ in range(CARE.neglect_tolerance + 2):
+        pup.act(world, CARE, rng)
+    assert pup.alive is False
+    assert pup.cause_of_death == "neglect"
+
+
+def test_neglect_is_forgiven_when_the_parent_comes_back():
+    world, parent, pup, rng = _parent_and_pup()
+    parent.x, parent.y = 0, 0
+    pup.x, pup.y = 15, 15
+    for _ in range(CARE.neglect_tolerance - 1):
+        pup.act(world, CARE, rng)
+    assert pup.alive is True
+    banked = pup.neglect_ticks
+    parent.x, parent.y = pup.x, pup.y      # comes back
+    for _ in range(banked):
+        pup.act(world, CARE, rng)
+    assert pup.neglect_ticks == 0          # fully recovered
+    assert pup.alive is True
+
+
+def test_a_dead_parent_cannot_care():
+    world, parent, pup, rng = _parent_and_pup()
+    parent.alive = False
+    for _ in range(CARE.neglect_tolerance + 2):
+        pup.act(world, CARE, rng)
+    assert pup.alive is False
+    assert pup.cause_of_death == "neglect"
+
+
+def test_growing_up_ends_the_dependency():
+    world, parent, pup, rng = _parent_and_pup()
+    pup.age = CARE.dependency_ticks
+    pup.energy = 50
+    pup.act(world, CARE, rng)
+    assert pup.is_dependent is False
+    assert pup.parent is None
+    assert parent.dependents == []
+
+
+def test_causes_of_death_are_recorded():
+    starving = DEFAULT.variant("starve", energy_cost_per_tick=1000.0)
+    world, agent, rng = make(starving)
+    agent.act(world, starving, rng)
+    assert agent.cause_of_death == "starvation"
+
+    old = DEFAULT.variant("old", ageing_enabled=True)
+    world, agent, rng = make(old)
+    agent.lifespan = 1
+    agent.energy = 1000
+    agent.act(world, old, rng)
+    assert agent.cause_of_death == "old age"
+
+
+def test_no_dependency_when_care_is_switched_off():
+    world, parent, rng = make(DEFAULT)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, DEFAULT, rng)
+    assert pup.is_dependent is False
+    assert pup.parent is None
+    assert parent.dependents == []
+
+
+def test_a_parent_senses_where_its_pup_is():
+    from brain import SENSE_INDEX
+    world, parent, pup, rng = _parent_and_pup()
+    pup.x, pup.y = parent.x + 2, parent.y
+    senses = parent.sense(world, CARE)
+    assert senses[SENSE_INDEX["pup_dx"]] > 0        # the pup is to the east
+    assert senses[SENSE_INDEX["pup_need"]] > 0      # and it registers as having one
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

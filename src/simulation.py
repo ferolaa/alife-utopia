@@ -107,21 +107,28 @@ def run(cfg: SimConfig, progress_every: int = 0) -> dict:
                     agent.refund_birth(cfg)
 
         survivors = []
+        toll = {"starvation": 0, "old age": 0, "neglect": 0}
         for agent in world.agents:
             if agent.alive:
                 survivors.append(agent)
-            elif agent.nest is not None:
+                continue
+            if agent.nest is not None:
                 # A creature that dies in its nest frees it. Without this the nests leak
                 # away one by one until nothing in the world can breed at all, which looks
                 # exactly like a population collapse and would be entirely our own doing.
                 world.release_nest(*agent.nest)
                 agent.nest = None
+            if agent.parent is not None:
+                # Do not leave the dead on a parent's list of dependents.
+                agent._leave_the_parent()
+            if agent.cause_of_death in toll:
+                toll[agent.cause_of_death] += 1
         deaths = len(world.agents) - len(survivors)
         world.agents = survivors + newborns
 
         world.respawn_step()
 
-        history.append(_snapshot(world, cfg, tick, births, deaths))
+        history.append(_snapshot(world, cfg, tick, births, deaths, toll))
 
         if progress_every and tick % progress_every == 0:
             print(
@@ -146,7 +153,7 @@ def run(cfg: SimConfig, progress_every: int = 0) -> dict:
     }
 
 
-def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int) -> dict:
+def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int, toll: dict) -> dict:
     """One row of the results table. Everything the plots and the report will need.
 
     mean_neighbours is the measured crowding actually experienced by the agents. It is not
@@ -162,6 +169,8 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int)
             "mean_energy": 0.0, "mean_age": 0.0, "mean_neighbours": 0.0,
             "density": 0.0, "food": len(world.food),
             "nests_free": len(world.nests) - len(world.occupied_nests),
+            "died_starving": toll["starvation"], "died_old": toll["old age"],
+            "died_neglected": toll["neglect"], "dependents": 0,
         }
 
     # Crowding is read back from what each agent actually measured when it acted, rather
@@ -181,4 +190,11 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int)
         "density": world.density,
         "food": len(world.food),
         "nests_free": len(world.nests) - len(world.occupied_nests),
+        # Splitting the death toll by cause is what lets the write up say whether a
+        # population is starving, ageing out, or failing to raise its young. Those look
+        # identical in a plain population curve and mean completely different things.
+        "died_starving": toll["starvation"],
+        "died_old": toll["old age"],
+        "died_neglected": toll["neglect"],
+        "dependents": sum(1 for a in agents if a.is_dependent),
     }

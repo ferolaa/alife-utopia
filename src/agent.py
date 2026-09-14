@@ -14,6 +14,17 @@ import random
 from brain import MOVES, Brain, make_senses
 
 
+def _within(world, one, other, radius: int) -> bool:
+    """Is one creature close enough to the other to count as present?
+
+    Distance is measured as the larger of the two axis gaps, which makes the area a square
+    of side twice the radius. That matches how every other range in the simulation is
+    measured, so care range and crowding range mean the same kind of thing.
+    """
+    dx, dy = world.offset(one.x, one.y, other.x, other.y)
+    return max(abs(dx), abs(dy)) <= radius
+
+
 def draw_lifespan(cfg, rng: random.Random) -> float:
     """How long this particular creature gets to live.
 
@@ -36,7 +47,7 @@ class Agent:
     __slots__ = (
         "x", "y", "energy", "brain", "age", "alive", "children",
         "dependents", "dependent_until", "neglect_ticks", "nest", "neighbours",
-        "lifespan",
+        "lifespan", "parent", "cause_of_death",
     )
 
     def __init__(
@@ -66,6 +77,12 @@ class Agent:
         # dies if left unattended for too long.
         self.dependent_until: int = 0
         self.neglect_ticks: int = 0
+        self.parent: "Agent | None" = None
+
+        # Recorded when the creature dies, so the run can be broken down by what actually
+        # killed things. Telling starvation apart from neglect is the whole point of the
+        # experiment, and a bare death count cannot do that.
+        self.cause_of_death: str | None = None
 
         # The nest square this agent is occupying, if any. Released when it grows up.
         self.nest: tuple[int, int] | None = None
@@ -168,6 +185,16 @@ class Agent:
             world.release_nest(*self.nest)
             self.nest = None
 
+        # A pup that is still dependent does not forage, move or decide anything. It is
+        # being fed. The only thing that matters to it is whether a parent is nearby.
+        if self.is_dependent:
+            self._spend_tick_as_pup(world, cfg)
+            return None
+
+        # The tick it stops being dependent, it stops being its parent's problem.
+        if self.parent is not None:
+            self._leave_the_parent()
+
         # Count neighbours once, here, and reuse the answer everywhere else this tick.
         self.neighbours = world.count_neighbours(
             self.x, self.y, cfg.crowding_radius, exclude=self
@@ -198,10 +225,54 @@ class Agent:
             self.energy = min(cfg.energy_max, self.energy + cfg.energy_from_food)
 
         # 5. Death, from either starvation or old age.
-        if self.energy <= 0 or self.age >= self.lifespan:
+        if self.energy <= 0:
             self.alive = False
+            self.cause_of_death = "starvation"
+        elif self.age >= self.lifespan:
+            self.alive = False
+            self.cause_of_death = "old age"
 
         return child
+
+    def _spend_tick_as_pup(self, world, cfg) -> None:
+        """One tick in the life of a helpless newborn.
+
+        The pup cannot feed itself, so nothing it does affects its survival. What decides
+        whether it lives is whether its parent stays close enough, often enough. Time spent
+        unattended accumulates, and time spent attended pays it back down again, so a parent
+        that comes and goes can still raise a pup, while one that wanders off for good
+        cannot.
+
+        This is the mechanism the real collapse ran through. Mothers under pressure stopped
+        returning to their litters, the litters did not survive, and a population that
+        cannot raise its young has no future however many adults it currently has.
+        """
+        parent = self.parent
+        attended = (
+            parent is not None
+            and parent.alive
+            and not parent.is_dependent
+            and _within(world, parent, self, cfg.care_radius)
+        )
+
+        if attended:
+            if self.neglect_ticks > 0:
+                self.neglect_ticks -= 1
+        else:
+            self.neglect_ticks += 1
+            if self.neglect_ticks > cfg.neglect_tolerance:
+                self.alive = False
+                self.cause_of_death = "neglect"
+
+    def _leave_the_parent(self) -> None:
+        """Grow up. The parent is no longer responsible for this creature."""
+        parent = self.parent
+        if parent is not None:
+            try:
+                parent.dependents.remove(self)
+            except ValueError:
+                pass
+        self.parent = None
 
     def refund_birth(self, cfg) -> None:
         """Undo a birth the simulation could not accept.
@@ -213,6 +284,10 @@ class Agent:
         """
         self.energy = min(cfg.energy_max, self.energy + cfg.reproduce_cost)
         self.children -= 1
+        if self.dependents:
+            # The child that was refused was the most recent one added.
+            ghost = self.dependents.pop()
+            ghost.parent = None
 
     def _try_reproduce(self, world, cfg, rng: random.Random) -> "Agent | None":
         """Spend energy to place a child with a mutated brain on a nearby square.
@@ -258,4 +333,10 @@ class Agent:
             lifespan=draw_lifespan(cfg, rng),
         )
         child.nest = nest_square
+
+        if cfg.parental_care_enabled:
+            child.dependent_until = cfg.dependency_ticks
+            child.parent = self
+            self.dependents.append(child)
+
         return child
