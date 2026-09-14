@@ -190,6 +190,7 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int,
             "nests_free": len(world.nests) - len(world.occupied_nests),
             "died_starving": toll["starvation"], "died_old": toll["old age"],
             "died_neglected": toll["neglect"], "dependents": 0,
+            "mean_impairment": 0.0,
         }
 
     # Crowding is read back from what each agent actually measured when it acted, rather
@@ -216,4 +217,10 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int,
         "died_old": toll["old age"],
         "died_neglected": toll["neglect"],
         "dependents": sum(1 for a in agents if a.is_dependent),
+        # The average damage carried by grown creatures. If this climbs while the
+        # population falls, the feedback loop Calhoun described is running.
+        "mean_impairment": (
+            sum(a.impairment for a in agents if not a.is_dependent)
+            / max(sum(1 for a in agents if not a.is_dependent), 1)
+        ),
     }

@@ -40,6 +40,11 @@ FOUNDING = DEFAULT.variant(
     nests_enabled=True,
     n_nests=60,
     parental_care_enabled=True,
+    # Crowding stress is on here for the same reason everything else is: the founders must
+    # be adapted to the world the experiments actually run in. Founding them in a world
+    # where crowding is free and then making it costly would produce a crash caused by the
+    # switch itself, which would be easy to mistake for a crowding collapse.
+    crowding_cost_enabled=True,
 )
 
 # What counts as established. A run limping along with a handful of survivors has not

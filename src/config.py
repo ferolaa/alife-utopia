@@ -47,7 +47,15 @@ class SimConfig:
     # social contact being costly in itself, as opposed to density simply being high. It is
     # the point Freedman raised against Calhoun, and it is one of the mechanisms we ablate.
     crowding_cost_enabled: bool = False
-    crowding_energy_cost: float = 0.12  # per neighbour, per tick
+
+    # Per neighbour, per tick. This number is calibrated rather than picked: at the density
+    # the population actually reaches, around ten to fifteen neighbours each, it should cost
+    # roughly what staying alive costs, so that crowding is a serious pressure when dense
+    # and close to nothing when sparse. That asymmetry is the whole point, and it is what
+    # Calhoun described. At the original value of 0.12 a crowded creature paid seven times
+    # its own metabolism, which no population can survive at any density, so the result was
+    # decided by the parameter rather than by anything the creatures did.
+    crowding_energy_cost: float = 0.025
 
     # ---------------------------- ageing, the first Calhoun mechanism -------------
     # Without ageing a population can never decline the way Calhoun's did, because nothing
@@ -73,6 +81,25 @@ class SimConfig:
     dependency_ticks: int = 60         # how long a pup stays helpless
     care_radius: int = 3               # how close a parent counts as present
     neglect_tolerance: int = 25        # ticks a pup survives unattended before dying
+
+    # ------------- developmental damage, the fourth mechanism ---------------------
+    # A pup that survives being left alone does not come out of it unharmed. It grows into
+    # an adult that is worse at noticing and responding to its own young.
+    #
+    # This is the one mechanism in the model that can carry damage forward in time. Every
+    # other pressure here is self correcting: when crowding hurts, creatures die, and fewer
+    # creatures means less crowding. Damage that outlives the conditions that caused it
+    # works the other way round, because a badly raised generation raises the next one worse
+    # still, whether or not the crowding that started it is still there.
+    #
+    # Calhoun described exactly this. The neglected pups of Universe 25 did not all die.
+    # Many grew up, and grew up unable to raise young of their own.
+    #
+    # Note that this is not inherited. The brain a pup is born with is untouched. What
+    # damages it is its own upbringing, which is why the effect spreads through care rather
+    # than through genes.
+    developmental_damage_enabled: bool = False
+    damage_scale: float = 1.0          # how strongly time spent unattended translates to harm
 
     # -------------------------------------------------------------- the evolution
     mutation_std: float = 0.12         # standard deviation of the mutation noise

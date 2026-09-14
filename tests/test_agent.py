@@ -389,6 +389,93 @@ def test_a_parent_senses_where_its_pup_is():
     assert senses[SENSE_INDEX["pup_need"]] > 0      # and it registers as having one
 
 
+
+DAMAGE = DEFAULT.variant("damage", parental_care_enabled=True, developmental_damage_enabled=True)
+
+
+def test_a_well_raised_pup_is_undamaged():
+    world, parent, rng = make(DAMAGE)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, DAMAGE, rng)
+    world.agents.append(pup)
+    world.rebuild_occupancy(DAMAGE.crowding_radius)
+    for _ in range(DAMAGE.dependency_ticks):     # parent right beside it the whole time
+        pup.act(world, DAMAGE, rng)
+    assert pup.alive is True
+    assert pup.neglect_suffered == 0
+    assert pup.impairment == 0.0
+
+
+def test_time_spent_alone_is_never_forgiven():
+    world, parent, rng = make(DAMAGE)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, DAMAGE, rng)
+    world.agents.append(pup)
+    pup.x, pup.y = 15, 15
+    parent.x, parent.y = 0, 0                    # away
+    for _ in range(10):
+        pup.act(world, DAMAGE, rng)
+    assert pup.neglect_suffered == 10
+    parent.x, parent.y = pup.x, pup.y            # comes back
+    for _ in range(10):
+        pup.act(world, DAMAGE, rng)
+    assert pup.neglect_ticks == 0                # rescued, so it will not die
+    assert pup.neglect_suffered == 10            # but the time alone still counts
+
+
+def test_a_neglected_survivor_grows_up_impaired():
+    world, parent, rng = make(DAMAGE)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, DAMAGE, rng)
+    world.agents.append(pup)
+    pup.neglect_suffered = DAMAGE.dependency_ticks // 2     # half its infancy alone
+    pup.age = DAMAGE.dependency_ticks
+    pup.energy = 50
+    pup.act(world, DAMAGE, rng)                             # the tick it grows up
+    assert 0.4 < pup.impairment < 0.6
+
+
+def test_impairment_cannot_exceed_one():
+    world, parent, rng = make(DAMAGE)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, DAMAGE, rng)
+    world.agents.append(pup)
+    pup.neglect_suffered = DAMAGE.dependency_ticks * 10
+    pup.age = DAMAGE.dependency_ticks
+    pup.energy = 50
+    pup.act(world, DAMAGE, rng)
+    assert pup.impairment == 1.0
+
+
+def test_an_impaired_parent_barely_senses_its_own_pup():
+    from brain import SENSE_INDEX
+    world, parent, rng = make(DAMAGE)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, DAMAGE, rng)
+    world.agents.append(pup)
+    pup.x, pup.y = parent.x + 2, parent.y
+    pup.neglect_ticks = 5
+
+    healthy = parent.sense(world, DAMAGE)[SENSE_INDEX["pup_need"]]
+    parent.impairment = 1.0
+    blind = parent.sense(world, DAMAGE)[SENSE_INDEX["pup_need"]]
+    assert healthy > 0
+    assert blind == 0.0                          # fully damaged means fully unaware
+
+
+def test_no_damage_when_the_mechanism_is_off():
+    cfg = DEFAULT.variant("nodamage", parental_care_enabled=True)
+    world, parent, rng = make(cfg)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, cfg, rng)
+    world.agents.append(pup)
+    pup.neglect_suffered = cfg.dependency_ticks
+    pup.age = cfg.dependency_ticks
+    pup.energy = 50
+    pup.act(world, cfg, rng)
+    assert pup.impairment == 0.0
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

@@ -47,7 +47,7 @@ class Agent:
     __slots__ = (
         "x", "y", "energy", "brain", "age", "alive", "children",
         "dependents", "dependent_until", "neglect_ticks", "nest", "neighbours",
-        "lifespan", "parent", "cause_of_death",
+        "lifespan", "parent", "cause_of_death", "neglect_suffered", "impairment",
     )
 
     def __init__(
@@ -78,6 +78,16 @@ class Agent:
         self.dependent_until: int = 0
         self.neglect_ticks: int = 0
         self.parent: "Agent | None" = None
+
+        # Total ticks this creature spent unattended as a pup. Unlike neglect_ticks, which
+        # falls again when a parent returns, this only ever goes up. Being rescued keeps a
+        # pup alive; it does not undo the time it already spent alone.
+        self.neglect_suffered: int = 0
+
+        # How badly its upbringing damaged it, from zero to one. Set once, when it grows up.
+        # It scales down how well this creature can sense its own young, so a badly raised
+        # creature is a bad parent even with a perfectly good brain.
+        self.impairment: float = 0.0
 
         # Recorded when the creature dies, so the run can be broken down by what actually
         # killed things. Telling starvation apart from neglect is the whole point of the
@@ -159,10 +169,16 @@ class Agent:
         dx, dy = world.offset(self.x, self.y, neediest.x, neediest.y)
         scale = max(cfg.vision, 1)
         need = min(1.0, worst / max(cfg.neglect_tolerance, 1))
+
+        # A creature damaged by its own upbringing perceives its young only faintly. At full
+        # impairment it cannot sense them at all, and so has no reason to go back to them.
+        # Its brain is untouched. What it lost was the childhood that would have let the
+        # brain do its job.
+        clarity = 1.0 - self.impairment
         return (
-            max(-1.0, min(1.0, dx / scale)),
-            max(-1.0, min(1.0, dy / scale)),
-            max(need, 0.05),   # a floor, so "I have a pup" is distinguishable from "none"
+            max(-1.0, min(1.0, dx / scale)) * clarity,
+            max(-1.0, min(1.0, dy / scale)) * clarity,
+            max(need, 0.05) * clarity,
         )
 
     # -------------------------------------------------------------------- acting
@@ -191,9 +207,10 @@ class Agent:
             self._spend_tick_as_pup(world, cfg)
             return None
 
-        # The tick it stops being dependent, it stops being its parent's problem.
+        # The tick it stops being dependent, it stops being its parent's problem, and
+        # whatever its upbringing did to it is settled.
         if self.parent is not None:
-            self._leave_the_parent()
+            self._grow_up(cfg)
 
         # Count neighbours once, here, and reuse the answer everywhere else this tick.
         self.neighbours = world.count_neighbours(
@@ -260,12 +277,25 @@ class Agent:
                 self.neglect_ticks -= 1
         else:
             self.neglect_ticks += 1
+            self.neglect_suffered += 1
             if self.neglect_ticks > cfg.neglect_tolerance:
                 self.alive = False
                 self.cause_of_death = "neglect"
 
+    def _grow_up(self, cfg) -> None:
+        """Leave the parent, and carry forward whatever the upbringing cost.
+
+        Impairment is the fraction of its infancy this creature spent alone, so a pup that
+        was always attended is unharmed and one that was mostly alone is badly harmed. The
+        harm is permanent. There is no recovering from it later.
+        """
+        if cfg.developmental_damage_enabled and cfg.dependency_ticks > 0:
+            share_alone = self.neglect_suffered / cfg.dependency_ticks
+            self.impairment = min(1.0, cfg.damage_scale * share_alone)
+        self._leave_the_parent()
+
     def _leave_the_parent(self) -> None:
-        """Grow up. The parent is no longer responsible for this creature."""
+        """The parent is no longer responsible for this creature."""
         parent = self.parent
         if parent is not None:
             try:
