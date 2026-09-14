@@ -14,6 +14,8 @@ from __future__ import annotations
 import random
 from functools import lru_cache
 
+import numpy as np
+
 
 @lru_cache(maxsize=32)
 def _offsets_nearest_first(radius: int) -> tuple[tuple[int, int], ...]:
@@ -69,6 +71,9 @@ class World:
         # An index from square to the agents standing on it. It is rebuilt once per tick,
         # so counting neighbours is a local lookup instead of a scan over every agent.
         self._occupancy: dict[tuple[int, int], list] = {}
+
+        # Neighbour counts for every square, rebuilt each tick alongside the index.
+        self._crowding = None
 
         self.scatter_food(n_food)
 
@@ -227,9 +232,12 @@ class World:
         Returns zeros when this condition has no nests at all, so an agent in a world
         without nests simply receives no nest signal.
         """
-        if not self.nests:
-            return (0.0, 0.0, 0.0)
         nests, taken = self.nests, self.occupied_nests
+        # No nests at all, or none free anywhere. Either way there is nothing to find, and
+        # searching every square in range to discover that is pure waste. Once nests get
+        # scarce this is the common case, so the check pays for itself.
+        if not nests or len(taken) >= len(nests):
+            return (0.0, 0.0, 0.0)
         width, height, wrap = self.width, self.height, self.wrap_edges
 
         for ox, oy in _offsets_nearest_first(vision):
@@ -253,6 +261,16 @@ class World:
         This is the crowding measure, and crowding is what the whole project is about, so it
         is defined once here and reused everywhere rather than recomputed ad hoc.
         """
+        # The fast path: read the answer straight out of the grid built this tick.
+        # exclude is always the asking agent itself, standing on this very square, so
+        # removing it is just subtracting one.
+        crowding = self._crowding
+        if crowding is not None:
+            total = int(crowding[x, y])
+            if exclude is not None:
+                total -= 1
+            return max(total, 0)
+
         total = 0
         occupancy = self._occupancy
         if not occupancy:
@@ -277,11 +295,43 @@ class World:
 
     # -------------------------------------------------------------------- upkeep
 
-    def rebuild_occupancy(self) -> None:
-        """Refresh the square to agents index. The simulation calls this once per tick."""
+    def rebuild_occupancy(self, crowding_radius: int | None = None) -> None:
+        """Refresh the square to agents index. The simulation calls this once per tick.
+
+        If a crowding radius is given, the neighbour count for every square on the grid is
+        worked out at the same time. Counting neighbours separately for each agent means
+        repeating almost the same small search hundreds of times per tick. Doing the whole
+        grid in one go instead turns that into a couple of dozen array operations, and the
+        answers are identical.
+        """
         self._occupancy = {}
         for agent in self.agents:
             self._occupancy.setdefault((agent.x, agent.y), []).append(agent)
+        self._crowding = (
+            self._build_crowding_grid(crowding_radius)
+            if crowding_radius is not None
+            else None
+        )
+
+    def _build_crowding_grid(self, radius: int):
+        """A grid where each square holds the number of agents within radius of it."""
+        counts = np.zeros((self.width, self.height), dtype=np.int32)
+        for (x, y), here in self._occupancy.items():
+            counts[x, y] = len(here)
+
+        total = np.zeros_like(counts)
+        for ox in range(-radius, radius + 1):
+            for oy in range(-radius, radius + 1):
+                if self.wrap_edges:
+                    total += np.roll(np.roll(counts, ox, axis=0), oy, axis=1)
+                else:
+                    # Without wrapping, shift the overlapping region only.
+                    xs_to = slice(max(0, ox), self.width + min(0, ox))
+                    xs_from = slice(max(0, -ox), self.width + min(0, -ox))
+                    ys_to = slice(max(0, oy), self.height + min(0, oy))
+                    ys_from = slice(max(0, -oy), self.height + min(0, -oy))
+                    total[xs_to, ys_to] += counts[xs_from, ys_from]
+        return total
 
     @property
     def population(self) -> int:

@@ -76,7 +76,7 @@ def run(cfg: SimConfig, progress_every: int = 0) -> dict:
         # things were when the tick began, not on how far down the list it happens to sit.
         # The alternative, rebuilding after every single move, would make an agent's senses
         # depend on its position in the loop, which is not a property of the agent at all.
-        world.rebuild_occupancy()
+        world.rebuild_occupancy(cfg.crowding_radius)
 
         births = 0
         newborns: list[Agent] = []

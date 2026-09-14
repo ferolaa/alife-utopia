@@ -13,6 +13,7 @@ gaussian noise to the whole vector at once.
 
 from __future__ import annotations
 
+import math
 import random
 
 import numpy as np
@@ -83,10 +84,22 @@ class Brain:
         + N_HIDDEN * N_OUTPUTS + N_OUTPUTS      # second layer
     )
 
+    __slots__ = ("weights", "_W1", "_b1", "_W2", "_b2")
+
     def __init__(self, weights: np.ndarray):
         if weights.shape != (self.N_WEIGHTS,):
             raise ValueError(f"expected {self.N_WEIGHTS} weights, got {weights.shape}")
         self.weights = weights.astype(np.float64)
+
+        # The weights never change once a brain exists. A child gets a new Brain rather
+        # than having its parent's edited. So the matrices are carved out once here instead
+        # of being re-sliced on every single decision, which happens millions of times.
+        i, h, o = self.N_INPUTS, self.N_HIDDEN, self.N_OUTPUTS
+        at = 0
+        self._W1 = self.weights[at:at + i * h].reshape(i, h);  at += i * h
+        self._b1 = self.weights[at:at + h];                    at += h
+        self._W2 = self.weights[at:at + h * o].reshape(h, o);  at += h * o
+        self._b2 = self.weights[at:at + o]
 
     # ------------------------------------------------------------------ creation
 
@@ -112,22 +125,14 @@ class Brain:
     # ------------------------------------------------------------------- thinking
 
     def _unpack(self):
-        """Slice the flat weight vector back into matrices for the forward pass."""
-        i, h, o = self.N_INPUTS, self.N_HIDDEN, self.N_OUTPUTS
-        w = self.weights
-        at = 0
-        W1 = w[at:at + i * h].reshape(i, h);  at += i * h
-        b1 = w[at:at + h];                    at += h
-        W2 = w[at:at + h * o].reshape(h, o);  at += h * o
-        b2 = w[at:at + o]
-        return W1, b1, W2, b2
+        """The weight matrices, as carved out when this brain was built."""
+        return self._W1, self._b1, self._W2, self._b2
 
     def action_scores(self, senses) -> np.ndarray:
         """Run the senses through the network. Returns one score per action."""
         x = np.asarray(senses, dtype=np.float64)
-        W1, b1, W2, b2 = self._unpack()
-        hidden = np.tanh(x @ W1 + b1)     # tanh keeps activations between minus one and one
-        return hidden @ W2 + b2
+        hidden = np.tanh(x @ self._W1 + self._b1)   # tanh keeps activations in minus one to one
+        return hidden @ self._W2 + self._b2
 
     def decide(self, senses, rng: random.Random | None = None, temperature: float = 1.0) -> str:
         """Choose an action.
@@ -141,14 +146,25 @@ class Brain:
         temperature controls how random the choice is. Low values approach always taking
         the best action. High values approach picking uniformly at random.
         """
-        scores = self.action_scores(senses) / max(temperature, 1e-6)
-        scores = scores - scores.max()             # subtract the max to avoid overflow in exp
-        probs = np.exp(scores)
-        probs /= probs.sum()
-        r = (rng or random).random()
+        # The softmax is done in plain Python rather than with numpy. There are only six
+        # actions, and at that size numpy spends more time on its own call overhead than on
+        # the arithmetic. Measured, this is roughly three times faster than the numpy
+        # version, and it is the single most frequently executed piece of the simulation.
+        raw = self.action_scores(senses).tolist()
+        t = temperature if temperature > 1e-6 else 1e-6
+
+        biggest = max(raw)
+        total = 0.0
+        weights = []
+        for value in raw:
+            w = math.exp((value - biggest) / t)    # shift by the max so exp cannot overflow
+            weights.append(w)
+            total += w
+
+        target = (rng or random).random() * total
         cumulative = 0.0
-        for action, p in zip(ACTIONS, probs):
-            cumulative += p
-            if r <= cumulative:
+        for action, w in zip(ACTIONS, weights):
+            cumulative += w
+            if target <= cumulative:
                 return action
         return ACTIONS[-1]

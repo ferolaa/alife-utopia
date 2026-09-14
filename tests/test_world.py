@@ -110,6 +110,41 @@ def test_offset_is_plain_subtraction_with_walls():
     assert w.offset(1, 1, 9, 9) == (8, 8)
 
 
+
+def test_the_crowding_grid_agrees_with_counting_by_hand():
+    """The fast path and the slow path must give exactly the same answers.
+
+    Crowding is the measurement this whole project rests on, and it is now computed for the
+    whole grid in one go rather than per agent. That is only worth doing if the answers are
+    identical, so this compares the two methods directly on random layouts, with wrapping
+    on and off.
+    """
+    import random as _random
+    for wrap in (True, False):
+        for trial in range(5):
+            rng = _random.Random(trial)
+            w = World(width=12, height=9, n_food=0, wrap_edges=wrap, rng=rng)
+            w.agents = [_Dummy(rng.randrange(12), rng.randrange(9)) for _ in range(25)]
+
+            w.rebuild_occupancy()                     # no grid, so the slow path is used
+            assert w._crowding is None
+            slow = [w.count_neighbours(a.x, a.y, 2, exclude=a) for a in w.agents]
+
+            w.rebuild_occupancy(crowding_radius=2)    # grid built, fast path used
+            assert w._crowding is not None
+            fast = [w.count_neighbours(a.x, a.y, 2, exclude=a) for a in w.agents]
+
+            assert slow == fast, f"wrap={wrap} trial={trial}: {slow} != {fast}"
+
+
+def test_nest_search_gives_up_when_every_nest_is_taken():
+    w = make_world()
+    w.scatter_nests(4)
+    for square in list(w.nests):
+        w.claim_nest(*square)
+    assert w.nearest_free_nest_direction(5, 5, vision=4) == (0.0, 0.0, 0.0)
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

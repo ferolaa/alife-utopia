@@ -1,0 +1,206 @@
+{
+ "summary": {
+  "name": "utopia",
+  "ticks_run": 8000,
+  "peak_population": 849,
+  "peak_tick": 6926,
+  "final_population": 833,
+  "collapse_ratio": 0.9811542991755006,
+  "mean_neighbours_late": 14.06785615044265,
+  "total_births": 6122,
+  "total_deaths": 5329,
+  "extinct_at": null
+ },
+ "seconds": 92.05,
+ "trace": [
+  {
+   "tick": 0,
+   "population": 40,
+   "births": 0,
+   "deaths": 0,
+   "mean_age": 308.75,
+   "mean_neighbours": 0.65,
+   "nests_free": 60
+  },
+  {
+   "tick": 400,
+   "population": 44,
+   "births": 0,
+   "deaths": 0,
+   "mean_age": 408.54545454545456,
+   "mean_neighbours": 0.5454545454545454,
+   "nests_free": 56
+  },
+  {
+   "tick": 800,
+   "population": 91,
+   "births": 0,
+   "deaths": 0,
+   "mean_age": 256.68131868131866,
+   "mean_neighbours": 1.7362637362637363,
+   "nests_free": 42
+  },
+  {
+   "tick": 1200,
+   "population": 228,
+   "births": 4,
+   "deaths": 0,
+   "mean_age": 294.5,
+   "mean_neighbours": 4.366071428571429,
+   "nests_free": 24
+  },
+  {
+   "tick": 1600,
+   "population": 428,
+   "births": 0,
+   "deaths": 0,
+   "mean_age": 366.38317757009344,
+   "mean_neighbours": 7.88785046728972,
+   "nests_free": 16
+  },
+  {
+   "tick": 2000,
+   "population": 582,
+   "births": 2,
+   "deaths": 0,
+   "mean_age": 411.4810996563574,
+   "mean_neighbours": 10.682758620689656,
+   "nests_free": 9
+  },
+  {
+   "tick": 2400,
+   "population": 682,
+   "births": 1,
+   "deaths": 0,
+   "mean_age": 443.4648093841642,
+   "mean_neighbours": 11.43612334801762,
+   "nests_free": 12
+  },
+  {
+   "tick": 2800,
+   "population": 721,
+   "births": 1,
+   "deaths": 2,
+   "mean_age": 441.1608876560333,
+   "mean_neighbours": 12.2,
+   "nests_free": 8
+  },
+  {
+   "tick": 3200,
+   "population": 766,
+   "births": 1,
+   "deaths": 0,
+   "mean_age": 460.7023498694517,
+   "mean_neighbours": 13.108496732026143,
+   "nests_free": 8
+  },
+  {
+   "tick": 3600,
+   "population": 770,
+   "births": 0,
+   "deaths": 0,
+   "mean_age": 452.41948051948054,
+   "mean_neighbours": 12.911688311688312,
+   "nests_free": 7
+  },
+  {
+   "tick": 4000,
+   "population": 774,
+   "births": 2,
+   "deaths": 1,
+   "mean_age": 444.8720930232558,
+   "mean_neighbours": 13.47279792746114,
+   "nests_free": 9
+  },
+  {
+   "tick": 4400,
+   "population": 789,
+   "births": 1,
+   "deaths": 0,
+   "mean_age": 451.23954372623575,
+   "mean_neighbours": 12.906091370558375,
+   "nests_free": 6
+  },
+  {
+   "tick": 4800,
+   "population": 793,
+   "births": 1,
+   "deaths": 4,
+   "mean_age": 455.91046658259773,
+   "mean_neighbours": 13.842171717171718,
+   "nests_free": 5
+  },
+  {
+   "tick": 5200,
+   "population": 796,
+   "births": 0,
+   "deaths": 1,
+   "mean_age": 457.33040201005025,
+   "mean_neighbours": 13.57035175879397,
+   "nests_free": 7
+  },
+  {
+   "tick": 5600,
+   "population": 808,
+   "births": 0,
+   "deaths": 1,
+   "mean_age": 457.46410891089107,
+   "mean_neighbours": 13.944306930693068,
+   "nests_free": 9
+  },
+  {
+   "tick": 6000,
+   "population": 812,
+   "births": 0,
+   "deaths": 0,
+   "mean_age": 453.77463054187194,
+   "mean_neighbours": 13.862068965517242,
+   "nests_free": 4
+  },
+  {
+   "tick": 6400,
+   "population": 807,
+   "births": 1,
+   "deaths": 1,
+   "mean_age": 453.3742255266419,
+   "mean_neighbours": 14.766749379652605,
+   "nests_free": 7
+  },
+  {
+   "tick": 6800,
+   "population": 825,
+   "births": 1,
+   "deaths": 2,
+   "mean_age": 459.6533333333333,
+   "mean_neighbours": 14.044902912621358,
+   "nests_free": 5
+  },
+  {
+   "tick": 7200,
+   "population": 829,
+   "births": 1,
+   "deaths": 0,
+   "mean_age": 456.124246079614,
+   "mean_neighbours": 13.88647342995169,
+   "nests_free": 3
+  },
+  {
+   "tick": 7600,
+   "population": 828,
+   "births": 2,
+   "deaths": 2,
+   "mean_age": 450.5169082125604,
+   "mean_neighbours": 14.44915254237288,
+   "nests_free": 1
+  },
+  {
+   "tick": 7999,
+   "population": 833,
+   "births": 1,
+   "deaths": 0,
+   "mean_age": 460.218487394958,
+   "mean_neighbours": 14.28125,
+   "nests_free": 6
+  }
+ ]
+}
