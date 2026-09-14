@@ -5,8 +5,8 @@ it answers local queries like "is there food on this square" and "how many agent
 this square".
 
 The world does not decide what agents do. That logic lives in agent.py. Keeping the
-environment separate from the behaviour means the same world is reused unchanged across
-all three experimental conditions.
+environment separate from the behaviour means the same world is reused unchanged by every
+condition in the ablation study.
 """
 
 from __future__ import annotations
@@ -225,8 +225,8 @@ class World:
     def count_neighbours(self, x: int, y: int, radius: int, exclude=None) -> int:
         """Count the other agents within radius squares of a position.
 
-        This is the crowding measure. Both the Calhoun and the Freedman conditions depend
-        on it, so it is defined once here and reused everywhere.
+        This is the crowding measure, and crowding is what the whole project is about, so it
+        is defined once here and reused everywhere rather than recomputed ad hoc.
         """
         total = 0
         for ox in range(-radius, radius + 1):

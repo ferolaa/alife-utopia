@@ -5,8 +5,9 @@ let agents live, and the ones that reach the reproduction threshold leave mutate
 of themselves behind. Over many ticks the population fills up with descendants of whoever
 managed to eat reliably.
 
-One run is one condition. The same loop is used for all three conditions, and only the
-config differs.
+One run is one condition. The same loop runs every condition in the ablation study, and
+only the config differs between them. Nothing about the logic changes, which is what makes
+the comparison between conditions a fair one.
 """
 
 from __future__ import annotations

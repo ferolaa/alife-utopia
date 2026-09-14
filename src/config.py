@@ -1,8 +1,9 @@
 """Every parameter of the simulation, kept in one place.
 
-This matters for this project in particular. The three experimental conditions differ only
-in these numbers. No logic differs between them at all. That is what makes the comparison
-between conditions a fair one.
+This matters for this project in particular. Every condition in the ablation study differs
+only in these numbers. No logic differs between them at all. That is what makes the
+comparison between conditions a fair one, and it is why each mechanism is switched on and
+off by a flag here rather than by editing the simulation.
 """
 
 from __future__ import annotations
@@ -41,10 +42,10 @@ class SimConfig:
     reproduce_threshold: float = 35.0  # below this, attempting to reproduce does nothing
     reproduce_cost: float = 18.0       # energy transferred from parent to child
 
-    # ------------------------- the crowding cost, which is Freedman's mechanism ---
+    # ------------------------- the cost of unavoidable social contact -------------
     # When enabled, each nearby agent drains a little energy per tick. This represents
-    # unavoidable social interaction being costly in itself, as opposed to density simply
-    # being high.
+    # social contact being costly in itself, as opposed to density simply being high. It is
+    # the point Freedman raised against Calhoun, and it is one of the mechanisms we ablate.
     crowding_cost_enabled: bool = False
     crowding_energy_cost: float = 0.12  # per neighbour, per tick
 
