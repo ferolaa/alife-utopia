@@ -23,14 +23,14 @@ class World:
         height: int,
         n_food: int,
         food_unlimited: bool = False,
-        food_respawn_prob: float = 0.02,
+        food_respawn_rate: float = 0.0,
         wrap_edges: bool = True,
         rng: random.Random | None = None,
     ):
         self.width = width
         self.height = height
         self.food_unlimited = food_unlimited
-        self.food_respawn_prob = food_respawn_prob
+        self.food_respawn_rate = food_respawn_rate
         self.wrap_edges = wrap_edges
         self.rng = rng or random.Random()
 
@@ -96,10 +96,24 @@ class World:
         return True
 
     def respawn_step(self) -> None:
-        """Slow regrowth of food. Only used when food is limited."""
+        """Regrow food. Only used when food is limited.
+
+        food_respawn_rate is the average number of new items per tick, and it can be more
+        than one. The whole part is always added. The fractional part is added with a
+        matching probability, so that over many ticks the average comes out right.
+
+        This rate sets the carrying capacity of the world. One food item returns
+        energy_from_food energy, and each agent burns energy_cost_per_tick every tick, so
+        the population the world can support is roughly the rate times the ratio of those
+        two numbers.
+        """
         if self.food_unlimited:
             return
-        if self.rng.random() < self.food_respawn_prob:
+        whole = int(self.food_respawn_rate)
+        if whole:
+            self.scatter_food(whole)
+        remainder = self.food_respawn_rate - whole
+        if remainder and self.rng.random() < remainder:
             self.scatter_food(1)
 
     # ------------------------------------------------------------------- sensing

@@ -19,7 +19,7 @@ class SimConfig:
     height: int = 40
     n_food: int = 150
     food_unlimited: bool = False       # True means eaten food reappears immediately
-    food_respawn_prob: float = 0.3     # chance of new food per tick, when food is limited
+    food_respawn_rate: float = 4.0     # average new food items per tick, when limited
     wrap_edges: bool = True            # True makes the grid a torus
 
     # ------------------------------------------------------------- the simulation
