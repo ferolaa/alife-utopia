@@ -1,11 +1,12 @@
-"""The environment: a grid world holding food and agents.
+"""The environment the creatures live in.
 
-The world itself is deliberately "dumb": it knows where food and agents are, and it can
-answer local questions like "is there food near this square?" or "how many neighbours are
-around this square?". It does not decide what agents do - that lives in agent.py, and the
-loop that drives everything lives in the simulation module. Keeping the environment
-separate from behaviour means the same world can be reused unchanged across all three
-experimental conditions.
+The world is a grid. It holds food and it holds agents. It knows where everything is, and
+it answers local queries like "is there food on this square" and "how many agents are near
+this square".
+
+The world does not decide what agents do. That logic lives in agent.py. Keeping the
+environment separate from the behaviour means the same world is reused unchanged across
+all three experimental conditions.
 """
 
 from __future__ import annotations
@@ -14,7 +15,7 @@ import random
 
 
 class World:
-    """A width x height grid containing food and agents."""
+    """A grid of squares holding food and agents."""
 
     def __init__(
         self,
@@ -33,15 +34,15 @@ class World:
         self.wrap_edges = wrap_edges
         self.rng = rng or random.Random()
 
-        # Food is stored as a set of (x, y) squares. A set (rather than a full grid array)
-        # keeps "is there food here?" fast while food stays sparse, which it always is here.
+        # Food is stored as a set of squares. Food is always sparse here, so a set gives
+        # constant time lookups for "is there food on this square".
         self.food: set[tuple[int, int]] = set()
 
-        # Agents are appended by the simulation. The world only needs their positions.
+        # The simulation puts agents in here. The world only needs their positions.
         self.agents: list = []
 
-        # Rebuilt once per tick: maps a square to the agents standing on it, so that
-        # counting neighbours is a cheap local lookup instead of scanning every agent.
+        # An index from square to the agents standing on it. It is rebuilt once per tick,
+        # so counting neighbours is a local lookup instead of a scan over every agent.
         self._occupancy: dict[tuple[int, int], list] = {}
 
         self.scatter_food(n_food)
@@ -54,10 +55,10 @@ class World:
     def normalise(self, x: int, y: int) -> tuple[int, int]:
         """Bring a position back inside the grid.
 
-        With wrap_edges the grid is a torus: walking off the right edge brings you back on
-        the left. Wrapping is the default because it keeps population density uniform -
-        with hard walls, agents pile up in corners, which would create fake density
-        differences and muddy exactly the effect we are trying to measure.
+        With wrap_edges the grid is a torus. Walking off the right edge brings you back on
+        the left. Wrapping is the default because it keeps density uniform. With solid
+        walls the agents pile up in the corners, which creates artificial density
+        gradients, and density is exactly what this project is trying to measure.
         """
         if self.wrap_edges:
             return (x % self.width, y % self.height)
@@ -66,7 +67,7 @@ class World:
     # ---------------------------------------------------------------------- food
 
     def scatter_food(self, n: int) -> None:
-        """Drop n new food items on random empty squares."""
+        """Place n new food items on random empty squares."""
         attempts = 0
         added = 0
         while added < n and attempts < n * 20:
@@ -80,11 +81,11 @@ class World:
         return (x, y) in self.food
 
     def take_food(self, x: int, y: int) -> bool:
-        """Eat the food on this square. Returns True if there was any.
+        """Eat the food on this square. Returns True if there was food there.
 
-        When food is unlimited, eaten food immediately reappears somewhere else, so the
-        total amount in the world never drops. That is the "utopia" setting: resources
-        are never the thing that limits the population.
+        When food is unlimited, an eaten item immediately reappears somewhere else, so the
+        total never drops. That is the utopia setting. Resources are never the constraint
+        on the population.
         """
         square = (x, y)
         if square not in self.food:
@@ -95,7 +96,7 @@ class World:
         return True
 
     def respawn_step(self) -> None:
-        """Slow regrowth of food, used when food is *not* unlimited."""
+        """Slow regrowth of food. Only used when food is limited."""
         if self.food_unlimited:
             return
         if self.rng.random() < self.food_respawn_prob:
@@ -106,12 +107,16 @@ class World:
     def nearest_food_direction(
         self, x: int, y: int, vision: int
     ) -> tuple[float, float, float]:
-        """Look around (x, y) and report where the closest food is.
+        """Report where the closest visible food is, relative to a square.
 
-        Returns (dx, dy, closeness), all roughly in the range -1..1, which is the form the
-        agent's brain wants as input. If no food is visible, returns zeros. Agents only see
-        a small patch around themselves rather than the whole grid - this is both more
-        plausible and much cheaper to compute.
+        Returns three values. The first two are the direction to that food on each axis.
+        The third is how close it is. All three are roughly between minus one and one,
+        which is the scale the brain expects for its inputs. If no food is in range, all
+        three are zero.
+
+        Agents only see a small patch around themselves rather than the whole grid. This is
+        more plausible, and it keeps the cost per agent per tick constant instead of
+        growing with the size of the world.
         """
         best = None
         best_dist = None
@@ -119,21 +124,21 @@ class World:
             for oy in range(-vision, vision + 1):
                 square = self.normalise(x + ox, y + oy)
                 if square in self.food:
-                    dist = abs(ox) + abs(oy)          # steps needed on a grid
+                    dist = abs(ox) + abs(oy)          # manhattan distance, in grid steps
                     if best_dist is None or dist < best_dist:
                         best_dist = dist
                         best = (ox, oy)
         if best is None:
             return (0.0, 0.0, 0.0)
         dx, dy = best
-        closeness = 1.0 - (best_dist / (2 * vision))  # 1 = right here, 0 = at vision edge
+        closeness = 1.0 - (best_dist / (2 * vision))  # one means adjacent, zero means far
         return (dx / vision, dy / vision, closeness)
 
     def count_neighbours(self, x: int, y: int, radius: int, exclude=None) -> int:
-        """How many other agents are within `radius` squares of (x, y).
+        """Count the other agents within radius squares of a position.
 
-        This is the crowding measure that both the Calhoun and Freedman conditions hinge
-        on, so it is defined once here and reused everywhere.
+        This is the crowding measure. Both the Calhoun and the Freedman conditions depend
+        on it, so it is defined once here and reused everywhere.
         """
         total = 0
         for ox in range(-radius, radius + 1):
@@ -147,7 +152,7 @@ class World:
     # -------------------------------------------------------------------- upkeep
 
     def rebuild_occupancy(self) -> None:
-        """Refresh the square -> agents index. Called once per tick by the simulation."""
+        """Refresh the square to agents index. The simulation calls this once per tick."""
         self._occupancy = {}
         for agent in self.agents:
             self._occupancy.setdefault((agent.x, agent.y), []).append(agent)
@@ -158,5 +163,5 @@ class World:
 
     @property
     def density(self) -> float:
-        """Agents per square. The headline number for the crowding question."""
+        """Agents per square. This is the headline number for the crowding question."""
         return len(self.agents) / (self.width * self.height)

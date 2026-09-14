@@ -1,16 +1,15 @@
-"""The tiny neural network that decides what a creature does.
+"""The small neural network that decides what a creature does.
 
-This is a plain feed-forward network: a handful of numbers describing what the creature
-senses go in, and a choice of action comes out. It is small on purpose - a few dozen
-weights - because the weights are not trained with backpropagation. They are *evolved*:
-a creature that survives long enough to reproduce passes a slightly mutated copy of its
-weights to its offspring, and selection does the rest. Small networks evolve much faster
-than large ones, since random mutation is a far less efficient search than gradient
+A few numbers describing what the creature senses go in. A choice of action comes out.
+
+The network is tiny on purpose. Its weights are not trained with backpropagation. They are
+evolved instead. A creature that lives long enough to reproduce passes a mutated copy of
+its weights to its child, and selection does the rest. Small networks evolve much faster
+than large ones, because random mutation is a far weaker search method than gradient
 descent.
 
-All the weights live in one flat vector. That is the whole reason mutation is a one-liner
-(add gaussian noise to the vector) rather than something that has to walk a layer
-structure.
+All the weights live in one flat vector. That is why mutation is a single line. We add
+gaussian noise to the whole vector at once.
 """
 
 from __future__ import annotations
@@ -19,17 +18,18 @@ import random
 
 import numpy as np
 
-# What the creature senses. Keeping this list explicit here (rather than implied by an
-# integer) makes it obvious what the network is being asked to work with.
+# The inputs to the network. Listing them here makes it obvious what the network has to
+# work with.
 SENSES = (
-    "food_dx",         # direction to nearest visible food, left/right   (-1..1)
-    "food_dy",         # direction to nearest visible food, up/down      (-1..1)
-    "food_closeness",  # how near that food is, 0 = none visible          (0..1)
-    "energy",          # own energy, scaled                               (0..1)
-    "crowding",        # how many neighbours are nearby, scaled           (0..1)
+    "food_dx",         # is the nearest visible food left or right     (minus one to one)
+    "food_dy",         # is it above or below                          (minus one to one)
+    "food_closeness",  # how near it is, zero means none in sight      (zero to one)
+    "energy",          # the creature's own energy, scaled             (zero to one)
+    "crowding",        # how many neighbours are nearby, scaled        (zero to one)
 )
 
-# What the creature can do. Order matters: the network's outputs are read in this order.
+# The outputs of the network. The order matters, because the output scores are read in
+# this order.
 ACTIONS = ("stay", "north", "south", "east", "west", "reproduce")
 
 MOVES = {
@@ -43,16 +43,16 @@ MOVES = {
 
 
 class Brain:
-    """A one-hidden-layer network mapping senses to an action."""
+    """A feed forward network with one hidden layer. It maps senses to an action."""
 
     N_INPUTS = len(SENSES)
     N_HIDDEN = 8
     N_OUTPUTS = len(ACTIONS)
 
-    # Total number of weights: two weight matrices plus two bias vectors.
+    # How many weights make up one brain. Two weight matrices plus two bias vectors.
     N_WEIGHTS = (
-        N_INPUTS * N_HIDDEN + N_HIDDEN          # layer 1 weights + biases
-        + N_HIDDEN * N_OUTPUTS + N_OUTPUTS      # layer 2 weights + biases
+        N_INPUTS * N_HIDDEN + N_HIDDEN          # first layer
+        + N_HIDDEN * N_OUTPUTS + N_OUTPUTS      # second layer
     )
 
     def __init__(self, weights: np.ndarray):
@@ -66,17 +66,17 @@ class Brain:
 
     @classmethod
     def random(cls, rng: random.Random | None = None) -> "Brain":
-        """A brand-new random brain - what the very first generation starts with."""
+        """A new brain with random weights. This is what the first generation starts with."""
         seed = None if rng is None else rng.randrange(2**32)
         np_rng = np.random.default_rng(seed)
         return cls(np_rng.normal(0.0, 1.0, size=cls.N_WEIGHTS))
 
     def mutated_copy(self, mutation_std: float, rng: random.Random | None = None) -> "Brain":
-        """A child's brain: this brain plus small random changes.
+        """A child's brain. It is this brain plus gaussian noise.
 
-        mutation_std controls how big those changes are. Too small and the population
-        never discovers anything new; too large and good solutions get destroyed as fast
-        as they appear. This is the single most important evolution knob in the project.
+        mutation_std is the standard deviation of that noise. Too small and the population
+        never explores anything new. Too large and good solutions are destroyed as fast as
+        they appear. This is the most important evolution parameter in the project.
         """
         seed = None if rng is None else rng.randrange(2**32)
         np_rng = np.random.default_rng(seed)
@@ -97,23 +97,26 @@ class Brain:
         return W1, b1, W2, b2
 
     def action_scores(self, senses) -> np.ndarray:
-        """Run the senses through the network and return one score per action."""
+        """Run the senses through the network. Returns one score per action."""
         x = np.asarray(senses, dtype=np.float64)
         W1, b1, W2, b2 = self._unpack()
-        hidden = np.tanh(x @ W1 + b1)      # tanh keeps values in -1..1, a common choice
+        hidden = np.tanh(x @ W1 + b1)      # tanh keeps activations between minus one and one
         return hidden @ W2 + b2
 
     def decide(self, senses, rng: random.Random | None = None, temperature: float = 1.0) -> str:
-        """Pick an action.
+        """Choose an action.
 
-        The scores are turned into probabilities (softmax) and one action is *sampled*,
-        rather than always taking the highest-scoring one. This matters: with a strictly
-        deterministic choice, a creature that sees no food would repeat the same move
-        forever and only ever sweep one row of the grid. Sampling makes it wander, which
-        is what lets it stumble onto food in the first place.
+        The scores are turned into probabilities with a softmax, and one action is sampled
+        from them. We do not always take the highest scoring action. Here is why. A
+        creature that sees no food gets the same senses every tick. With a deterministic
+        choice it would repeat the same move forever and only ever sweep one row of the
+        grid. Sampling makes it wander, and wandering is how it finds food.
+
+        temperature controls how random the choice is. Low values approach always picking
+        the best action. High values approach picking uniformly at random.
         """
         scores = self.action_scores(senses) / max(temperature, 1e-6)
-        scores = scores - scores.max()              # keeps exp() from overflowing
+        scores = scores - scores.max()              # subtract the max to avoid overflow in exp
         probs = np.exp(scores)
         probs /= probs.sum()
         r = (rng or random).random()
