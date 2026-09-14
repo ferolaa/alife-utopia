@@ -140,6 +140,25 @@ def test_age_increases_each_tick():
     assert agent.age == 5
 
 
+def test_neighbours_are_counted_once_and_remembered():
+    world, agent, rng = make()
+    assert agent.neighbours is None        # has not acted yet
+    agent.act(world, DEFAULT, rng)
+    assert agent.neighbours is not None    # the count is kept for reuse
+
+
+def test_refunding_a_birth_restores_the_parent():
+    cfg = DEFAULT
+    world, agent, rng = make(cfg)
+    agent.energy = cfg.reproduce_threshold + 5
+    before = agent.energy
+    child = agent._try_reproduce(world, cfg, rng)
+    assert child is not None
+    agent.refund_birth(cfg)
+    assert agent.energy == before          # energy given back
+    assert agent.children == 0             # and it does not count as a child
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

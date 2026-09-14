@@ -19,7 +19,7 @@ class Agent:
 
     __slots__ = (
         "x", "y", "energy", "brain", "age", "alive", "children",
-        "dependents", "dependent_until", "neglect_ticks", "nest",
+        "dependents", "dependent_until", "neglect_ticks", "nest", "neighbours",
     )
 
     def __init__(self, x: int, y: int, energy: float, brain: Brain):
@@ -43,13 +43,19 @@ class Agent:
         # The nest square this agent is occupying, if any. Released when it grows up.
         self.nest: tuple[int, int] | None = None
 
+        # How many neighbours this agent had when it last acted. Counting neighbours is the
+        # most expensive thing in the simulation, so it is done once per tick and the
+        # answer is reused by the crowding cost, the senses and the metrics. None means
+        # this agent has not acted yet, which is true of newborns on the tick they appear.
+        self.neighbours: int | None = None
+
     @property
     def is_dependent(self) -> bool:
         return self.age < self.dependent_until
 
     # ------------------------------------------------------------------- sensing
 
-    def sense(self, world, cfg) -> tuple[float, ...]:
+    def sense(self, world, cfg, neighbours: int | None = None) -> tuple[float, ...]:
         """Collect every input the brain expects, in the order brain.SENSES lists.
 
         Senses belonging to a mechanism that is switched off come back as zero. An agent in
@@ -62,9 +68,10 @@ class Agent:
         nest_dx, nest_dy, nest_closeness = world.nearest_free_nest_direction(
             self.x, self.y, cfg.vision
         )
-        neighbours = world.count_neighbours(
-            self.x, self.y, cfg.crowding_radius, exclude=self
-        )
+        if neighbours is None:
+            neighbours = world.count_neighbours(
+                self.x, self.y, cfg.crowding_radius, exclude=self
+            )
         pup_dx, pup_dy, pup_need = self._sense_pups(world, cfg)
 
         return make_senses(
@@ -126,18 +133,20 @@ class Agent:
         """
         self.age += 1
 
+        # Count neighbours once, here, and reuse the answer everywhere else this tick.
+        self.neighbours = world.count_neighbours(
+            self.x, self.y, cfg.crowding_radius, exclude=self
+        )
+
         # 1. The metabolic cost of staying alive.
         self.energy -= cfg.energy_cost_per_tick
 
         # 2. The cost of nearby agents, if this condition enables it.
         if cfg.crowding_cost_enabled:
-            neighbours = world.count_neighbours(
-                self.x, self.y, cfg.crowding_radius, exclude=self
-            )
-            self.energy -= neighbours * cfg.crowding_energy_cost
+            self.energy -= self.neighbours * cfg.crowding_energy_cost
 
         # 3. Sense, decide, act.
-        senses = self.sense(world, cfg)
+        senses = self.sense(world, cfg, neighbours=self.neighbours)
         action = self.brain.decide(senses, rng, cfg.action_temperature)
 
         child = None
@@ -158,6 +167,17 @@ class Agent:
             self.alive = False
 
         return child
+
+    def refund_birth(self, cfg) -> None:
+        """Undo a birth the simulation could not accept.
+
+        The population cap is a safety limit on the program, not a fact about the world, so
+        it must not quietly destroy energy or count as a failed breeding attempt. Without
+        this the population sits at the cap while every parent pays for children that never
+        exist, which drains the whole population.
+        """
+        self.energy = min(cfg.energy_max, self.energy + cfg.reproduce_cost)
+        self.children -= 1
 
     def _try_reproduce(self, world, cfg, rng: random.Random) -> "Agent | None":
         """Spend energy to place a child with a mutated brain on a nearby square.

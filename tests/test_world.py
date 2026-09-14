@@ -80,6 +80,36 @@ def test_neighbour_counting():
     assert w.count_neighbours(5, 5, radius=1) == 2              # a itself counts too
 
 
+def test_nests_start_empty_and_can_be_claimed():
+    w = make_world()
+    assert w.nests == set()
+    w.scatter_nests(3)
+    assert len(w.nests) == 3
+    square = next(iter(w.nests))
+    assert w.is_free_nest(*square) is True
+    assert w.claim_nest(*square) is True
+    assert w.is_free_nest(*square) is False
+    assert w.claim_nest(*square) is False      # cannot be claimed twice
+    w.release_nest(*square)
+    assert w.is_free_nest(*square) is True
+
+
+def test_nest_sense_is_silent_when_there_are_no_nests():
+    w = make_world()
+    assert w.nearest_free_nest_direction(5, 5, vision=4) == (0.0, 0.0, 0.0)
+
+
+def test_offset_takes_the_short_way_round_a_wrapped_grid():
+    w = make_world(wrap_edges=True)            # 10 x 10
+    assert w.offset(1, 1, 9, 9) == (-2, -2)    # not (8, 8)
+    assert w.offset(9, 9, 1, 1) == (2, 2)
+
+
+def test_offset_is_plain_subtraction_with_walls():
+    w = make_world(wrap_edges=False)
+    assert w.offset(1, 1, 9, 9) == (8, 8)
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

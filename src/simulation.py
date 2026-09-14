@@ -56,7 +56,12 @@ def run(cfg: SimConfig, progress_every: int = 0) -> dict:
     extinct_at = None
 
     for tick in range(cfg.n_ticks):
-        # The occupancy index must be current before any agent senses crowding.
+        # Build the index of who is standing where, once, before anybody moves. Every
+        # agent this tick therefore senses the same snapshot of the world, taken at the
+        # start of the tick. This is simultaneous update: what an agent does depends on how
+        # things were when the tick began, not on how far down the list it happens to sit.
+        # The alternative, rebuilding after every single move, would make an agent's senses
+        # depend on its position in the loop, which is not a property of the agent at all.
         world.rebuild_occupancy()
 
         births = 0
@@ -72,9 +77,15 @@ def run(cfg: SimConfig, progress_every: int = 0) -> dict:
             if not agent.alive:
                 continue
             child = agent.act(world, cfg, rng)
-            if child is not None and len(world.agents) + len(newborns) < cfg.max_population:
-                newborns.append(child)
-                births += 1
+            if child is not None:
+                if len(world.agents) + len(newborns) < cfg.max_population:
+                    newborns.append(child)
+                    births += 1
+                else:
+                    # At the cap the birth cannot happen, so give the parent back what it
+                    # spent. The cap protects the program from running away, and it should
+                    # not act as an invisible tax on breeding.
+                    agent.refund_birth(cfg)
 
         survivors = [a for a in world.agents if a.alive]
         deaths = len(world.agents) - len(survivors)
@@ -124,11 +135,11 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int)
             "density": 0.0, "food": len(world.food),
         }
 
-    total_neighbours = 0
-    for agent in agents:
-        total_neighbours += world.count_neighbours(
-            agent.x, agent.y, cfg.crowding_radius, exclude=agent
-        )
+    # Crowding is read back from what each agent actually measured when it acted, rather
+    # than recounted here. That is both cheaper and more meaningful: it is the crowding the
+    # agents really experienced and responded to. Newborns have not acted yet, so they are
+    # left out of the average instead of counting as having no neighbours.
+    measured = [a.neighbours for a in agents if a.neighbours is not None]
 
     return {
         "tick": tick,
@@ -137,7 +148,7 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int)
         "deaths": deaths,
         "mean_energy": sum(a.energy for a in agents) / n,
         "mean_age": sum(a.age for a in agents) / n,
-        "mean_neighbours": total_neighbours / n,
+        "mean_neighbours": (sum(measured) / len(measured)) if measured else 0.0,
         "density": world.density,
         "food": len(world.food),
     }
