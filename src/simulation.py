@@ -180,8 +180,12 @@ def _clustering(world: World, cfg: SimConfig, measured: list) -> float:
     """Observed crowding divided by the crowding an even spread would give."""
     if not measured:
         return 0.0
+    n = world.population
+    if n < 2:
+        return 0.0
     patch = (2 * cfg.crowding_radius + 1) ** 2
-    expected = world.density * patch - 1.0
+    cells = world.width * world.height
+    expected = (n - 1) * patch / cells      # uniform spread, exactly
     if expected <= 0:
         return 0.0
     return (sum(measured) / len(measured)) / expected

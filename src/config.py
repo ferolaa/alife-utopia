@@ -108,6 +108,23 @@ class SimConfig:
     developmental_damage_enabled: bool = False
     damage_scale: float = 1.0          # how strongly time spent unattended translates to harm
 
+    # ------------- crowding blinds parents ----------------------------------------
+    # A parent's sense of where its own young are, and how badly they need it, weakens as
+    # neighbours pile up around it. Calhoun described mothers in a crowd losing track of
+    # their litters entirely. Until now our parents have had perfect knowledge of their
+    # young however dense the pen became, which quietly assumed away the thing he said went
+    # wrong.
+    crowding_blinds_parents: bool = False
+    signal_decay: float = 0.08         # how fast the signal fades per neighbour
+
+    # ------------- intruders disturb the nest -------------------------------------
+    # A pup is harmed by other creatures crowding its nest, not only by its parent being
+    # away. This matters because it is the one source of harm a diligent parent cannot
+    # prevent: in the real pen, mothers under constant intrusion abandoned young they were
+    # otherwise perfectly able to raise.
+    nest_intrusion_enabled: bool = False
+    intrusion_threshold: int = 6       # neighbours around the nest before it counts
+
     # -------------------------------------------------------------- the evolution
     mutation_std: float = 0.12         # standard deviation of the mutation noise
     action_temperature: float = 1.0    # softmax temperature when sampling an action

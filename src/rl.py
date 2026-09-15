@@ -392,8 +392,9 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
         }
         measured = [a.neighbours for a in world.agents if a.neighbours is not None]
         record["mean_neighbours"] = (sum(measured) / len(measured)) if measured else 0.0
+        n = world.population
         patch = (2 * cfg.crowding_radius + 1) ** 2
-        expected = world.density * patch - 1.0
+        expected = (n - 1) * patch / (world.width * world.height) if n > 1 else 0.0
         record["clustering"] = (record["mean_neighbours"] / expected) if expected > 0 else 0.0
 
         if (tick + 1) % update_every == 0:

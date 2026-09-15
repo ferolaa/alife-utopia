@@ -476,6 +476,87 @@ def test_no_damage_when_the_mechanism_is_off():
     assert pup.impairment == 0.0
 
 
+
+BLIND = DEFAULT.variant("blind", parental_care_enabled=True,
+                        crowding_blinds_parents=True, signal_decay=0.08)
+INTRUDE = DEFAULT.variant("intrude", parental_care_enabled=True,
+                          nest_intrusion_enabled=True, intrusion_threshold=6)
+
+
+def _with_pup(cfg):
+    world, parent, rng = make(cfg)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, cfg, rng)
+    world.agents.append(pup)
+    world.rebuild_occupancy(cfg.crowding_radius)
+    return world, parent, pup, rng
+
+
+def test_a_crowd_weakens_a_parents_sense_of_its_pup():
+    from brain import SENSE_INDEX
+    world, parent, pup, rng = _with_pup(BLIND)
+    pup.x, pup.y = parent.x + 2, parent.y
+    pup.neglect_ticks = 10
+
+    parent.neighbours = 0
+    alone = parent.sense(world, BLIND)[SENSE_INDEX["pup_need"]]
+    parent.neighbours = 20
+    crowded = parent.sense(world, BLIND)[SENSE_INDEX["pup_need"]]
+
+    assert alone > 0
+    assert crowded < alone            # the signal fades
+    assert crowded > 0                # but never vanishes entirely
+
+
+def test_crowding_does_not_blind_when_the_mechanism_is_off():
+    from brain import SENSE_INDEX
+    cfg = DEFAULT.variant("nocare_blind", parental_care_enabled=True)
+    world, parent, pup, rng = _with_pup(cfg)
+    pup.x, pup.y = parent.x + 2, parent.y
+    pup.neglect_ticks = 10
+    parent.neighbours = 0
+    alone = parent.sense(world, cfg)[SENSE_INDEX["pup_need"]]
+    parent.neighbours = 20
+    crowded = parent.sense(world, cfg)[SENSE_INDEX["pup_need"]]
+    assert alone == crowded
+
+
+def _neglect_after_a_tick(cfg, n_intruders):
+    world, parent, rng = make(cfg)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, cfg, rng)
+    pup.x, pup.y = parent.x, parent.y          # parent right beside it
+    crowd = [Agent(parent.x, parent.y, 50.0, Brain.random(random.Random(i)))
+             for i in range(n_intruders)]
+    world.agents = [parent, pup] + crowd
+    world.rebuild_occupancy(cfg.crowding_radius)
+    before = pup.neglect_ticks
+    pup.act(world, cfg, rng)
+    return pup.neglect_ticks - before
+
+
+def test_a_quiet_nest_is_fine_even_with_a_few_others_around():
+    assert _neglect_after_a_tick(INTRUDE, 0) == 0
+    assert _neglect_after_a_tick(INTRUDE, 3) == 0
+
+
+def test_a_crowded_nest_harms_the_pup_despite_the_parent_being_there():
+    # This is the point of the mechanism: attentive parenting stops being enough.
+    assert _neglect_after_a_tick(INTRUDE, 8) > 0
+
+
+def test_intruders_are_ignored_when_the_mechanism_is_off():
+    quiet = DEFAULT.variant("quiet", parental_care_enabled=True)
+    assert _neglect_after_a_tick(quiet, 8) == 0
+
+
+def test_the_parent_is_not_counted_as_an_intruder():
+    # With the threshold at 6, exactly 6 others plus the parent must still trip it, and 5
+    # others plus the parent must not. If the parent were miscounted the boundary moves.
+    assert _neglect_after_a_tick(INTRUDE, 5) == 0
+    assert _neglect_after_a_tick(INTRUDE, 6) > 0
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

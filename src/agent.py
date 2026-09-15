@@ -181,6 +181,17 @@ class Agent:
         # Its brain is untouched. What it lost was the childhood that would have let the
         # brain do its job.
         clarity = 1.0 - self.impairment
+
+        # And a creature in a crowd loses track of its young regardless of upbringing. The
+        # signal decays with the number of neighbours, so the same parent that manages
+        # perfectly well alone is half blind surrounded.
+        if cfg.crowding_blinds_parents:
+            nearby = self.neighbours
+            if nearby is None:
+                nearby = world.count_neighbours(
+                    self.x, self.y, cfg.crowding_radius, exclude=self
+                )
+            clarity /= (1.0 + cfg.signal_decay * nearby)
         return (
             max(-1.0, min(1.0, dx / scale)) * clarity,
             max(-1.0, min(1.0, dy / scale)) * clarity,
@@ -283,6 +294,18 @@ class Agent:
             and not parent.is_dependent
             and _within(world, parent, self, cfg.care_radius)
         )
+
+        # Too many bodies around the nest and the pup suffers whatever its parent does.
+        # This is the only harm in the model that diligent parenting cannot prevent, which
+        # is precisely why it is worth testing: every other pressure here has an escape.
+        if cfg.nest_intrusion_enabled and attended:
+            intruders = world.count_neighbours(
+                self.x, self.y, cfg.crowding_radius, exclude=self
+            )
+            if parent is not None and _within(world, parent, self, cfg.crowding_radius):
+                intruders -= 1          # the parent is not an intruder
+            if intruders >= cfg.intrusion_threshold:
+                attended = False
 
         if attended:
             if self.neglect_ticks > 0:
