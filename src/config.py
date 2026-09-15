@@ -72,6 +72,13 @@ class SimConfig:
     # over once food is unlimited.
     nests_enabled: bool = False
     n_nests: int = 60
+    nests_on_perimeter: bool = False   # put the nest boxes around the walls, as in the pen
+
+    # ---------------------------- feeding sites -----------------------------------
+    # Zero means food falls anywhere. Any higher number concentrates it at that many
+    # fixed sites, which is what the real enclosure had and what makes gathering possible.
+    n_feeders: int = 0
+    feeder_spread: int = 3             # how far from a feeder its food can land
 
     # ---------------------------- parental care, the third mechanism --------------
     # Newborns are helpless. They cannot act, and they die if no parent stays close. This
@@ -111,3 +118,48 @@ class SimConfig:
 
 
 DEFAULT = SimConfig()
+
+
+# The enclosure, set up to match Calhoun's as closely as this model can.
+#
+# Four breeding pairs went into a pen built for several thousand, with food and water
+# freely available and no way out. Nesting boxes were up in the walls; food was down in the
+# middle. The population grew for months, levelled off far below the pen's capacity, and
+# then declined.
+#
+# What is reproduced here: unlimited food, no predators or disease, solid walls, nest boxes
+# around the perimeter, feeding at a few fixed sites, ageing and maturity, young that die
+# unattended, and a small competent founding group in a space that could hold far more.
+#
+# What is not: dominance hierarchies, individual recognition, and mating behaviour, all of
+# which need creatures that can remember specific other creatures.
+UNIVERSE_25 = SimConfig(
+    name="universe25",
+
+    # A pen, not a doughnut. Walls matter here: animals bunch up in corners and along
+    # edges, and that bunching is part of what is being studied rather than an artefact to
+    # design away.
+    width=48,
+    height=48,
+    wrap_edges=False,
+
+    # Food is never the constraint, but it comes from a handful of places.
+    food_unlimited=True,
+    n_food=260,
+    n_feeders=4,
+    feeder_spread=3,
+
+    # Nest boxes in the walls, well short of what the population will need.
+    nests_enabled=True,
+    n_nests=70,
+    nests_on_perimeter=True,
+
+    # A small founding group in a large space, as in the original.
+    n_initial_agents=16,
+    max_population=3000,
+    n_ticks=12000,
+
+    ageing_enabled=True,
+    parental_care_enabled=True,
+    crowding_cost_enabled=True,
+)

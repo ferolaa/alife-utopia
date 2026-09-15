@@ -58,6 +58,15 @@ class World:
         # constant time lookups for "is there food on this square".
         self.food: set[tuple[int, int]] = set()
 
+        # Feeding sites. When present, food only appears near these, instead of anywhere
+        # on the grid. Calhoun's animals ate at fixed hoppers, and he considered what
+        # followed to be the central mechanism of the whole experiment: they learned to
+        # associate eating with company and began piling into one feeding area while other
+        # parts of the pen stood empty. He called it the behavioural sink. Food scattered
+        # evenly across a grid cannot produce it, because there is nowhere in particular to
+        # gather.
+        self.feeders: set[tuple[int, int]] = set()
+
         # Nest sites. A fixed set of squares where young can be raised. Empty unless the
         # condition being run enables them. When they exist they are the scarce resource
         # that agents compete over, which is closer to the original pen than food scarcity
@@ -116,13 +125,34 @@ class World:
 
     # ---------------------------------------------------------------------- food
 
-    def scatter_food(self, n: int) -> None:
-        """Place n new food items on random empty squares."""
+    def place_feeders(self, n: int, rng=None) -> None:
+        """Put n feeding sites down. Food will only appear around these."""
+        rng = rng or self.rng
+        while len(self.feeders) < n:
+            self.feeders.add(self.random_square())
+
+    def scatter_food(self, n: int, spread: int = 3) -> None:
+        """Place n new food items.
+
+        With feeders present, food appears within `spread` squares of one of them, so
+        eating means going to where the food is, and where the food is, everyone else is
+        too. Without feeders it falls anywhere, which is the older uniform behaviour and is
+        kept so the two can be compared.
+        """
         attempts = 0
         added = 0
-        while added < n and attempts < n * 20:
-            square = self.random_square()
+        limit = n * 20
+        feeders = list(self.feeders)
+        while added < n and attempts < limit:
             attempts += 1
+            if feeders:
+                fx, fy = feeders[self.rng.randrange(len(feeders))]
+                square = self.normalise(
+                    fx + self.rng.randint(-spread, spread),
+                    fy + self.rng.randint(-spread, spread),
+                )
+            else:
+                square = self.random_square()
             if square not in self.food:
                 self.food.add(square)
                 added += 1
@@ -203,12 +233,29 @@ class World:
                 return (ox / vision, oy / vision, closeness)
         return (0.0, 0.0, 0.0)
 
-    def scatter_nests(self, n: int) -> None:
-        """Place n nest sites on random squares. Called once when the world is built."""
+    def scatter_nests(self, n: int, on_perimeter: bool = False, band: int = 3) -> None:
+        """Place n nest sites. Called once when the world is built.
+
+        In the real pen the nesting boxes were up in the walls and the food and water were
+        down in the middle, so a mouse leaving its litter to eat had to travel. Putting the
+        nests around the edge and the feeders inside reproduces that separation, which is
+        what turns caring for young and feeding yourself into genuinely rival activities
+        rather than two things that can be done in the same spot.
+        """
         attempts = 0
-        while len(self.nests) < n and attempts < n * 20:
+        while len(self.nests) < n and attempts < n * 40:
             attempts += 1
-            self.nests.add(self.random_square())
+            if on_perimeter:
+                x, y = self.random_square()
+                near_edge = (
+                    x < band or x >= self.width - band
+                    or y < band or y >= self.height - band
+                )
+                if not near_edge:
+                    continue
+            else:
+                x, y = self.random_square()
+            self.nests.add((x, y))
 
     def is_free_nest(self, x: int, y: int) -> bool:
         square = (x, y)

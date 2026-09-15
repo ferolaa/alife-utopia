@@ -15,7 +15,7 @@ RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 COLUMNS = [
     "tick", "population", "births", "deaths",
     "mean_energy", "mean_age", "mean_neighbours", "density", "food", "nests_free",
-    "died_starving", "died_old", "died_neglected", "dependents", "mean_impairment",
+    "died_starving", "died_old", "died_neglected", "dependents", "mean_impairment", "clustering",
 ]
 
 

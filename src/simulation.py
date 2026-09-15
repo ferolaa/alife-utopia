@@ -80,8 +80,12 @@ def run(cfg: SimConfig, progress_every: int = 0, founders: list | None = None) -
         wrap_edges=cfg.wrap_edges,
         rng=rng,
     )
+    if cfg.n_feeders:
+        world.place_feeders(cfg.n_feeders)
+        world.food.clear()                       # re-place the initial food at the feeders
+        world.scatter_food(cfg.n_food, spread=cfg.feeder_spread)
     if cfg.nests_enabled:
-        world.scatter_nests(cfg.n_nests)
+        world.scatter_nests(cfg.n_nests, on_perimeter=cfg.nests_on_perimeter)
     world.agents = _new_population(world, cfg, rng, founders)
 
     history: list[dict] = []
@@ -172,6 +176,17 @@ def run(cfg: SimConfig, progress_every: int = 0, founders: list | None = None) -
     }
 
 
+def _clustering(world: World, cfg: SimConfig, measured: list) -> float:
+    """Observed crowding divided by the crowding an even spread would give."""
+    if not measured:
+        return 0.0
+    patch = (2 * cfg.crowding_radius + 1) ** 2
+    expected = world.density * patch - 1.0
+    if expected <= 0:
+        return 0.0
+    return (sum(measured) / len(measured)) / expected
+
+
 def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int, toll: dict) -> dict:
     """One row of the results table. Everything the plots and the report will need.
 
@@ -190,7 +205,7 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int,
             "nests_free": len(world.nests) - len(world.occupied_nests),
             "died_starving": toll["starvation"], "died_old": toll["old age"],
             "died_neglected": toll["neglect"], "dependents": 0,
-            "mean_impairment": 0.0,
+            "mean_impairment": 0.0, "clustering": 0.0,
         }
 
     # Crowding is read back from what each agent actually measured when it acted, rather
@@ -217,6 +232,10 @@ def _snapshot(world: World, cfg: SimConfig, tick: int, births: int, deaths: int,
         "died_old": toll["old age"],
         "died_neglected": toll["neglect"],
         "dependents": sum(1 for a in agents if a.is_dependent),
+        # How much more crowded creatures are than they would be if they spread out evenly.
+        # One means evenly spread. Above one means they are gathering, which is the thing
+        # Calhoun named the behavioural sink and treated as the heart of the experiment.
+        "clustering": _clustering(world, cfg, measured),
         # The average damage carried by grown creatures. If this climbs while the
         # population falls, the feedback loop Calhoun described is running.
         "mean_impairment": (

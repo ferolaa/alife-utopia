@@ -1,0 +1,832 @@
+[
+ {
+  "mode": "survival",
+  "seed": 0,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.289,
+    "food": 0.27,
+    "conflict": 0.052,
+    "births": 82
+   },
+   {
+    "it": 10,
+    "pup": 0.292,
+    "food": 0.285,
+    "conflict": 0.112,
+    "births": 68
+   },
+   {
+    "it": 20,
+    "pup": 0.268,
+    "food": 0.274,
+    "conflict": -0.015,
+    "births": 47
+   },
+   {
+    "it": 30,
+    "pup": 0.326,
+    "food": 0.322,
+    "conflict": 0.025,
+    "births": 54
+   },
+   {
+    "it": 40,
+    "pup": 0.283,
+    "food": 0.276,
+    "conflict": 0.15,
+    "births": 45
+   },
+   {
+    "it": 50,
+    "pup": 0.302,
+    "food": 0.299,
+    "conflict": 0.134,
+    "births": 46
+   },
+   {
+    "it": 60,
+    "pup": 0.303,
+    "food": 0.297,
+    "conflict": 0.119,
+    "births": 31
+   },
+   {
+    "it": 70,
+    "pup": 0.293,
+    "food": 0.269,
+    "conflict": 0.011,
+    "births": 36
+   },
+   {
+    "it": 80,
+    "pup": 0.284,
+    "food": 0.268,
+    "conflict": 0.029,
+    "births": 38
+   },
+   {
+    "it": 90,
+    "pup": 0.28,
+    "food": 0.265,
+    "conflict": -0.151,
+    "births": 28
+   },
+   {
+    "it": 99,
+    "pup": 0.308,
+    "food": 0.264,
+    "conflict": -0.235,
+    "births": 30
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 1,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.241,
+    "food": 0.237,
+    "conflict": -0.111,
+    "births": 60
+   },
+   {
+    "it": 10,
+    "pup": 0.254,
+    "food": 0.224,
+    "conflict": -0.022,
+    "births": 47
+   },
+   {
+    "it": 20,
+    "pup": 0.227,
+    "food": 0.226,
+    "conflict": -0.078,
+    "births": 47
+   },
+   {
+    "it": 30,
+    "pup": 0.255,
+    "food": 0.24,
+    "conflict": -0.112,
+    "births": 22
+   },
+   {
+    "it": 40,
+    "pup": 0.246,
+    "food": 0.245,
+    "conflict": -0.163,
+    "births": 32
+   },
+   {
+    "it": 50,
+    "pup": 0.239,
+    "food": 0.232,
+    "conflict": -0.185,
+    "births": 39
+   },
+   {
+    "it": 60,
+    "pup": 0.254,
+    "food": 0.256,
+    "conflict": -0.255,
+    "births": 37
+   },
+   {
+    "it": 70,
+    "pup": 0.222,
+    "food": 0.231,
+    "conflict": -0.304,
+    "births": 33
+   },
+   {
+    "it": 80,
+    "pup": 0.244,
+    "food": 0.248,
+    "conflict": -0.237,
+    "births": 37
+   },
+   {
+    "it": 90,
+    "pup": 0.212,
+    "food": 0.223,
+    "conflict": -0.367,
+    "births": 26
+   },
+   {
+    "it": 99,
+    "pup": 0.25,
+    "food": 0.261,
+    "conflict": -0.377,
+    "births": 17
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 2,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.253,
+    "food": 0.277,
+    "conflict": 0.0,
+    "births": 45
+   },
+   {
+    "it": 10,
+    "pup": 0.245,
+    "food": 0.271,
+    "conflict": 0.049,
+    "births": 43
+   },
+   {
+    "it": 20,
+    "pup": 0.231,
+    "food": 0.255,
+    "conflict": -0.053,
+    "births": 32
+   },
+   {
+    "it": 30,
+    "pup": 0.273,
+    "food": 0.298,
+    "conflict": 0.057,
+    "births": 45
+   },
+   {
+    "it": 40,
+    "pup": 0.25,
+    "food": 0.26,
+    "conflict": 0.05,
+    "births": 33
+   },
+   {
+    "it": 50,
+    "pup": 0.26,
+    "food": 0.28,
+    "conflict": 0.138,
+    "births": 37
+   },
+   {
+    "it": 60,
+    "pup": 0.246,
+    "food": 0.275,
+    "conflict": 0.049,
+    "births": 40
+   },
+   {
+    "it": 70,
+    "pup": 0.223,
+    "food": 0.25,
+    "conflict": -0.004,
+    "births": 30
+   },
+   {
+    "it": 80,
+    "pup": 0.221,
+    "food": 0.255,
+    "conflict": 0.118,
+    "births": 39
+   },
+   {
+    "it": 90,
+    "pup": 0.236,
+    "food": 0.256,
+    "conflict": 0.146,
+    "births": 35
+   },
+   {
+    "it": 99,
+    "pup": 0.241,
+    "food": 0.248,
+    "conflict": 0.174,
+    "births": 36
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 3,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.27,
+    "food": 0.295,
+    "conflict": -0.057,
+    "births": 60
+   },
+   {
+    "it": 10,
+    "pup": 0.261,
+    "food": 0.281,
+    "conflict": 0.098,
+    "births": 51
+   },
+   {
+    "it": 20,
+    "pup": 0.251,
+    "food": 0.285,
+    "conflict": 0.057,
+    "births": 34
+   },
+   {
+    "it": 30,
+    "pup": 0.297,
+    "food": 0.334,
+    "conflict": 0.204,
+    "births": 42
+   },
+   {
+    "it": 40,
+    "pup": 0.272,
+    "food": 0.302,
+    "conflict": 0.195,
+    "births": 35
+   },
+   {
+    "it": 50,
+    "pup": 0.268,
+    "food": 0.306,
+    "conflict": 0.287,
+    "births": 35
+   },
+   {
+    "it": 60,
+    "pup": 0.291,
+    "food": 0.304,
+    "conflict": 0.412,
+    "births": 29
+   },
+   {
+    "it": 70,
+    "pup": 0.281,
+    "food": 0.313,
+    "conflict": 0.291,
+    "births": 45
+   },
+   {
+    "it": 80,
+    "pup": 0.242,
+    "food": 0.267,
+    "conflict": 0.289,
+    "births": 69
+   },
+   {
+    "it": 90,
+    "pup": 0.247,
+    "food": 0.278,
+    "conflict": 0.19,
+    "births": 78
+   },
+   {
+    "it": 99,
+    "pup": 0.265,
+    "food": 0.276,
+    "conflict": 0.188,
+    "births": 65
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 4,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.263,
+    "food": 0.251,
+    "conflict": -0.026,
+    "births": 62
+   },
+   {
+    "it": 10,
+    "pup": 0.274,
+    "food": 0.248,
+    "conflict": -0.057,
+    "births": 67
+   },
+   {
+    "it": 20,
+    "pup": 0.231,
+    "food": 0.22,
+    "conflict": -0.281,
+    "births": 44
+   },
+   {
+    "it": 30,
+    "pup": 0.258,
+    "food": 0.252,
+    "conflict": -0.342,
+    "births": 45
+   },
+   {
+    "it": 40,
+    "pup": 0.252,
+    "food": 0.254,
+    "conflict": -0.374,
+    "births": 37
+   },
+   {
+    "it": 50,
+    "pup": 0.241,
+    "food": 0.245,
+    "conflict": -0.287,
+    "births": 59
+   },
+   {
+    "it": 60,
+    "pup": 0.203,
+    "food": 0.22,
+    "conflict": -0.429,
+    "births": 51
+   },
+   {
+    "it": 70,
+    "pup": 0.218,
+    "food": 0.238,
+    "conflict": -0.436,
+    "births": 48
+   },
+   {
+    "it": 80,
+    "pup": 0.205,
+    "food": 0.215,
+    "conflict": -0.35,
+    "births": 45
+   },
+   {
+    "it": 90,
+    "pup": 0.212,
+    "food": 0.22,
+    "conflict": -0.402,
+    "births": 50
+   },
+   {
+    "it": 99,
+    "pup": 0.247,
+    "food": 0.216,
+    "conflict": -0.218,
+    "births": 55
+   }
+  ]
+ },
+ {
+  "mode": "offspring",
+  "seed": 0,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.295,
+    "food": 0.267,
+    "conflict": 0.036,
+    "births": 82
+   },
+   {
+    "it": 10,
+    "pup": 0.325,
+    "food": 0.275,
+    "conflict": 0.091,
+    "births": 85
+   },
+   {
+    "it": 20,
+    "pup": 0.339,
+    "food": 0.23,
+    "conflict": 0.053,
+    "births": 99
+   },
+   {
+    "it": 30,
+    "pup": 0.452,
+    "food": 0.283,
+    "conflict": 0.119,
+    "births": 115
+   },
+   {
+    "it": 40,
+    "pup": 0.468,
+    "food": 0.294,
+    "conflict": 0.2,
+    "births": 99
+   },
+   {
+    "it": 50,
+    "pup": 0.508,
+    "food": 0.316,
+    "conflict": 0.223,
+    "births": 124
+   },
+   {
+    "it": 60,
+    "pup": 0.482,
+    "food": 0.346,
+    "conflict": 0.146,
+    "births": 128
+   },
+   {
+    "it": 70,
+    "pup": 0.523,
+    "food": 0.385,
+    "conflict": 0.216,
+    "births": 114
+   },
+   {
+    "it": 80,
+    "pup": 0.518,
+    "food": 0.404,
+    "conflict": 0.056,
+    "births": 121
+   },
+   {
+    "it": 90,
+    "pup": 0.548,
+    "food": 0.455,
+    "conflict": -0.024,
+    "births": 160
+   },
+   {
+    "it": 99,
+    "pup": 0.601,
+    "food": 0.503,
+    "conflict": -0.024,
+    "births": 148
+   }
+  ]
+ },
+ {
+  "mode": "offspring",
+  "seed": 1,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.244,
+    "food": 0.24,
+    "conflict": -0.11,
+    "births": 60
+   },
+   {
+    "it": 10,
+    "pup": 0.27,
+    "food": 0.241,
+    "conflict": 0.025,
+    "births": 59
+   },
+   {
+    "it": 20,
+    "pup": 0.304,
+    "food": 0.231,
+    "conflict": 0.139,
+    "births": 47
+   },
+   {
+    "it": 30,
+    "pup": 0.361,
+    "food": 0.265,
+    "conflict": 0.114,
+    "births": 76
+   },
+   {
+    "it": 40,
+    "pup": 0.387,
+    "food": 0.256,
+    "conflict": 0.112,
+    "births": 102
+   },
+   {
+    "it": 50,
+    "pup": 0.42,
+    "food": 0.261,
+    "conflict": 0.259,
+    "births": 107
+   },
+   {
+    "it": 60,
+    "pup": 0.44,
+    "food": 0.275,
+    "conflict": 0.327,
+    "births": 110
+   },
+   {
+    "it": 70,
+    "pup": 0.475,
+    "food": 0.285,
+    "conflict": 0.195,
+    "births": 131
+   },
+   {
+    "it": 80,
+    "pup": 0.464,
+    "food": 0.317,
+    "conflict": 0.26,
+    "births": 123
+   },
+   {
+    "it": 90,
+    "pup": 0.49,
+    "food": 0.334,
+    "conflict": 0.286,
+    "births": 149
+   },
+   {
+    "it": 99,
+    "pup": 0.548,
+    "food": 0.405,
+    "conflict": 0.371,
+    "births": 137
+   }
+  ]
+ },
+ {
+  "mode": "offspring",
+  "seed": 2,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.259,
+    "food": 0.275,
+    "conflict": 0.016,
+    "births": 45
+   },
+   {
+    "it": 10,
+    "pup": 0.265,
+    "food": 0.287,
+    "conflict": -0.005,
+    "births": 65
+   },
+   {
+    "it": 20,
+    "pup": 0.24,
+    "food": 0.248,
+    "conflict": -0.082,
+    "births": 63
+   },
+   {
+    "it": 30,
+    "pup": 0.288,
+    "food": 0.28,
+    "conflict": 0.157,
+    "births": 87
+   },
+   {
+    "it": 40,
+    "pup": 0.347,
+    "food": 0.281,
+    "conflict": 0.28,
+    "births": 115
+   },
+   {
+    "it": 50,
+    "pup": 0.392,
+    "food": 0.289,
+    "conflict": 0.297,
+    "births": 103
+   },
+   {
+    "it": 60,
+    "pup": 0.389,
+    "food": 0.242,
+    "conflict": 0.39,
+    "births": 106
+   },
+   {
+    "it": 70,
+    "pup": 0.427,
+    "food": 0.306,
+    "conflict": 0.282,
+    "births": 119
+   },
+   {
+    "it": 80,
+    "pup": 0.45,
+    "food": 0.305,
+    "conflict": 0.307,
+    "births": 124
+   },
+   {
+    "it": 90,
+    "pup": 0.486,
+    "food": 0.345,
+    "conflict": 0.357,
+    "births": 132
+   },
+   {
+    "it": 99,
+    "pup": 0.507,
+    "food": 0.379,
+    "conflict": 0.151,
+    "births": 137
+   }
+  ]
+ },
+ {
+  "mode": "offspring",
+  "seed": 3,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.27,
+    "food": 0.285,
+    "conflict": -0.029,
+    "births": 60
+   },
+   {
+    "it": 10,
+    "pup": 0.31,
+    "food": 0.325,
+    "conflict": 0.26,
+    "births": 71
+   },
+   {
+    "it": 20,
+    "pup": 0.313,
+    "food": 0.272,
+    "conflict": -0.036,
+    "births": 95
+   },
+   {
+    "it": 30,
+    "pup": 0.385,
+    "food": 0.314,
+    "conflict": 0.232,
+    "births": 93
+   },
+   {
+    "it": 40,
+    "pup": 0.416,
+    "food": 0.336,
+    "conflict": 0.318,
+    "births": 123
+   },
+   {
+    "it": 50,
+    "pup": 0.463,
+    "food": 0.363,
+    "conflict": 0.403,
+    "births": 131
+   },
+   {
+    "it": 60,
+    "pup": 0.496,
+    "food": 0.372,
+    "conflict": 0.318,
+    "births": 120
+   },
+   {
+    "it": 70,
+    "pup": 0.531,
+    "food": 0.412,
+    "conflict": 0.119,
+    "births": 149
+   },
+   {
+    "it": 80,
+    "pup": 0.523,
+    "food": 0.428,
+    "conflict": 0.13,
+    "births": 134
+   },
+   {
+    "it": 90,
+    "pup": 0.506,
+    "food": 0.479,
+    "conflict": 0.025,
+    "births": 159
+   },
+   {
+    "it": 99,
+    "pup": 0.55,
+    "food": 0.519,
+    "conflict": 0.066,
+    "births": 147
+   }
+  ]
+ },
+ {
+  "mode": "offspring",
+  "seed": 4,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.26,
+    "food": 0.249,
+    "conflict": -0.047,
+    "births": 62
+   },
+   {
+    "it": 10,
+    "pup": 0.312,
+    "food": 0.264,
+    "conflict": 0.117,
+    "births": 65
+   },
+   {
+    "it": 20,
+    "pup": 0.292,
+    "food": 0.229,
+    "conflict": 0.099,
+    "births": 75
+   },
+   {
+    "it": 30,
+    "pup": 0.37,
+    "food": 0.268,
+    "conflict": 0.206,
+    "births": 96
+   },
+   {
+    "it": 40,
+    "pup": 0.41,
+    "food": 0.263,
+    "conflict": 0.224,
+    "births": 99
+   },
+   {
+    "it": 50,
+    "pup": 0.423,
+    "food": 0.255,
+    "conflict": 0.163,
+    "births": 118
+   },
+   {
+    "it": 60,
+    "pup": 0.445,
+    "food": 0.285,
+    "conflict": 0.271,
+    "births": 109
+   },
+   {
+    "it": 70,
+    "pup": 0.481,
+    "food": 0.333,
+    "conflict": 0.168,
+    "births": 134
+   },
+   {
+    "it": 80,
+    "pup": 0.49,
+    "food": 0.365,
+    "conflict": 0.009,
+    "births": 134
+   },
+   {
+    "it": 90,
+    "pup": 0.521,
+    "food": 0.431,
+    "conflict": -0.063,
+    "births": 128
+   },
+   {
+    "it": 99,
+    "pup": 0.528,
+    "food": 0.461,
+    "conflict": -0.013,
+    "births": 107
+   }
+  ]
+ }
+]

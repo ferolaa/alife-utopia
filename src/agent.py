@@ -48,6 +48,7 @@ class Agent:
         "x", "y", "energy", "brain", "age", "alive", "children",
         "dependents", "dependent_until", "neglect_ticks", "nest", "neighbours",
         "lifespan", "parent", "cause_of_death", "neglect_suffered", "impairment",
+        "last_senses",
     )
 
     def __init__(
@@ -83,6 +84,11 @@ class Agent:
         # falls again when a parent returns, this only ever goes up. Being rescued keeps a
         # pup alive; it does not undo the time it already spent alone.
         self.neglect_suffered: int = 0
+
+        # The sense vector this creature last acted on. Kept so that a trainer outside the
+        # simulation can see what the creature saw when it made a choice, which is what
+        # policy gradient methods need and evolution does not.
+        self.last_senses = None
 
         # How badly its upbringing damaged it, from zero to one. Set once, when it grows up.
         # It scales down how well this creature can sense its own young, so a badly raised
@@ -183,8 +189,13 @@ class Agent:
 
     # -------------------------------------------------------------------- acting
 
-    def act(self, world, cfg, rng: random.Random) -> "Agent | None":
+    def act(self, world, cfg, rng: random.Random, action: str | None = None) -> "Agent | None":
         """Live one tick. Returns a child if the agent reproduced, otherwise None.
+
+        If an action is supplied, the creature performs it instead of consulting its own
+        brain. That is how a policy trained outside the simulation drives the creature: the
+        trainer chooses for every creature at once, in a single batched forward pass, rather
+        than each creature being asked separately.
 
         The order of the steps is deliberate, and worth stating in the report. Costs are
         paid first, then the action is taken, then death is checked. So an agent can
@@ -225,8 +236,9 @@ class Agent:
             self.energy -= self.neighbours * cfg.crowding_energy_cost
 
         # 3. Sense, decide, act.
-        senses = self.sense(world, cfg, neighbours=self.neighbours)
-        action = self.brain.decide(senses, rng, cfg.action_temperature)
+        self.last_senses = self.sense(world, cfg, neighbours=self.neighbours)
+        if action is None:
+            action = self.brain.decide(self.last_senses, rng, cfg.action_temperature)
 
         child = None
         if action == "reproduce":
