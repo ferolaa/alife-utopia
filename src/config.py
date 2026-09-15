@@ -108,14 +108,19 @@ class SimConfig:
     developmental_damage_enabled: bool = False
     damage_scale: float = 1.0          # how strongly time spent unattended translates to harm
 
-    # ------------- crowding blinds parents ----------------------------------------
-    # A parent's sense of where its own young are, and how badly they need it, weakens as
-    # neighbours pile up around it. Calhoun described mothers in a crowd losing track of
-    # their litters entirely. Until now our parents have had perfect knowledge of their
-    # young however dense the pen became, which quietly assumed away the thing he said went
-    # wrong.
-    crowding_blinds_parents: bool = False
-    signal_decay: float = 0.08         # how fast the signal fades per neighbour
+    # ------------- a crowd gets between parent and pup -----------------------------
+    # As neighbours accumulate around a pup, the distance at which a parent counts as
+    # actually tending it shrinks. In an empty pen, being a few squares away is enough. In
+    # a crush you have to be right on top of it.
+    #
+    # This changes what the world does, not what the creature perceives. An earlier version
+    # scaled down the pup inputs before they reached the network instead, and that was a
+    # mistake: the policy had never been trained on shrunken inputs, so its behaviour on
+    # them was arbitrary, and foraging degraded alongside parenting for no reason anyone
+    # could point to. Intervening on observations confounds the manipulation with
+    # distribution shift. Intervening on dynamics does not.
+    crowding_blocks_care: bool = False
+    care_radius_decay: float = 0.10    # how fast the effective care distance shrinks
 
     # ------------- intruders disturb the nest -------------------------------------
     # A pup is harmed by other creatures crowding its nest, not only by its parent being

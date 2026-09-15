@@ -477,8 +477,8 @@ def test_no_damage_when_the_mechanism_is_off():
 
 
 
-BLIND = DEFAULT.variant("blind", parental_care_enabled=True,
-                        crowding_blinds_parents=True, signal_decay=0.08)
+BLOCKED = DEFAULT.variant("blocked", parental_care_enabled=True,
+                          crowding_blocks_care=True, care_radius_decay=0.10)
 INTRUDE = DEFAULT.variant("intrude", parental_care_enabled=True,
                           nest_intrusion_enabled=True, intrusion_threshold=6)
 
@@ -492,33 +492,40 @@ def _with_pup(cfg):
     return world, parent, pup, rng
 
 
-def test_a_crowd_weakens_a_parents_sense_of_its_pup():
-    from brain import SENSE_INDEX
-    world, parent, pup, rng = _with_pup(BLIND)
-    pup.x, pup.y = parent.x + 2, parent.y
-    pup.neglect_ticks = 10
+def _tended_with_crowd(cfg, gap, n_others):
+    """Is a parent `gap` squares from its pup still counted as tending it, in a crowd?"""
+    world, parent, rng = make(cfg)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, cfg, rng)
+    pup.x, pup.y = parent.x + gap, parent.y
+    crowd = [Agent(pup.x, pup.y, 50.0, Brain.random(random.Random(i)))
+             for i in range(n_others)]
+    world.agents = [parent, pup] + crowd
+    world.rebuild_occupancy(cfg.crowding_radius)
+    before = pup.neglect_ticks
+    pup.act(world, cfg, rng)
+    return pup.neglect_ticks <= before
 
-    parent.neighbours = 0
-    alone = parent.sense(world, BLIND)[SENSE_INDEX["pup_need"]]
-    parent.neighbours = 20
-    crowded = parent.sense(world, BLIND)[SENSE_INDEX["pup_need"]]
 
-    assert alone > 0
-    assert crowded < alone            # the signal fades
-    assert crowded > 0                # but never vanishes entirely
+def test_a_crowd_puts_a_parent_out_of_reach_of_its_own_pup():
+    # Two squares away is well within the care radius of three when nobody else is around,
+    # and outside it once a crowd has gathered. The parent has not moved and its senses are
+    # untouched; only what the world does with its presence has changed.
+    assert _tended_with_crowd(BLOCKED, gap=2, n_others=0) is True
+    assert _tended_with_crowd(BLOCKED, gap=2, n_others=12) is False
 
 
-def test_crowding_does_not_blind_when_the_mechanism_is_off():
-    from brain import SENSE_INDEX
-    cfg = DEFAULT.variant("nocare_blind", parental_care_enabled=True)
-    world, parent, pup, rng = _with_pup(cfg)
-    pup.x, pup.y = parent.x + 2, parent.y
-    pup.neglect_ticks = 10
-    parent.neighbours = 0
-    alone = parent.sense(world, cfg)[SENSE_INDEX["pup_need"]]
-    parent.neighbours = 20
-    crowded = parent.sense(world, cfg)[SENSE_INDEX["pup_need"]]
-    assert alone == crowded
+def test_a_parent_right_on_top_of_its_pup_still_gets_through():
+    # The mechanism shrinks the reach, it does not sever the relationship. A parent on the
+    # same square must always count, however dense it gets, or neglect becomes unavoidable
+    # rather than merely harder to avoid.
+    assert _tended_with_crowd(BLOCKED, gap=0, n_others=30) is True
+
+
+def test_reach_is_unaffected_when_the_mechanism_is_off():
+    plain = DEFAULT.variant("plain", parental_care_enabled=True)
+    assert _tended_with_crowd(plain, gap=2, n_others=0) is True
+    assert _tended_with_crowd(plain, gap=2, n_others=12) is True
 
 
 def _neglect_after_a_tick(cfg, n_intruders):

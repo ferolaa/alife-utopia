@@ -14,7 +14,7 @@ import random
 from brain import MOVES, Brain, make_senses
 
 
-def _within(world, one, other, radius: int) -> bool:
+def _within(world, one, other, radius: float) -> bool:
     """Is one creature close enough to the other to count as present?
 
     Distance is measured as the larger of the two axis gaps, which makes the area a square
@@ -182,16 +182,6 @@ class Agent:
         # brain do its job.
         clarity = 1.0 - self.impairment
 
-        # And a creature in a crowd loses track of its young regardless of upbringing. The
-        # signal decays with the number of neighbours, so the same parent that manages
-        # perfectly well alone is half blind surrounded.
-        if cfg.crowding_blinds_parents:
-            nearby = self.neighbours
-            if nearby is None:
-                nearby = world.count_neighbours(
-                    self.x, self.y, cfg.crowding_radius, exclude=self
-                )
-            clarity /= (1.0 + cfg.signal_decay * nearby)
         return (
             max(-1.0, min(1.0, dx / scale)) * clarity,
             max(-1.0, min(1.0, dy / scale)) * clarity,
@@ -288,11 +278,22 @@ class Agent:
         cannot raise its young has no future however many adults it currently has.
         """
         parent = self.parent
+
+        # How close the parent has to be for its presence to do any good. A crowd around
+        # the pup shrinks this, so the same parent standing in the same place stops
+        # counting as present once enough bodies are between them.
+        reach = cfg.care_radius
+        if cfg.crowding_blocks_care:
+            crowd = world.count_neighbours(
+                self.x, self.y, cfg.crowding_radius, exclude=self
+            )
+            reach = cfg.care_radius / (1.0 + cfg.care_radius_decay * crowd)
+
         attended = (
             parent is not None
             and parent.alive
             and not parent.is_dependent
-            and _within(world, parent, self, cfg.care_radius)
+            and _within(world, parent, self, reach)
         )
 
         # Too many bodies around the nest and the pup suffers whatever its parent does.

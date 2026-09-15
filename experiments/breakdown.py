@@ -2,7 +2,7 @@
 
 Three additions, each a thing Calhoun described and each dormant until the pen fills up:
 
-  blind      a parent loses track of its young as neighbours accumulate
+  blocked    a crowd gets between parent and pup, so being near stops being enough
   intrusion  a crowded nest harms the pup whatever its parent does
   damage     a pup that survives neglect grows into a parent who cannot tend its own
 
@@ -25,10 +25,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 CONDITIONS = {
     "none": {},
-    "blind": dict(crowding_blinds_parents=True),
+    "blocked": dict(crowding_blocks_care=True),
     "intrusion": dict(nest_intrusion_enabled=True),
     "damage": dict(developmental_damage_enabled=True),
-    "all": dict(crowding_blinds_parents=True, nest_intrusion_enabled=True,
+    "all": dict(crowding_blocks_care=True, nest_intrusion_enabled=True,
                 developmental_damage_enabled=True),
 }
 
