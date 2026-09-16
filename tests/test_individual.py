@@ -121,6 +121,91 @@ def test_weights_round_trip_to_a_plain_brain():
     assert np.allclose(brain.action_scores(SENSES), expected, atol=1e-5)
 
 
+
+def test_a_founder_is_a_copy_of_the_pretrained_policy():
+    pop = Population(capacity=4)
+    policy = PolicyNet()
+    slot = pop.founder(policy)
+    expected = policy(torch.tensor([SENSES], dtype=torch.float32)).detach().numpy()[0]
+    assert np.allclose(pop.brain_of(slot).action_scores(SENSES), expected, atol=1e-5)
+
+
+def test_a_newborn_starts_knowing_what_its_parent_knew():
+    pop = Population(capacity=4)
+    parent = pop.founder(PolicyNet())
+    with torch.no_grad():
+        pop.W2[parent] += 0.4          # the parent learnt something in its life
+    child = pop.inherit(parent)
+    assert np.allclose(pop.brain_of(parent).weights, pop.brain_of(child).weights, atol=1e-6)
+    assert pop.spread([parent, child]) < 1e-6
+
+
+def test_a_child_that_learns_drifts_from_its_parent():
+    pop = Population(capacity=4)
+    parent = pop.founder(PolicyNet())
+    child = pop.inherit(parent)
+    before = pop.spread([parent, child])
+    with torch.no_grad():
+        pop.W1[child] += 0.3           # a life of its own
+    assert before == 0.0
+    assert pop.spread([parent, child]) > 0.1
+
+
+def test_inheritance_is_noiseless_by_default():
+    """No mutation unless asked for.
+
+    This keeps the experiment interpretable: with noise off, any difference between two
+    creatures was caused by something that happened to one of them, not by randomness we
+    sprinkled on at birth.
+    """
+    pop = Population(capacity=4)
+    parent = pop.founder(PolicyNet())
+    child = pop.inherit(parent)
+    assert np.array_equal(pop.brain_of(parent).weights, pop.brain_of(child).weights)
+
+
+def test_mutation_can_be_switched_on():
+    import random as _random
+    pop = Population(capacity=4)
+    parent = pop.founder(PolicyNet())
+    child = pop.inherit(parent, mutation_std=0.1, rng=_random.Random(0))
+    diff = np.abs(pop.brain_of(parent).weights - pop.brain_of(child).weights)
+    assert diff.mean() > 0
+    assert diff.mean() < 0.5           # still recognisably its parent
+
+
+def test_a_full_population_refuses_to_add_more():
+    pop = Population(capacity=2)
+    parent = pop.founder(PolicyNet())
+    assert pop.inherit(parent) is not None     # fills the second slot
+    assert pop.inherit(parent) is None         # no room
+    assert pop.founder(PolicyNet()) is None
+
+
+def test_released_slots_come_back_for_newborns():
+    pop = Population(capacity=2)
+    parent = pop.founder(PolicyNet())
+    child = pop.inherit(parent)
+    pop.release(child)                          # the child dies
+    again = pop.inherit(parent)                 # another is born
+    assert again == child                       # and reuses the slot
+    assert pop.in_use == 2
+
+
+def test_a_reused_slot_does_not_keep_the_dead_creatures_weights():
+    # Slot reuse is where a stale-state bug would hide: a newborn inheriting whatever the
+    # previous occupant had learnt, rather than what its own parent knows.
+    pop = Population(capacity=2)
+    first = pop.founder(PolicyNet())
+    ghost = pop.inherit(first)
+    with torch.no_grad():
+        pop.W1[ghost] += 9.0                    # the dead creature was very unusual
+    pop.release(ghost)
+    newborn = pop.inherit(first)
+    assert newborn == ghost                     # same slot
+    assert np.allclose(pop.brain_of(newborn).weights, pop.brain_of(first).weights, atol=1e-6)
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

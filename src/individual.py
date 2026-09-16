@@ -86,6 +86,51 @@ class Population:
             self.W2[target] = self.W2[source]
             self.b2[target] = self.b2[source]
 
+    def inherit(self, parent_slot: int, mutation_std: float = 0.0, rng=None) -> int | None:
+        """Give a newborn a slot holding a copy of its parent's network.
+
+        A child starts life already knowing what its parent knew, and then adapts from its
+        own experience. That is the arrangement worth testing: creatures that begin alike
+        and come apart because their lives differ, rather than because we scattered noise
+        over them.
+
+        mutation_std is zero by default, and deliberately so. With no noise, every
+        difference that appears between two creatures was produced by something that
+        happened to one of them and not the other, which is exactly the claim we want to be
+        able to make. Raising it above zero mixes evolution back in and muddies that.
+
+        Returns the new slot, or None when the population is full.
+        """
+        child = self.claim()
+        if child is None:
+            return None
+        self.copy_slot(parent_slot, child)
+        if mutation_std > 0:
+            generator = None
+            if rng is not None:
+                generator = torch.Generator(device=self.device)
+                generator.manual_seed(rng.randrange(2**31))
+            with torch.no_grad():
+                for tensor in (self.W1, self.b1, self.W2, self.b2):
+                    noise = torch.randn(
+                        tensor[child].shape, device=self.device, generator=generator
+                    )
+                    tensor[child] += noise * mutation_std
+        return child
+
+    def founder(self, policy) -> int | None:
+        """A slot for one of the starting creatures, copied from the pretrained policy.
+
+        Every founder is the same network, which is what the shared-policy runs also start
+        from. The two arms therefore begin with identical behaviour and differ only in
+        whether the creatures are allowed to drift apart afterwards.
+        """
+        slot = self.claim()
+        if slot is None:
+            return None
+        self.set_from_policy(slot, policy)
+        return slot
+
     def brain_of(self, slot: int) -> Brain:
         """One creature's weights as a plain Brain, so the usual probes work on it."""
         with torch.no_grad():

@@ -48,7 +48,7 @@ class Agent:
         "x", "y", "energy", "brain", "age", "alive", "children",
         "dependents", "dependent_until", "neglect_ticks", "nest", "neighbours",
         "lifespan", "parent", "cause_of_death", "neglect_suffered", "impairment",
-        "last_senses",
+        "last_senses", "slot",
     )
 
     def __init__(
@@ -84,6 +84,11 @@ class Agent:
         # falls again when a parent returns, this only ever goes up. Being rescued keeps a
         # pup alive; it does not undo the time it already spent alone.
         self.neglect_suffered: int = 0
+
+        # Which slot in the population's weight tensors holds this creature's own
+        # network, when creatures have individual networks rather than sharing one. None
+        # means it is being driven by a shared policy, or by its plain numpy Brain.
+        self.slot: int | None = None
 
         # The sense vector this creature last acted on. Kept so that a trainer outside the
         # simulation can see what the creature saw when it made a choice, which is what
