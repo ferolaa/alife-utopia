@@ -21,11 +21,12 @@ from __future__ import annotations
 
 import numpy as np
 import torch
+import torch.nn as nn
 
 from brain import Brain
 
 
-class Population:
+class Population(nn.Module):
     """The weights of every living creature, stacked so they can be run together.
 
     Shapes, for one population of n creatures:
@@ -37,14 +38,19 @@ class Population:
     """
 
     def __init__(self, capacity: int, device: str = "cpu"):
+        super().__init__()
         self.capacity = capacity
         self.device = device
         i, h, o = Brain.N_INPUTS, Brain.N_HIDDEN, Brain.N_OUTPUTS
 
-        self.W1 = torch.zeros(capacity, i, h, device=device)
-        self.b1 = torch.zeros(capacity, h, device=device)
-        self.W2 = torch.zeros(capacity, h, o, device=device)
-        self.b2 = torch.zeros(capacity, o, device=device)
+        # Held as parameters so gradients can flow. Because each creature's loss only ever
+        # touches its own slice of these tensors, one backward pass produces a separate
+        # gradient for every creature, and each one is updated only by its own experience.
+        # No per creature optimiser is needed, and nothing is shared between them.
+        self.W1 = nn.Parameter(torch.zeros(capacity, i, h, device=device))
+        self.b1 = nn.Parameter(torch.zeros(capacity, h, device=device))
+        self.W2 = nn.Parameter(torch.zeros(capacity, h, o, device=device))
+        self.b2 = nn.Parameter(torch.zeros(capacity, o, device=device))
 
         self._free = list(range(capacity))      # slots not currently in use
 
@@ -73,18 +79,18 @@ class Population:
         afterwards rather than from where they began.
         """
         with torch.no_grad():
-            self.W1[slot] = policy.hidden.weight.T.detach().clone()
-            self.b1[slot] = policy.hidden.bias.detach().clone()
-            self.W2[slot] = policy.out.weight.T.detach().clone()
-            self.b2[slot] = policy.out.bias.detach().clone()
+            self.W1.data[slot] = policy.hidden.weight.T.detach().clone()
+            self.b1.data[slot] = policy.hidden.bias.detach().clone()
+            self.W2.data[slot] = policy.out.weight.T.detach().clone()
+            self.b2.data[slot] = policy.out.bias.detach().clone()
 
     def copy_slot(self, source: int, target: int) -> None:
         """Copy one creature's weights into another slot, for inheritance at birth."""
         with torch.no_grad():
-            self.W1[target] = self.W1[source]
-            self.b1[target] = self.b1[source]
-            self.W2[target] = self.W2[source]
-            self.b2[target] = self.b2[source]
+            self.W1.data[target] = self.W1.data[source]
+            self.b1.data[target] = self.b1.data[source]
+            self.W2.data[target] = self.W2.data[source]
+            self.b2.data[target] = self.b2.data[source]
 
     def inherit(self, parent_slot: int, mutation_std: float = 0.0, rng=None) -> int | None:
         """Give a newborn a slot holding a copy of its parent's network.
@@ -113,9 +119,9 @@ class Population:
             with torch.no_grad():
                 for tensor in (self.W1, self.b1, self.W2, self.b2):
                     noise = torch.randn(
-                        tensor[child].shape, device=self.device, generator=generator
+                        tensor.data[child].shape, device=self.device, generator=generator
                     )
-                    tensor[child] += noise * mutation_std
+                    tensor.data[child] += noise * mutation_std
         return child
 
     def founder(self, policy) -> int | None:
@@ -135,8 +141,8 @@ class Population:
         """One creature's weights as a plain Brain, so the usual probes work on it."""
         with torch.no_grad():
             flat = torch.cat([
-                self.W1[slot].flatten(), self.b1[slot],
-                self.W2[slot].flatten(), self.b2[slot],
+                self.W1.data[slot].flatten(), self.b1.data[slot],
+                self.W2.data[slot].flatten(), self.b2.data[slot],
             ]).cpu().numpy()
         return Brain(flat.astype(np.float64))
 
@@ -155,6 +161,70 @@ class Population:
         hidden = torch.tanh(torch.einsum("ni,nih->nh", senses, W1) + b1)
         return torch.einsum("nh,nho->no", hidden, W2) + b2
 
+    # ---------------------------------------------------------------- learning
+
+    def forget_slot(self, optimiser, slot: int) -> None:
+        """Wipe the optimiser's memory of a slot before a new creature moves into it.
+
+        Adam keeps a running sense of each weight's recent gradients. Slots are reused when
+        creatures die, so without this a newborn would inherit the momentum of whatever
+        dead creature held the slot before it, and start its life being pushed in a
+        direction that had nothing to do with anything it ever did. It is the same class of
+        stale-state bug as reusing a nest without clearing it.
+        """
+        for tensor in (self.W1, self.b1, self.W2, self.b2):
+            state = optimiser.state.get(tensor)
+            if not state:
+                continue
+            for key in ("exp_avg", "exp_avg_sq", "max_exp_avg_sq", "momentum_buffer"):
+                buffer = state.get(key)
+                if buffer is not None:
+                    buffer[slot] = 0.0
+
+    def learn(self, optimiser, trajectories: dict, gamma: float = 0.99) -> float:
+        """One gradient step, giving every creature an update from its own life.
+
+        trajectories maps a slot to the log probabilities and rewards of the choices that
+        creature made since the last update.
+
+        Returns are discounted per creature and then standardised across the whole
+        population at once, rather than within each creature separately. That is
+        deliberate: a creature with only a handful of steps has no meaningful spread of its
+        own to normalise by, and standardising against the population makes the baseline
+        "how everyone else did", so a creature is pushed towards choices that beat its
+        neighbours rather than merely beat its own average. The gradient still only reaches
+        its own weights.
+        """
+        steps, returns = [], []
+        for slot, (log_probs, rewards) in trajectories.items():
+            running = 0.0
+            discounted = []
+            for r in reversed(rewards):
+                running = r + gamma * running
+                discounted.append(running)
+            discounted.reverse()
+            steps.extend(log_probs)
+            returns.extend(discounted)
+
+        if not steps:
+            return 0.0
+
+        returns_t = torch.tensor(returns, dtype=torch.float32, device=self.device)
+        if returns_t.numel() > 1:
+            # unbiased=False, because this is the whole window's experience rather than a
+            # sample drawn from something larger, and the unbiased form is undefined for a
+            # single step.
+            returns_t = (returns_t - returns_t.mean()) / (returns_t.std(unbiased=False) + 1e-8)
+        # With a single step there is nothing to standardise against, so the return is used
+        # as it stands. Subtracting its own mean would leave exactly zero and quietly
+        # cancel the update, which looks like working code that never learns.
+        loss = -(torch.stack(steps) * returns_t).mean()
+
+        optimiser.zero_grad()
+        loss.backward()
+        optimiser.step()
+        return float(loss.item())
+
     # -------------------------------------------------------------- inspection
 
     def spread(self, slots: list[int]) -> float:
@@ -169,8 +239,8 @@ class Population:
             return 0.0
         index = torch.as_tensor(slots, dtype=torch.long, device=self.device)
         flat = torch.cat([
-            self.W1[index].flatten(1), self.b1[index],
-            self.W2[index].flatten(1), self.b2[index],
+            self.W1.data[index].flatten(1), self.b1.data[index],
+            self.W2.data[index].flatten(1), self.b2.data[index],
         ], dim=1)
         centre = flat.mean(dim=0, keepdim=True)
         return float((flat - centre).norm(dim=1).mean())

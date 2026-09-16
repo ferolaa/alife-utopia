@@ -206,6 +206,104 @@ def test_a_reused_slot_does_not_keep_the_dead_creatures_weights():
     assert np.allclose(pop.brain_of(newborn).weights, pop.brain_of(first).weights, atol=1e-6)
 
 
+
+def _one_step(pop, slot, reward):
+    """Give one creature a single recorded choice worth `reward`."""
+    from torch.distributions import Categorical
+    senses = torch.tensor([SENSES], dtype=torch.float32)
+    dist = Categorical(logits=pop.action_scores([slot], senses))
+    pick = dist.sample()
+    return {slot: ([dist.log_prob(pick)[0]], [reward])}
+
+
+def test_only_the_creature_that_acted_is_updated():
+    """The heart of individual learning: experience must not leak between creatures."""
+    pop = Population(capacity=4)
+    actor = pop.founder(PolicyNet())
+    bystander = pop.inherit(actor)
+    opt = torch.optim.Adam(pop.parameters(), lr=0.05)
+
+    before_actor = pop.brain_of(actor).weights.copy()
+    before_bystander = pop.brain_of(bystander).weights.copy()
+    pop.learn(opt, _one_step(pop, actor, 1.0))
+
+    assert not np.allclose(before_actor, pop.brain_of(actor).weights)
+    assert np.allclose(before_bystander, pop.brain_of(bystander).weights)
+
+
+def test_learning_makes_identical_creatures_diverge():
+    pop = Population(capacity=4)
+    a = pop.founder(PolicyNet())
+    b = pop.inherit(a)
+    opt = torch.optim.Adam(pop.parameters(), lr=0.05)
+    assert pop.spread([a, b]) == 0.0
+    for _ in range(5):
+        pop.learn(opt, _one_step(pop, a, 1.0))
+    assert pop.spread([a, b]) > 0.0
+
+
+def test_a_single_step_does_not_produce_nan():
+    # Standardising one number has no defined spread; the guard must handle it.
+    pop = Population(capacity=2)
+    slot = pop.founder(PolicyNet())
+    opt = torch.optim.Adam(pop.parameters(), lr=0.05)
+    pop.learn(opt, _one_step(pop, slot, 1.0))
+    assert np.all(np.isfinite(pop.brain_of(slot).weights))
+
+
+def test_an_empty_window_is_harmless():
+    pop = Population(capacity=2)
+    slot = pop.founder(PolicyNet())
+    opt = torch.optim.Adam(pop.parameters(), lr=0.05)
+    before = pop.brain_of(slot).weights.copy()
+    assert pop.learn(opt, {}) == 0.0
+    assert np.allclose(before, pop.brain_of(slot).weights)
+
+
+def test_a_reused_slot_does_not_inherit_the_dead_creatures_momentum():
+    """Adam remembers each weight's recent gradients, and slots outlive their creatures.
+
+    Without clearing that memory, a newborn starts life being pushed in whatever direction
+    the previous occupant of its slot was heading, which has nothing to do with anything it
+    did. The test drives one creature hard to build up momentum, kills it, and checks a
+    newborn in the same slot is not dragged along by it.
+    """
+    pop = Population(capacity=2)
+    founder = pop.founder(PolicyNet())
+    doomed = pop.inherit(founder)
+    opt = torch.optim.Adam(pop.parameters(), lr=0.05)
+
+    for _ in range(10):                       # build up a strong running gradient
+        pop.learn(opt, _one_step(pop, doomed, 5.0))
+
+    pop.release(doomed)
+    pop.forget_slot(opt, doomed)
+    newborn = pop.inherit(founder)
+    assert newborn == doomed                  # same slot reused
+
+    at_birth = pop.brain_of(newborn).weights.copy()
+    pop.learn(opt, {})                        # a step in which the newborn did nothing
+    assert np.allclose(at_birth, pop.brain_of(newborn).weights, atol=1e-7)
+
+
+def test_momentum_does_carry_over_if_the_slot_is_not_cleared():
+    # The counterpart to the test above: this is what goes wrong without forget_slot, and
+    # it documents why that call is not optional.
+    pop = Population(capacity=2)
+    founder = pop.founder(PolicyNet())
+    doomed = pop.inherit(founder)
+    opt = torch.optim.Adam(pop.parameters(), lr=0.05)
+    for _ in range(10):
+        pop.learn(opt, _one_step(pop, doomed, 5.0))
+
+    pop.release(doomed)
+    newborn = pop.inherit(founder)            # deliberately NOT cleared
+    at_birth = pop.brain_of(newborn).weights.copy()
+    pop.learn(opt, _one_step(pop, founder, 1.0))
+    moved = not np.allclose(at_birth, pop.brain_of(newborn).weights, atol=1e-7)
+    assert moved, "expected stale momentum to disturb the newborn"
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):
