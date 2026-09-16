@@ -36,18 +36,24 @@ if __name__ == "__main__":
     name = sys.argv[1]
     ticks = int(sys.argv[2]) if len(sys.argv) > 2 else 6000
     seed = int(sys.argv[3]) if len(sys.argv) > 3 else 0
+    # Which pretrained brain to run. Was hardcoded to zero, which meant every ablation
+    # result rested on one trained policy however many world seeds were used. A finding
+    # that only appears with one particular brain is not a finding.
+    policy_seed = int(sys.argv[4]) if len(sys.argv) > 4 else seed
 
     policy = PolicyNet()
-    policy.load_state_dict(torch.load(ROOT / "results" / "pen_policy_s0.pt"))
+    policy.load_state_dict(torch.load(ROOT / "results" / f"pen_policy_s{policy_seed}.pt"))
     optimiser = torch.optim.Adam(policy.parameters(), lr=0.003)
 
     cfg = UNIVERSE_25.variant(name, n_ticks=ticks, seed=seed, **CONDITIONS[name])
-    print(f"condition '{name}': {CONDITIONS[name] or 'baseline'}")
+    print(f"condition '{name}' (policy {policy_seed}, world {seed}): "
+          f"{CONDITIONS[name] or 'baseline'}")
     world, history = run_enclosure(cfg, policy, optimiser, seed=seed, probe_every=1000)
 
     keep = ("tick", "population", "births", "deaths", "died_neglected", "died_starving",
             "died_old", "nests_free", "mean_neighbours", "clustering", "pup_seeking")
-    out = ROOT / "results" / f"breakdown_{name}_s{seed}.json"
+    tag = f"s{seed}" if policy_seed == seed else f"s{seed}_p{policy_seed}"
+    out = ROOT / "results" / f"breakdown_{name}_{tag}.json"
     json.dump([{k: h[k] for k in keep if k in h} for h in history], open(out, "w"))
 
     peak = max(h["population"] for h in history)
