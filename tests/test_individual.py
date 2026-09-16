@@ -15,9 +15,22 @@ from rl import PolicyNet  # noqa: E402
 SENSES = make_senses(food_dx=0.5, pup_need=0.3, energy=0.7)
 
 
+def a_policy(seed: int = 0) -> PolicyNet:
+    """A network with fixed weights.
+
+    Every test here builds its population from this. An unseeded network makes the tests
+    non-deterministic, and some of these assertions sit close to a boundary: a creature
+    scoring 0.264 on one run can land at 0.249 on the next and flip a count, so the suite
+    passes or fails depending on the weather. A flaky test is worse than none, because it
+    trains you to ignore it.
+    """
+    torch.manual_seed(seed)
+    return PolicyNet()
+
+
 def _filled(n=4, capacity=8):
     pop = Population(capacity=capacity)
-    policy = PolicyNet()
+    policy = a_policy()
     slots = [pop.claim() for _ in range(n)]
     for s in slots:
         pop.set_from_policy(s, policy)
@@ -124,7 +137,7 @@ def test_weights_round_trip_to_a_plain_brain():
 
 def test_a_founder_is_a_copy_of_the_pretrained_policy():
     pop = Population(capacity=4)
-    policy = PolicyNet()
+    policy = a_policy()
     slot = pop.founder(policy)
     expected = policy(torch.tensor([SENSES], dtype=torch.float32)).detach().numpy()[0]
     assert np.allclose(pop.brain_of(slot).action_scores(SENSES), expected, atol=1e-5)
@@ -132,7 +145,7 @@ def test_a_founder_is_a_copy_of_the_pretrained_policy():
 
 def test_a_newborn_starts_knowing_what_its_parent_knew():
     pop = Population(capacity=4)
-    parent = pop.founder(PolicyNet())
+    parent = pop.founder(a_policy())
     with torch.no_grad():
         pop.W2[parent] += 0.4          # the parent learnt something in its life
     child = pop.inherit(parent)
@@ -142,7 +155,7 @@ def test_a_newborn_starts_knowing_what_its_parent_knew():
 
 def test_a_child_that_learns_drifts_from_its_parent():
     pop = Population(capacity=4)
-    parent = pop.founder(PolicyNet())
+    parent = pop.founder(a_policy())
     child = pop.inherit(parent)
     before = pop.spread([parent, child])
     with torch.no_grad():
@@ -159,7 +172,7 @@ def test_inheritance_is_noiseless_by_default():
     sprinkled on at birth.
     """
     pop = Population(capacity=4)
-    parent = pop.founder(PolicyNet())
+    parent = pop.founder(a_policy())
     child = pop.inherit(parent)
     assert np.array_equal(pop.brain_of(parent).weights, pop.brain_of(child).weights)
 
@@ -167,7 +180,7 @@ def test_inheritance_is_noiseless_by_default():
 def test_mutation_can_be_switched_on():
     import random as _random
     pop = Population(capacity=4)
-    parent = pop.founder(PolicyNet())
+    parent = pop.founder(a_policy())
     child = pop.inherit(parent, mutation_std=0.1, rng=_random.Random(0))
     diff = np.abs(pop.brain_of(parent).weights - pop.brain_of(child).weights)
     assert diff.mean() > 0
@@ -176,15 +189,15 @@ def test_mutation_can_be_switched_on():
 
 def test_a_full_population_refuses_to_add_more():
     pop = Population(capacity=2)
-    parent = pop.founder(PolicyNet())
+    parent = pop.founder(a_policy())
     assert pop.inherit(parent) is not None     # fills the second slot
     assert pop.inherit(parent) is None         # no room
-    assert pop.founder(PolicyNet()) is None
+    assert pop.founder(a_policy()) is None
 
 
 def test_released_slots_come_back_for_newborns():
     pop = Population(capacity=2)
-    parent = pop.founder(PolicyNet())
+    parent = pop.founder(a_policy())
     child = pop.inherit(parent)
     pop.release(child)                          # the child dies
     again = pop.inherit(parent)                 # another is born
@@ -196,7 +209,7 @@ def test_a_reused_slot_does_not_keep_the_dead_creatures_weights():
     # Slot reuse is where a stale-state bug would hide: a newborn inheriting whatever the
     # previous occupant had learnt, rather than what its own parent knows.
     pop = Population(capacity=2)
-    first = pop.founder(PolicyNet())
+    first = pop.founder(a_policy())
     ghost = pop.inherit(first)
     with torch.no_grad():
         pop.W1[ghost] += 9.0                    # the dead creature was very unusual
@@ -219,7 +232,7 @@ def _one_step(pop, slot, reward):
 def test_only_the_creature_that_acted_is_updated():
     """The heart of individual learning: experience must not leak between creatures."""
     pop = Population(capacity=4)
-    actor = pop.founder(PolicyNet())
+    actor = pop.founder(a_policy())
     bystander = pop.inherit(actor)
     opt = torch.optim.Adam(pop.parameters(), lr=0.05)
 
@@ -233,7 +246,7 @@ def test_only_the_creature_that_acted_is_updated():
 
 def test_learning_makes_identical_creatures_diverge():
     pop = Population(capacity=4)
-    a = pop.founder(PolicyNet())
+    a = pop.founder(a_policy())
     b = pop.inherit(a)
     opt = torch.optim.Adam(pop.parameters(), lr=0.05)
     assert pop.spread([a, b]) == 0.0
@@ -245,7 +258,7 @@ def test_learning_makes_identical_creatures_diverge():
 def test_a_single_step_does_not_produce_nan():
     # Standardising one number has no defined spread; the guard must handle it.
     pop = Population(capacity=2)
-    slot = pop.founder(PolicyNet())
+    slot = pop.founder(a_policy())
     opt = torch.optim.Adam(pop.parameters(), lr=0.05)
     pop.learn(opt, _one_step(pop, slot, 1.0))
     assert np.all(np.isfinite(pop.brain_of(slot).weights))
@@ -253,7 +266,7 @@ def test_a_single_step_does_not_produce_nan():
 
 def test_an_empty_window_is_harmless():
     pop = Population(capacity=2)
-    slot = pop.founder(PolicyNet())
+    slot = pop.founder(a_policy())
     opt = torch.optim.Adam(pop.parameters(), lr=0.05)
     before = pop.brain_of(slot).weights.copy()
     assert pop.learn(opt, {}) == 0.0
@@ -269,7 +282,7 @@ def test_a_reused_slot_does_not_inherit_the_dead_creatures_momentum():
     newborn in the same slot is not dragged along by it.
     """
     pop = Population(capacity=2)
-    founder = pop.founder(PolicyNet())
+    founder = pop.founder(a_policy())
     doomed = pop.inherit(founder)
     opt = torch.optim.Adam(pop.parameters(), lr=0.05)
 
@@ -290,7 +303,7 @@ def test_momentum_does_carry_over_if_the_slot_is_not_cleared():
     # The counterpart to the test above: this is what goes wrong without forget_slot, and
     # it documents why that call is not optional.
     pop = Population(capacity=2)
-    founder = pop.founder(PolicyNet())
+    founder = pop.founder(a_policy())
     doomed = pop.inherit(founder)
     opt = torch.optim.Adam(pop.parameters(), lr=0.05)
     for _ in range(10):
@@ -302,6 +315,75 @@ def test_momentum_does_carry_over_if_the_slot_is_not_cleared():
     pop.learn(opt, _one_step(pop, founder, 1.0))
     moved = not np.allclose(at_birth, pop.brain_of(newborn).weights, atol=1e-7)
     assert moved, "expected stale momentum to disturb the newborn"
+
+
+
+def test_exact_scores_agree_with_the_sampling_probe():
+    """The fast exact score and the slow sampled one must measure the same thing."""
+    from evaluate import pup_seeking_score
+    pop = Population(capacity=2)
+    slot = pop.founder(a_policy())
+    exact = pop.behaviour([slot])["pup"][0]
+    sampled = pup_seeking_score(pop.brain_of(slot), trials=4000, seed=0)
+    assert abs(exact - sampled) < 0.03
+
+
+def test_identical_creatures_score_identically():
+    pop = Population(capacity=5)
+    policy = a_policy()
+    slots = [pop.founder(policy) for _ in range(3)]
+    scores = pop.behaviour(slots)["pup"]
+    assert np.allclose(scores, scores[0], atol=1e-6)
+
+
+def test_scoring_an_empty_population_is_harmless():
+    pop = Population(capacity=2)
+    assert pop.behaviour([])["pup"].size == 0
+    assert pop.differentiation([])["n"] == 0
+
+
+def test_a_uniform_population_shows_no_differentiation():
+    pop = Population(capacity=6)
+    policy = a_policy()
+    slots = [pop.founder(policy) for _ in range(4)]
+    d = pop.differentiation(slots)
+    assert d["n"] == 4
+    assert d["pup_sd"] < 1e-6
+    assert d["weight_spread"] < 1e-6
+
+
+def test_differentiation_appears_when_creatures_diverge():
+    pop = Population(capacity=6)
+    policy = a_policy()
+    slots = [pop.founder(policy) for _ in range(4)]
+    before = pop.differentiation(slots)
+    with torch.no_grad():
+        pop.W2.data[slots[0]] += 1.5
+        pop.W1.data[slots[1]] -= 1.0
+    after = pop.differentiation(slots)
+    assert after["pup_sd"] > before["pup_sd"]
+    assert after["weight_spread"] > before["weight_spread"]
+    assert after["pup_max"] > after["pup_min"]
+
+
+def test_disengaged_counts_creatures_not_averages():
+    """A population split in two must not read as a middling average.
+
+    This is the whole reason the measure exists: half the colony ignoring its young and
+    half tending it normally produces the same mean as everyone being lukewarm, and those
+    are completely different situations.
+    """
+    pop = Population(capacity=8)
+    policy = a_policy()
+    slots = [pop.founder(policy) for _ in range(4)]
+    # Force two creatures to have no directional preference at all by flattening their
+    # output layer, so every action scores the same.
+    with torch.no_grad():
+        for s in slots[:2]:
+            pop.W2.data[s] = 0.0
+            pop.b2.data[s] = 0.0
+    d = pop.differentiation(slots)
+    assert abs(d["disengaged"] - 0.5) < 1e-6
 
 
 if __name__ == "__main__":

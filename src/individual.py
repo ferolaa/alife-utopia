@@ -23,7 +23,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from brain import Brain
+from brain import ACTIONS, Brain
+from evaluate import FOOD_DIRECTION_CASES, MOVE_ACTIONS, PUP_DIRECTION_CASES
 
 
 class Population(nn.Module):
@@ -226,6 +227,74 @@ class Population(nn.Module):
         return float(loss.item())
 
     # -------------------------------------------------------------- inspection
+
+    def behaviour(self, slots: list[int]) -> dict:
+        """Score every living creature's behaviour, exactly, in a handful of forward passes.
+
+        The probes used elsewhere sample actions many times and count how often the right
+        one comes up, which is noisy and slow. Here the network's own action probabilities
+        are read directly instead: present the whole population with "food is to the east",
+        softmax the outputs, and take how much probability mass sits on moving east as a
+        share of all movement. That is the same quantity the sampling probe estimates, but
+        computed rather than approximated, and it costs four forward passes for the entire
+        population instead of thousands of samples per creature.
+
+        Returns one score per creature for food seeking and for tending young, on the same
+        scale as before, where 0.25 is no preference at all.
+        """
+        if not slots:
+            return {"food": np.zeros(0), "pup": np.zeros(0)}
+
+        move_index = [ACTIONS.index(a) for a in MOVE_ACTIONS]
+        out = {}
+        for label, cases in (("food", FOOD_DIRECTION_CASES), ("pup", PUP_DIRECTION_CASES)):
+            totals = np.zeros(len(slots))
+            for wanted, senses in cases.items():
+                batch = torch.tensor(
+                    np.repeat(np.array(senses, dtype=np.float32)[None, :], len(slots), axis=0),
+                    device=self.device,
+                )
+                with torch.no_grad():
+                    probs = torch.softmax(self.action_scores(slots, batch), dim=1)
+                    moves = probs[:, move_index]
+                    share = moves[:, MOVE_ACTIONS.index(wanted)] / moves.sum(dim=1).clamp(min=1e-9)
+                totals += share.cpu().numpy()
+            out[label] = totals / len(cases)
+        return out
+
+    def differentiation(self, slots: list[int], chance: float = 0.25) -> dict:
+        """Is this one population behaving one way, or several behaving differently?
+
+        Every result before this one was a single number for the whole colony, which can
+        only ever describe an average. Calhoun's collapse was not an average moving: it was
+        a population coming apart, most of it withdrawing while a shrinking part carried on.
+        An average cannot tell those apart, and this is the measurement that can.
+
+        disengaged is the share of creatures whose response to their own young has fallen to
+        chance, meaning they no longer act on the signal at all. That is as close as this
+        model comes to Calhoun's withdrawn animals, and it is a count of individuals rather
+        than a shift in a mean.
+
+        weight_spread is how far apart the networks themselves are. Behaviour is the thing
+        that matters, but weight spread catches drift that has not yet shown up in these
+        particular probes.
+        """
+        scores = self.behaviour(slots)
+        pup, food = scores["pup"], scores["food"]
+        if pup.size == 0:
+            return {"n": 0, "pup_mean": 0.0, "pup_sd": 0.0, "food_mean": 0.0,
+                    "food_sd": 0.0, "disengaged": 0.0, "weight_spread": 0.0}
+        return {
+            "n": int(pup.size),
+            "pup_mean": float(pup.mean()),
+            "pup_sd": float(pup.std()),
+            "pup_min": float(pup.min()),
+            "pup_max": float(pup.max()),
+            "food_mean": float(food.mean()),
+            "food_sd": float(food.std()),
+            "disengaged": float((pup <= chance).mean()),
+            "weight_spread": self.spread(slots),
+        }
 
     def spread(self, slots: list[int]) -> float:
         """How far apart the living creatures' weights are.

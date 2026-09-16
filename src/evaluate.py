@@ -13,14 +13,15 @@ from brain import Brain, make_senses
 
 # Each case gives the brain a clear situation: food is visible in one direction, the agent
 # is healthy, and nobody else is nearby. A food seeking brain should move that way.
-_FOOD_DIRECTION_CASES = {
+FOOD_DIRECTION_CASES = {
     "east": make_senses(food_dx=1.0, food_closeness=0.9, energy=0.5),
     "west": make_senses(food_dx=-1.0, food_closeness=0.9, energy=0.5),
     "north": make_senses(food_dy=-1.0, food_closeness=0.9, energy=0.5),
     "south": make_senses(food_dy=1.0, food_closeness=0.9, energy=0.5),
 }
 
-_MOVES = ("north", "south", "east", "west")
+MOVE_ACTIONS = ("north", "south", "east", "west")
+_MOVES = MOVE_ACTIONS
 
 # With four possible moves, a brain with no preference gets one in four right.
 CHANCE_LEVEL = 0.25
@@ -35,7 +36,7 @@ def food_seeking_score(brain: Brain, trials: int = 400, seed: int = 0) -> float:
     """
     rng = random.Random(seed)
     correct = total = 0
-    for wanted, senses in _FOOD_DIRECTION_CASES.items():
+    for wanted, senses in FOOD_DIRECTION_CASES.items():
         for _ in range(trials):
             action = brain.decide(senses, rng)
             if action in _MOVES:
@@ -45,7 +46,7 @@ def food_seeking_score(brain: Brain, trials: int = 400, seed: int = 0) -> float:
     return correct / max(total, 1)
 
 
-_PUP_DIRECTION_CASES = {
+PUP_DIRECTION_CASES = {
     "east": make_senses(pup_dx=1.0, pup_need=0.8, energy=0.6),
     "west": make_senses(pup_dx=-1.0, pup_need=0.8, energy=0.6),
     "north": make_senses(pup_dy=-1.0, pup_need=0.8, energy=0.6),
@@ -66,7 +67,7 @@ def pup_seeking_score(brain: Brain, trials: int = 400, seed: int = 0) -> float:
     """
     rng = random.Random(seed)
     correct = total = 0
-    for wanted, senses in _PUP_DIRECTION_CASES.items():
+    for wanted, senses in PUP_DIRECTION_CASES.items():
         for _ in range(trials):
             action = brain.decide(senses, rng)
             if action in _MOVES:
