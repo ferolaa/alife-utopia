@@ -1,32 +1,32 @@
 [
  {
   "policy": 0,
-  "food": 0.625,
-  "pup": 0.572,
-  "conflict": -0.313,
-  "peak": 177,
-  "late_pop": 164.9,
-  "births": 611,
+  "food": 0.568,
+  "pup": 0.43,
+  "conflict": -0.145,
+  "peak": 129,
+  "late_pop": 119.1,
+  "births": 364,
   "neglect": 8
  },
  {
   "policy": 1,
-  "food": 0.497,
-  "pup": 0.524,
-  "conflict": 0.112,
-  "peak": 187,
-  "late_pop": 178.0,
-  "births": 640,
-  "neglect": 3
+  "food": 0.532,
+  "pup": 0.426,
+  "conflict": -0.236,
+  "peak": 76,
+  "late_pop": 65.6,
+  "births": 175,
+  "neglect": 5
  },
  {
   "policy": 2,
-  "food": 0.604,
-  "pup": 0.559,
-  "conflict": -0.144,
-  "peak": 204,
-  "late_pop": 196.0,
-  "births": 645,
-  "neglect": 6
+  "food": 0.576,
+  "pup": 0.429,
+  "conflict": -0.399,
+  "peak": 109,
+  "late_pop": 96.4,
+  "births": 347,
+  "neglect": 10
  }
 ]

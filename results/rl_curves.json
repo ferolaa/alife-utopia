@@ -1,582 +1,167 @@
 [
  {
-  "mode": "survival",
+  "mode": "offspring",
   "seed": 0,
   "curve": [
    {
     "it": 0,
-    "pup": 0.291,
-    "food": 0.265,
-    "conflict": 0.057,
-    "births": 28
+    "pup": 0.277,
+    "food": 0.275,
+    "conflict": 0.036,
+    "births": 10
    },
    {
     "it": 10,
-    "pup": 0.284,
-    "food": 0.293,
-    "conflict": 0.036,
-    "births": 31
+    "pup": 0.283,
+    "food": 0.302,
+    "conflict": 0.172,
+    "births": 6
    },
    {
     "it": 20,
-    "pup": 0.245,
-    "food": 0.266,
-    "conflict": -0.133,
-    "births": 29
+    "pup": 0.254,
+    "food": 0.276,
+    "conflict": 0.01,
+    "births": 11
    },
    {
     "it": 30,
-    "pup": 0.299,
+    "pup": 0.293,
     "food": 0.33,
-    "conflict": -0.119,
-    "births": 14
+    "conflict": -0.034,
+    "births": 6
    },
    {
     "it": 40,
-    "pup": 0.27,
-    "food": 0.38,
-    "conflict": -0.171,
-    "births": 54
+    "pup": 0.301,
+    "food": 0.37,
+    "conflict": -0.035,
+    "births": 30
    },
    {
     "it": 50,
-    "pup": 0.287,
-    "food": 0.38,
-    "conflict": -0.182,
-    "births": 29
+    "pup": 0.315,
+    "food": 0.378,
+    "conflict": -0.119,
+    "births": 34
    },
    {
     "it": 60,
-    "pup": 0.283,
-    "food": 0.404,
+    "pup": 0.314,
+    "food": 0.393,
     "conflict": -0.19,
-    "births": 22
+    "births": 41
    },
    {
     "it": 70,
-    "pup": 0.259,
-    "food": 0.424,
-    "conflict": -0.27,
-    "births": 43
+    "pup": 0.345,
+    "food": 0.425,
+    "conflict": 0.068,
+    "births": 21
    },
    {
     "it": 80,
-    "pup": 0.27,
-    "food": 0.426,
-    "conflict": -0.269,
-    "births": 36
+    "pup": 0.352,
+    "food": 0.478,
+    "conflict": -0.154,
+    "births": 47
    },
    {
     "it": 90,
-    "pup": 0.266,
-    "food": 0.433,
-    "conflict": -0.363,
-    "births": 45
+    "pup": 0.379,
+    "food": 0.481,
+    "conflict": -0.128,
+    "births": 44
    },
    {
     "it": 99,
-    "pup": 0.261,
-    "food": 0.486,
-    "conflict": -0.389,
-    "births": 28
+    "pup": 0.419,
+    "food": 0.531,
+    "conflict": -0.069,
+    "births": 23
    }
   ]
  },
  {
-  "mode": "survival",
+  "mode": "offspring",
   "seed": 1,
   "curve": [
    {
     "it": 0,
-    "pup": 0.246,
-    "food": 0.249,
-    "conflict": -0.127,
-    "births": 11
-   },
-   {
-    "it": 10,
-    "pup": 0.239,
-    "food": 0.237,
-    "conflict": -0.02,
-    "births": 21
-   },
-   {
-    "it": 20,
-    "pup": 0.251,
-    "food": 0.266,
-    "conflict": 0.0,
-    "births": 8
-   },
-   {
-    "it": 30,
-    "pup": 0.28,
-    "food": 0.301,
-    "conflict": -0.067,
-    "births": 12
-   },
-   {
-    "it": 40,
-    "pup": 0.251,
-    "food": 0.279,
-    "conflict": -0.108,
-    "births": 9
-   },
-   {
-    "it": 50,
-    "pup": 0.269,
-    "food": 0.323,
-    "conflict": -0.077,
-    "births": 11
-   },
-   {
-    "it": 60,
-    "pup": 0.255,
-    "food": 0.315,
-    "conflict": -0.157,
-    "births": 19
-   },
-   {
-    "it": 70,
-    "pup": 0.256,
-    "food": 0.323,
-    "conflict": -0.332,
-    "births": 13
-   },
-   {
-    "it": 80,
-    "pup": 0.228,
-    "food": 0.347,
-    "conflict": -0.321,
-    "births": 17
-   },
-   {
-    "it": 90,
-    "pup": 0.232,
-    "food": 0.358,
-    "conflict": -0.378,
-    "births": 18
-   },
-   {
-    "it": 99,
-    "pup": 0.233,
-    "food": 0.402,
-    "conflict": -0.414,
-    "births": 14
-   }
-  ]
- },
- {
-  "mode": "survival",
-  "seed": 2,
-  "curve": [
-   {
-    "it": 0,
-    "pup": 0.256,
-    "food": 0.278,
-    "conflict": 0.037,
-    "births": 12
-   },
-   {
-    "it": 10,
-    "pup": 0.228,
-    "food": 0.279,
-    "conflict": 0.021,
-    "births": 13
-   },
-   {
-    "it": 20,
-    "pup": 0.227,
-    "food": 0.307,
-    "conflict": -0.012,
-    "births": 29
-   },
-   {
-    "it": 30,
-    "pup": 0.247,
-    "food": 0.335,
-    "conflict": -0.105,
-    "births": 17
-   },
-   {
-    "it": 40,
-    "pup": 0.218,
-    "food": 0.315,
-    "conflict": -0.261,
-    "births": 10
-   },
-   {
-    "it": 50,
-    "pup": 0.215,
-    "food": 0.325,
-    "conflict": -0.136,
-    "births": 19
-   },
-   {
-    "it": 60,
-    "pup": 0.224,
-    "food": 0.372,
-    "conflict": -0.191,
-    "births": 24
-   },
-   {
-    "it": 70,
-    "pup": 0.208,
-    "food": 0.361,
-    "conflict": -0.332,
-    "births": 12
-   },
-   {
-    "it": 80,
-    "pup": 0.218,
-    "food": 0.356,
-    "conflict": -0.191,
-    "births": 6
-   },
-   {
-    "it": 90,
-    "pup": 0.202,
-    "food": 0.343,
-    "conflict": -0.144,
-    "births": 10
-   },
-   {
-    "it": 99,
-    "pup": 0.233,
-    "food": 0.372,
-    "conflict": -0.122,
-    "births": 6
-   }
-  ]
- },
- {
-  "mode": "survival",
-  "seed": 3,
-  "curve": [
-   {
-    "it": 0,
-    "pup": 0.267,
-    "food": 0.286,
-    "conflict": -0.049,
-    "births": 27
-   },
-   {
-    "it": 10,
-    "pup": 0.267,
-    "food": 0.303,
-    "conflict": 0.029,
-    "births": 21
-   },
-   {
-    "it": 20,
-    "pup": 0.235,
-    "food": 0.289,
-    "conflict": -0.103,
-    "births": 33
-   },
-   {
-    "it": 30,
-    "pup": 0.263,
-    "food": 0.348,
-    "conflict": -0.189,
-    "births": 30
-   },
-   {
-    "it": 40,
-    "pup": 0.242,
-    "food": 0.355,
-    "conflict": -0.243,
-    "births": 24
-   },
-   {
-    "it": 50,
-    "pup": 0.253,
-    "food": 0.38,
-    "conflict": -0.343,
-    "births": 18
-   },
-   {
-    "it": 60,
-    "pup": 0.263,
-    "food": 0.404,
-    "conflict": -0.435,
-    "births": 26
-   },
-   {
-    "it": 70,
-    "pup": 0.28,
-    "food": 0.44,
-    "conflict": -0.356,
-    "births": 17
-   },
-   {
-    "it": 80,
-    "pup": 0.252,
-    "food": 0.411,
-    "conflict": -0.24,
-    "births": 24
-   },
-   {
-    "it": 90,
-    "pup": 0.253,
-    "food": 0.439,
-    "conflict": -0.28,
-    "births": 17
-   },
-   {
-    "it": 99,
-    "pup": 0.28,
-    "food": 0.445,
-    "conflict": -0.39,
-    "births": 19
-   }
-  ]
- },
- {
-  "mode": "survival",
-  "seed": 4,
-  "curve": [
-   {
-    "it": 0,
-    "pup": 0.264,
-    "food": 0.249,
-    "conflict": -0.031,
-    "births": 15
+    "pup": 0.254,
+    "food": 0.243,
+    "conflict": -0.104,
+    "births": 2
    },
    {
     "it": 10,
     "pup": 0.25,
     "food": 0.253,
-    "conflict": 0.024,
-    "births": 17
+    "conflict": -0.152,
+    "births": 2
    },
    {
     "it": 20,
-    "pup": 0.235,
-    "food": 0.263,
-    "conflict": -0.058,
-    "births": 20
-   },
-   {
-    "it": 30,
-    "pup": 0.248,
-    "food": 0.296,
-    "conflict": -0.141,
-    "births": 12
-   },
-   {
-    "it": 40,
-    "pup": 0.235,
-    "food": 0.294,
-    "conflict": -0.172,
-    "births": 12
-   },
-   {
-    "it": 50,
-    "pup": 0.257,
-    "food": 0.295,
-    "conflict": -0.199,
-    "births": 3
-   },
-   {
-    "it": 60,
-    "pup": 0.246,
-    "food": 0.315,
-    "conflict": -0.129,
-    "births": 8
-   },
-   {
-    "it": 70,
-    "pup": 0.199,
-    "food": 0.303,
-    "conflict": -0.291,
+    "pup": 0.237,
+    "food": 0.26,
+    "conflict": -0.262,
     "births": 5
    },
    {
-    "it": 80,
-    "pup": 0.212,
-    "food": 0.316,
-    "conflict": -0.26,
-    "births": 15
-   },
-   {
-    "it": 90,
-    "pup": 0.19,
-    "food": 0.327,
-    "conflict": -0.386,
-    "births": 24
-   },
-   {
-    "it": 99,
-    "pup": 0.206,
-    "food": 0.368,
-    "conflict": -0.384,
-    "births": 15
-   }
-  ]
- },
- {
-  "mode": "offspring",
-  "seed": 0,
-  "curve": [
-   {
-    "it": 0,
-    "pup": 0.297,
-    "food": 0.268,
-    "conflict": 0.073,
-    "births": 28
-   },
-   {
-    "it": 10,
-    "pup": 0.331,
-    "food": 0.312,
-    "conflict": 0.04,
-    "births": 40
-   },
-   {
-    "it": 20,
-    "pup": 0.315,
-    "food": 0.277,
-    "conflict": -0.093,
-    "births": 34
-   },
-   {
     "it": 30,
-    "pup": 0.402,
-    "food": 0.357,
-    "conflict": -0.077,
-    "births": 51
+    "pup": 0.287,
+    "food": 0.317,
+    "conflict": -0.323,
+    "births": 2
    },
    {
     "it": 40,
-    "pup": 0.422,
-    "food": 0.365,
-    "conflict": -0.06,
-    "births": 70
+    "pup": 0.273,
+    "food": 0.319,
+    "conflict": -0.332,
+    "births": 2
    },
    {
     "it": 50,
-    "pup": 0.436,
-    "food": 0.399,
-    "conflict": -0.06,
-    "births": 77
+    "pup": 0.276,
+    "food": 0.329,
+    "conflict": -0.269,
+    "births": 6
    },
    {
     "it": 60,
-    "pup": 0.468,
-    "food": 0.432,
-    "conflict": -0.198,
-    "births": 81
+    "pup": 0.275,
+    "food": 0.345,
+    "conflict": -0.232,
+    "births": 6
    },
    {
     "it": 70,
-    "pup": 0.486,
-    "food": 0.464,
-    "conflict": -0.049,
-    "births": 112
-   },
-   {
-    "it": 80,
-    "pup": 0.478,
-    "food": 0.483,
-    "conflict": -0.174,
-    "births": 101
-   },
-   {
-    "it": 90,
-    "pup": 0.491,
-    "food": 0.526,
-    "conflict": -0.296,
-    "births": 114
-   },
-   {
-    "it": 99,
-    "pup": 0.552,
-    "food": 0.602,
-    "conflict": -0.302,
-    "births": 104
-   }
-  ]
- },
- {
-  "mode": "offspring",
-  "seed": 1,
-  "curve": [
-   {
-    "it": 0,
-    "pup": 0.241,
-    "food": 0.241,
-    "conflict": -0.111,
+    "pup": 0.295,
+    "food": 0.389,
+    "conflict": -0.325,
     "births": 11
    },
    {
-    "it": 10,
-    "pup": 0.264,
-    "food": 0.255,
-    "conflict": 0.011,
-    "births": 19
-   },
-   {
-    "it": 20,
-    "pup": 0.275,
-    "food": 0.262,
-    "conflict": 0.159,
-    "births": 15
-   },
-   {
-    "it": 30,
-    "pup": 0.317,
-    "food": 0.292,
-    "conflict": 0.031,
-    "births": 25
-   },
-   {
-    "it": 40,
-    "pup": 0.305,
-    "food": 0.27,
-    "conflict": 0.017,
-    "births": 20
-   },
-   {
-    "it": 50,
-    "pup": 0.313,
-    "food": 0.291,
-    "conflict": 0.038,
-    "births": 36
-   },
-   {
-    "it": 60,
-    "pup": 0.329,
-    "food": 0.322,
-    "conflict": 0.061,
-    "births": 35
-   },
-   {
-    "it": 70,
-    "pup": 0.366,
-    "food": 0.329,
-    "conflict": -0.059,
-    "births": 54
-   },
-   {
     "it": 80,
-    "pup": 0.409,
-    "food": 0.373,
-    "conflict": 0.048,
-    "births": 76
+    "pup": 0.317,
+    "food": 0.409,
+    "conflict": -0.221,
+    "births": 10
    },
    {
     "it": 90,
-    "pup": 0.41,
-    "food": 0.387,
-    "conflict": 0.08,
-    "births": 82
+    "pup": 0.326,
+    "food": 0.405,
+    "conflict": -0.247,
+    "births": 2
    },
    {
     "it": 99,
-    "pup": 0.457,
-    "food": 0.428,
-    "conflict": 0.201,
-    "births": 67
+    "pup": 0.381,
+    "food": 0.472,
+    "conflict": -0.203,
+    "births": 20
    }
   ]
  },
@@ -586,80 +171,80 @@
   "curve": [
    {
     "it": 0,
-    "pup": 0.254,
-    "food": 0.279,
+    "pup": 0.257,
+    "food": 0.277,
     "conflict": 0.032,
-    "births": 12
+    "births": 2
    },
    {
     "it": 10,
-    "pup": 0.252,
-    "food": 0.273,
-    "conflict": 0.042,
-    "births": 16
+    "pup": 0.254,
+    "food": 0.282,
+    "conflict": -0.069,
+    "births": 9
    },
    {
     "it": 20,
-    "pup": 0.265,
-    "food": 0.287,
-    "conflict": 0.11,
-    "births": 18
+    "pup": 0.26,
+    "food": 0.3,
+    "conflict": -0.154,
+    "births": 12
    },
    {
     "it": 30,
-    "pup": 0.321,
-    "food": 0.333,
-    "conflict": 0.0,
-    "births": 25
+    "pup": 0.3,
+    "food": 0.373,
+    "conflict": -0.143,
+    "births": 21
    },
    {
     "it": 40,
-    "pup": 0.288,
-    "food": 0.316,
-    "conflict": -0.017,
-    "births": 43
+    "pup": 0.291,
+    "food": 0.371,
+    "conflict": -0.199,
+    "births": 18
    },
    {
     "it": 50,
-    "pup": 0.338,
-    "food": 0.368,
-    "conflict": 0.03,
-    "births": 44
+    "pup": 0.306,
+    "food": 0.407,
+    "conflict": -0.213,
+    "births": 32
    },
    {
     "it": 60,
-    "pup": 0.342,
-    "food": 0.374,
-    "conflict": 0.065,
-    "births": 94
+    "pup": 0.308,
+    "food": 0.411,
+    "conflict": -0.382,
+    "births": 30
    },
    {
     "it": 70,
-    "pup": 0.37,
-    "food": 0.392,
-    "conflict": -0.08,
-    "births": 56
+    "pup": 0.351,
+    "food": 0.444,
+    "conflict": -0.188,
+    "births": 22
    },
    {
     "it": 80,
-    "pup": 0.381,
-    "food": 0.409,
-    "conflict": 0.01,
-    "births": 82
+    "pup": 0.349,
+    "food": 0.454,
+    "conflict": -0.103,
+    "births": 72
    },
    {
     "it": 90,
-    "pup": 0.444,
-    "food": 0.474,
-    "conflict": -0.101,
-    "births": 58
+    "pup": 0.381,
+    "food": 0.483,
+    "conflict": -0.307,
+    "births": 74
    },
    {
     "it": 99,
-    "pup": 0.488,
-    "food": 0.526,
-    "conflict": -0.129,
-    "births": 86
+    "pup": 0.42,
+    "food": 0.514,
+    "conflict": -0.383,
+    "births": 32
    }
   ]
  },
@@ -669,80 +254,80 @@
   "curve": [
    {
     "it": 0,
-    "pup": 0.267,
-    "food": 0.283,
-    "conflict": -0.068,
-    "births": 27
+    "pup": 0.269,
+    "food": 0.294,
+    "conflict": -0.038,
+    "births": 10
    },
    {
     "it": 10,
-    "pup": 0.287,
-    "food": 0.33,
-    "conflict": 0.179,
-    "births": 46
+    "pup": 0.291,
+    "food": 0.311,
+    "conflict": 0.073,
+    "births": 9
    },
    {
     "it": 20,
-    "pup": 0.302,
-    "food": 0.31,
-    "conflict": 0.124,
-    "births": 26
+    "pup": 0.295,
+    "food": 0.325,
+    "conflict": -0.084,
+    "births": 21
    },
    {
     "it": 30,
-    "pup": 0.388,
-    "food": 0.369,
-    "conflict": 0.284,
-    "births": 26
+    "pup": 0.349,
+    "food": 0.395,
+    "conflict": -0.108,
+    "births": 13
    },
    {
     "it": 40,
-    "pup": 0.384,
-    "food": 0.427,
-    "conflict": 0.166,
-    "births": 54
+    "pup": 0.355,
+    "food": 0.43,
+    "conflict": 0.078,
+    "births": 7
    },
    {
     "it": 50,
-    "pup": 0.396,
+    "pup": 0.373,
     "food": 0.449,
-    "conflict": 0.331,
-    "births": 58
+    "conflict": 0.016,
+    "births": 24
    },
    {
     "it": 60,
-    "pup": 0.4,
-    "food": 0.457,
-    "conflict": 0.154,
-    "births": 60
+    "pup": 0.406,
+    "food": 0.486,
+    "conflict": -0.01,
+    "births": 38
    },
    {
     "it": 70,
-    "pup": 0.427,
-    "food": 0.483,
-    "conflict": -0.091,
-    "births": 49
+    "pup": 0.408,
+    "food": 0.504,
+    "conflict": -0.139,
+    "births": 38
    },
    {
     "it": 80,
-    "pup": 0.405,
-    "food": 0.502,
-    "conflict": 0.085,
-    "births": 61
+    "pup": 0.404,
+    "food": 0.508,
+    "conflict": -0.112,
+    "births": 68
    },
    {
     "it": 90,
-    "pup": 0.439,
-    "food": 0.537,
-    "conflict": -0.063,
-    "births": 118
+    "pup": 0.437,
+    "food": 0.503,
+    "conflict": -0.099,
+    "births": 28
    },
    {
     "it": 99,
-    "pup": 0.463,
-    "food": 0.559,
-    "conflict": -0.137,
-    "births": 99
+    "pup": 0.471,
+    "food": 0.548,
+    "conflict": -0.051,
+    "births": 47
    }
   ]
  },
@@ -752,80 +337,495 @@
   "curve": [
    {
     "it": 0,
-    "pup": 0.269,
-    "food": 0.256,
-    "conflict": -0.026,
-    "births": 15
+    "pup": 0.263,
+    "food": 0.245,
+    "conflict": -0.016,
+    "births": 2
    },
    {
     "it": 10,
-    "pup": 0.285,
-    "food": 0.26,
-    "conflict": 0.039,
-    "births": 15
+    "pup": 0.278,
+    "food": 0.276,
+    "conflict": 0.015,
+    "births": 7
    },
    {
     "it": 20,
-    "pup": 0.272,
-    "food": 0.27,
-    "conflict": -0.046,
-    "births": 17
+    "pup": 0.252,
+    "food": 0.264,
+    "conflict": -0.092,
+    "births": 8
    },
    {
     "it": 30,
-    "pup": 0.338,
-    "food": 0.312,
-    "conflict": 0.076,
+    "pup": 0.32,
+    "food": 0.343,
+    "conflict": -0.161,
     "births": 26
    },
    {
     "it": 40,
-    "pup": 0.328,
-    "food": 0.299,
-    "conflict": 0.031,
-    "births": 39
+    "pup": 0.297,
+    "food": 0.344,
+    "conflict": -0.097,
+    "births": 43
    },
    {
     "it": 50,
-    "pup": 0.375,
-    "food": 0.346,
-    "conflict": 0.036,
-    "births": 35
+    "pup": 0.34,
+    "food": 0.356,
+    "conflict": -0.062,
+    "births": 44
    },
    {
     "it": 60,
-    "pup": 0.375,
-    "food": 0.363,
-    "conflict": 0.102,
-    "births": 59
+    "pup": 0.318,
+    "food": 0.408,
+    "conflict": -0.25,
+    "births": 33
    },
    {
     "it": 70,
-    "pup": 0.404,
-    "food": 0.396,
-    "conflict": -0.098,
-    "births": 47
+    "pup": 0.368,
+    "food": 0.439,
+    "conflict": -0.091,
+    "births": 38
    },
    {
     "it": 80,
-    "pup": 0.399,
-    "food": 0.449,
-    "conflict": -0.237,
-    "births": 94
+    "pup": 0.369,
+    "food": 0.454,
+    "conflict": -0.192,
+    "births": 83
    },
    {
     "it": 90,
-    "pup": 0.414,
-    "food": 0.475,
-    "conflict": -0.27,
-    "births": 68
+    "pup": 0.395,
+    "food": 0.51,
+    "conflict": -0.202,
+    "births": 58
    },
    {
     "it": 99,
-    "pup": 0.455,
-    "food": 0.519,
-    "conflict": -0.258,
-    "births": 57
+    "pup": 0.427,
+    "food": 0.54,
+    "conflict": -0.237,
+    "births": 41
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 0,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.274,
+    "food": 0.271,
+    "conflict": 0.036,
+    "births": 10
+   },
+   {
+    "it": 10,
+    "pup": 0.275,
+    "food": 0.311,
+    "conflict": 0.144,
+    "births": 12
+   },
+   {
+    "it": 20,
+    "pup": 0.261,
+    "food": 0.298,
+    "conflict": 0.046,
+    "births": 6
+   },
+   {
+    "it": 30,
+    "pup": 0.288,
+    "food": 0.358,
+    "conflict": 0.019,
+    "births": 6
+   },
+   {
+    "it": 40,
+    "pup": 0.259,
+    "food": 0.35,
+    "conflict": -0.101,
+    "births": 35
+   },
+   {
+    "it": 50,
+    "pup": 0.283,
+    "food": 0.407,
+    "conflict": -0.209,
+    "births": 16
+   },
+   {
+    "it": 60,
+    "pup": 0.247,
+    "food": 0.417,
+    "conflict": -0.361,
+    "births": 16
+   },
+   {
+    "it": 70,
+    "pup": 0.236,
+    "food": 0.427,
+    "conflict": -0.32,
+    "births": 9
+   },
+   {
+    "it": 80,
+    "pup": 0.232,
+    "food": 0.435,
+    "conflict": -0.288,
+    "births": 15
+   },
+   {
+    "it": 90,
+    "pup": 0.228,
+    "food": 0.467,
+    "conflict": -0.357,
+    "births": 28
+   },
+   {
+    "it": 99,
+    "pup": 0.236,
+    "food": 0.529,
+    "conflict": -0.396,
+    "births": 20
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 1,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.254,
+    "food": 0.243,
+    "conflict": -0.104,
+    "births": 2
+   },
+   {
+    "it": 10,
+    "pup": 0.253,
+    "food": 0.25,
+    "conflict": -0.091,
+    "births": 1
+   },
+   {
+    "it": 20,
+    "pup": 0.228,
+    "food": 0.247,
+    "conflict": -0.228,
+    "births": 5
+   },
+   {
+    "it": 30,
+    "pup": 0.281,
+    "food": 0.314,
+    "conflict": -0.293,
+    "births": 1
+   },
+   {
+    "it": 40,
+    "pup": 0.261,
+    "food": 0.312,
+    "conflict": -0.304,
+    "births": 4
+   },
+   {
+    "it": 50,
+    "pup": 0.27,
+    "food": 0.32,
+    "conflict": -0.255,
+    "births": 3
+   },
+   {
+    "it": 60,
+    "pup": 0.274,
+    "food": 0.346,
+    "conflict": -0.165,
+    "births": 2
+   },
+   {
+    "it": 70,
+    "pup": 0.244,
+    "food": 0.356,
+    "conflict": -0.286,
+    "births": 7
+   },
+   {
+    "it": 80,
+    "pup": 0.265,
+    "food": 0.375,
+    "conflict": -0.214,
+    "births": 0
+   },
+   {
+    "it": 90,
+    "pup": 0.234,
+    "food": 0.356,
+    "conflict": -0.346,
+    "births": 2
+   },
+   {
+    "it": 99,
+    "pup": 0.236,
+    "food": 0.41,
+    "conflict": -0.263,
+    "births": 2
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 2,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.257,
+    "food": 0.277,
+    "conflict": 0.032,
+    "births": 2
+   },
+   {
+    "it": 10,
+    "pup": 0.254,
+    "food": 0.29,
+    "conflict": -0.047,
+    "births": 3
+   },
+   {
+    "it": 20,
+    "pup": 0.232,
+    "food": 0.298,
+    "conflict": -0.161,
+    "births": 3
+   },
+   {
+    "it": 30,
+    "pup": 0.275,
+    "food": 0.383,
+    "conflict": -0.169,
+    "births": 15
+   },
+   {
+    "it": 40,
+    "pup": 0.218,
+    "food": 0.368,
+    "conflict": -0.247,
+    "births": 11
+   },
+   {
+    "it": 50,
+    "pup": 0.232,
+    "food": 0.416,
+    "conflict": -0.273,
+    "births": 18
+   },
+   {
+    "it": 60,
+    "pup": 0.23,
+    "food": 0.428,
+    "conflict": -0.154,
+    "births": 15
+   },
+   {
+    "it": 70,
+    "pup": 0.191,
+    "food": 0.447,
+    "conflict": -0.273,
+    "births": 8
+   },
+   {
+    "it": 80,
+    "pup": 0.209,
+    "food": 0.439,
+    "conflict": -0.199,
+    "births": 25
+   },
+   {
+    "it": 90,
+    "pup": 0.22,
+    "food": 0.465,
+    "conflict": -0.314,
+    "births": 24
+   },
+   {
+    "it": 99,
+    "pup": 0.229,
+    "food": 0.515,
+    "conflict": -0.314,
+    "births": 16
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 3,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.275,
+    "food": 0.295,
+    "conflict": -0.029,
+    "births": 10
+   },
+   {
+    "it": 10,
+    "pup": 0.26,
+    "food": 0.303,
+    "conflict": 0.131,
+    "births": 8
+   },
+   {
+    "it": 20,
+    "pup": 0.251,
+    "food": 0.302,
+    "conflict": -0.03,
+    "births": 6
+   },
+   {
+    "it": 30,
+    "pup": 0.291,
+    "food": 0.373,
+    "conflict": -0.199,
+    "births": 6
+   },
+   {
+    "it": 40,
+    "pup": 0.257,
+    "food": 0.417,
+    "conflict": -0.335,
+    "births": 6
+   },
+   {
+    "it": 50,
+    "pup": 0.274,
+    "food": 0.442,
+    "conflict": -0.3,
+    "births": 3
+   },
+   {
+    "it": 60,
+    "pup": 0.251,
+    "food": 0.435,
+    "conflict": -0.515,
+    "births": 11
+   },
+   {
+    "it": 70,
+    "pup": 0.255,
+    "food": 0.462,
+    "conflict": -0.426,
+    "births": 21
+   },
+   {
+    "it": 80,
+    "pup": 0.231,
+    "food": 0.445,
+    "conflict": -0.41,
+    "births": 15
+   },
+   {
+    "it": 90,
+    "pup": 0.252,
+    "food": 0.446,
+    "conflict": -0.595,
+    "births": 2
+   },
+   {
+    "it": 99,
+    "pup": 0.247,
+    "food": 0.485,
+    "conflict": -0.575,
+    "births": 11
+   }
+  ]
+ },
+ {
+  "mode": "survival",
+  "seed": 4,
+  "curve": [
+   {
+    "it": 0,
+    "pup": 0.263,
+    "food": 0.246,
+    "conflict": -0.026,
+    "births": 2
+   },
+   {
+    "it": 10,
+    "pup": 0.288,
+    "food": 0.27,
+    "conflict": 0.101,
+    "births": 6
+   },
+   {
+    "it": 20,
+    "pup": 0.256,
+    "food": 0.269,
+    "conflict": -0.065,
+    "births": 4
+   },
+   {
+    "it": 30,
+    "pup": 0.297,
+    "food": 0.341,
+    "conflict": -0.176,
+    "births": 6
+   },
+   {
+    "it": 40,
+    "pup": 0.276,
+    "food": 0.353,
+    "conflict": -0.199,
+    "births": 25
+   },
+   {
+    "it": 50,
+    "pup": 0.286,
+    "food": 0.38,
+    "conflict": -0.172,
+    "births": 27
+   },
+   {
+    "it": 60,
+    "pup": 0.252,
+    "food": 0.392,
+    "conflict": -0.429,
+    "births": 3
+   },
+   {
+    "it": 70,
+    "pup": 0.252,
+    "food": 0.407,
+    "conflict": -0.439,
+    "births": 22
+   },
+   {
+    "it": 80,
+    "pup": 0.237,
+    "food": 0.42,
+    "conflict": -0.381,
+    "births": 40
+   },
+   {
+    "it": 90,
+    "pup": 0.227,
+    "food": 0.47,
+    "conflict": -0.441,
+    "births": 12
+   },
+   {
+    "it": 99,
+    "pup": 0.248,
+    "food": 0.505,
+    "conflict": -0.405,
+    "births": 28
    }
   ]
  }

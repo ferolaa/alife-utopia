@@ -161,6 +161,21 @@ class Brain:
         weights[start:start + self.N_OUTPUTS] = 0.0
         return Brain(weights)
 
+    def without_sense(self, sense: int) -> "Brain":
+        """A copy of this brain that cannot see one of its senses.
+
+        The weights carrying that input into the hidden layer are cleared, which is the same
+        as the input always reading zero. Everything the brain does with its other senses is
+        untouched, so whatever behaviour is lost was resting on the one that was removed.
+        """
+        if not 0 <= sense < self.N_INPUTS:
+            raise ValueError(f"no sense {sense}")
+        weights = self.weights.copy()
+        # The first weight matrix is stored row by row, one row per input.
+        start = sense * self.N_HIDDEN
+        weights[start:start + self.N_HIDDEN] = 0.0
+        return Brain(weights)
+
     def decide(self, senses, rng: random.Random | None = None, temperature: float = 1.0) -> str:
         """Choose an action.
 

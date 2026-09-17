@@ -117,6 +117,76 @@ def ablation(brain: Brain, trials: int = 800, seed: int = 0) -> dict:
     return {"intact": intact, "units": units}
 
 
+def sensitivity(brain: Brain, senses_matrix) -> np.ndarray:
+    """How much each unit's output moves per unit change in each sense.
+
+    Correlation says what a unit tracks, but it is dominated by which senses happen to vary.
+    Most creatures have no dependent pup most of the time, so the pup senses sit at zero and
+    correlate with nothing, whether or not the network cares about them deeply.
+
+    This measures the other thing: the slope of the unit's output with respect to each sense,
+    averaged over the situations creatures are really in. A unit saturated by everything else
+    has a flat slope and is not listening, however large its weights.
+
+    Returns a matrix with one row per sense and one column per unit.
+    """
+    X = np.asarray(senses_matrix, dtype=np.float64)
+    H = brain.hidden_activations(X)
+    slope = 1.0 - H ** 2                      # the derivative of tanh, per situation per unit
+    return np.abs(brain._W1) * slope.mean(axis=0)
+
+
+def sense_ablation(brain: Brain, trials: int = 800, seed: int = 0) -> dict:
+    """Blind the brain to one sense at a time and see which behaviours go with it.
+
+    This asks a blunter question than silencing units, and a more readable one. A policy
+    trained with no reward for offspring has no reason to use the pup senses at all, and if
+    it does not, taking them away should cost it nothing.
+    """
+    intact = probe(brain, trials=trials, seed=seed)
+    senses = []
+    for i, name in enumerate(SENSES):
+        blind = probe(brain.without_sense(i), trials=trials, seed=seed)
+        senses.append({
+            "sense": name,
+            "scores": blind,
+            "change": {k: blind[k] - intact[k] for k in intact},
+        })
+    return {"intact": intact, "senses": senses}
+
+
+def progressive_ablation(brain: Brain, measure: str = "pup_seeking",
+                         trials: int = 800, seed: int = 0) -> list[dict]:
+    """Silence units one after another, worst first, and watch a behaviour come apart.
+
+    Removing one unit from twelve barely moves anything, which is a result in itself but not
+    a very legible one. The shape of this curve says more. A behaviour held by a couple of
+    units falls off a cliff early. A behaviour spread across the whole layer declines
+    steadily until almost nothing is left.
+
+    At each step the unit whose removal costs the most is taken out and kept out, so the
+    order is greedy rather than fixed in advance.
+    """
+    intact = probe(brain, trials=trials, seed=seed)
+    current = brain
+    removed: list[int] = []
+    curve = [{"removed": 0, "units": [], measure: intact[measure]}]
+
+    for _ in range(Brain.N_HIDDEN - 1):
+        best_unit, best_brain, best_score = None, None, None
+        for unit in range(Brain.N_HIDDEN):
+            if unit in removed:
+                continue
+            candidate = current.without_unit(unit)
+            score = probe(candidate, trials=trials, seed=seed)[measure]
+            if best_score is None or score < best_score:
+                best_unit, best_brain, best_score = unit, candidate, score
+        removed.append(best_unit)
+        current = best_brain
+        curve.append({"removed": len(removed), "units": list(removed), measure: best_score})
+    return curve
+
+
 def specialisation(ablation_result: dict) -> float:
     """How concentrated a behaviour is, on a scale from spread out to carried by one unit.
 

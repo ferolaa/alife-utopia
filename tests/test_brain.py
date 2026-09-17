@@ -125,6 +125,33 @@ def test_silencing_leaves_the_original_brain_alone():
     assert np.allclose(b.weights, before)
 
 
+def test_blinding_a_sense_is_the_same_as_the_sense_reading_zero():
+    b = Brain.random(random.Random(18))
+    for i, name in enumerate(SENSES):
+        blind = b.without_sense(i)
+        for values in (SOME_SENSES, make_senses(energy=0.8, pup_need=0.6, crowding=0.3)):
+            zeroed = list(values)
+            zeroed[i] = 0.0
+            assert np.allclose(blind.action_scores(values), b.action_scores(zeroed)), name
+
+
+def test_blinding_leaves_the_original_brain_alone():
+    b = Brain.random(random.Random(19))
+    before = b.weights.copy()
+    b.without_sense(0)
+    assert np.allclose(b.weights, before)
+
+
+def test_blinding_a_sense_that_does_not_exist_is_rejected():
+    b = Brain.random(random.Random(20))
+    for bad in (-1, Brain.N_INPUTS):
+        try:
+            b.without_sense(bad)
+        except ValueError:
+            continue
+        raise AssertionError(f"expected a ValueError for sense {bad}")
+
+
 def test_silencing_a_unit_that_does_not_exist_is_rejected():
     b = Brain.random(random.Random(17))
     for bad in (-1, Brain.N_HIDDEN):
