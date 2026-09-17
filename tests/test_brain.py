@@ -91,6 +91,50 @@ def test_parent_is_not_modified_by_having_a_child():
     assert np.allclose(b.weights, before)
 
 
+def test_hidden_activations_take_one_or_many_sense_vectors():
+    b = Brain.random(random.Random(13))
+    stack = np.array([SOME_SENSES, make_senses(energy=1.0), make_senses(pup_need=0.5)])
+    assert b.hidden_activations(SOME_SENSES).shape == (Brain.N_HIDDEN,)
+    assert b.hidden_activations(stack).shape == (len(stack), Brain.N_HIDDEN)
+    assert np.allclose(b.hidden_activations(stack)[0], b.hidden_activations(SOME_SENSES))
+
+
+def test_hidden_activations_stay_inside_the_tanh_range():
+    b = Brain.random(random.Random(14))
+    huge = np.full(Brain.N_INPUTS, 50.0)
+    assert np.all(np.abs(b.hidden_activations(huge)) <= 1.0)
+
+
+def test_silencing_a_unit_removes_exactly_that_unit():
+    b = Brain.random(random.Random(15))
+    hidden = b.hidden_activations(SOME_SENSES)
+    for unit in range(Brain.N_HIDDEN):
+        quiet = b.without_unit(unit)
+        # The hidden layer itself is untouched. Only what it feeds into changes.
+        assert np.allclose(quiet.hidden_activations(SOME_SENSES), hidden)
+        # And the result is what you get by setting that one activation to zero by hand.
+        by_hand = hidden.copy()
+        by_hand[unit] = 0.0
+        assert np.allclose(quiet.action_scores(SOME_SENSES), by_hand @ b._W2 + b._b2)
+
+
+def test_silencing_leaves_the_original_brain_alone():
+    b = Brain.random(random.Random(16))
+    before = b.weights.copy()
+    b.without_unit(0)
+    assert np.allclose(b.weights, before)
+
+
+def test_silencing_a_unit_that_does_not_exist_is_rejected():
+    b = Brain.random(random.Random(17))
+    for bad in (-1, Brain.N_HIDDEN):
+        try:
+            b.without_unit(bad)
+        except ValueError:
+            continue
+        raise AssertionError(f"expected a ValueError for hidden unit {bad}")
+
+
 def test_low_temperature_concentrates_on_the_best_action():
     b = Brain.random(random.Random(11))
     rng = random.Random(12)

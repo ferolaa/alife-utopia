@@ -128,11 +128,38 @@ class Brain:
         """The weight matrices, as carved out when this brain was built."""
         return self._W1, self._b1, self._W2, self._b2
 
+    def hidden_activations(self, senses) -> np.ndarray:
+        """What the hidden layer outputs for these senses.
+
+        Normally nobody looks at this: the hidden layer is a means to an end and only the
+        action scores matter. The representation analysis looks at it directly, because the
+        question there is what each of the twelve units has come to stand for.
+
+        Accepts one sense vector or a whole stack of them, and returns one activation per
+        unit in the first case and a row per sense vector in the second.
+        """
+        x = np.asarray(senses, dtype=np.float64)
+        return np.tanh(x @ self._W1 + self._b1)   # tanh keeps activations in minus one to one
+
     def action_scores(self, senses) -> np.ndarray:
         """Run the senses through the network. Returns one score per action."""
-        x = np.asarray(senses, dtype=np.float64)
-        hidden = np.tanh(x @ self._W1 + self._b1)   # tanh keeps activations in minus one to one
-        return hidden @ self._W2 + self._b2
+        return self.hidden_activations(senses) @ self._W2 + self._b2
+
+    def without_unit(self, unit: int) -> "Brain":
+        """A copy of this brain with one hidden unit silenced.
+
+        Silencing means the unit's output is forced to zero for every input, which is done
+        by clearing the weights that carry it to the output layer. Nothing else about the
+        brain changes, so whatever behaviour is lost was being carried by that unit.
+        """
+        if not 0 <= unit < self.N_HIDDEN:
+            raise ValueError(f"no hidden unit {unit}")
+        weights = self.weights.copy()
+        # The second weight matrix is stored row by row, one row per hidden unit, so the
+        # unit's outgoing weights are a single contiguous block.
+        start = self.N_INPUTS * self.N_HIDDEN + self.N_HIDDEN + unit * self.N_OUTPUTS
+        weights[start:start + self.N_OUTPUTS] = 0.0
+        return Brain(weights)
 
     def decide(self, senses, rng: random.Random | None = None, temperature: float = 1.0) -> str:
         """Choose an action.

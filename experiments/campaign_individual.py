@@ -32,13 +32,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def run(cfg, policy, seed, update_every=200, probe_every=500, lr=0.003, gamma=0.99):
     rng = random.Random(seed)
+    # The same pen as every other run, built by the same function. This used to finish the
+    # world off by hand here too, which is how the two arms of the comparison were able to
+    # drift apart without anyone touching either of them.
     world = _build_world(cfg, rng)
-    if cfg.n_feeders:
-        world.place_feeders(cfg.n_feeders)
-        world.food.clear()
-        world.scatter_food(cfg.n_food, spread=cfg.feeder_spread)
-    if cfg.nests_enabled:
-        world.scatter_nests(cfg.n_nests, on_perimeter=cfg.nests_on_perimeter)
 
     pop = Population(capacity=cfg.max_population)
     optimiser = torch.optim.Adam(pop.parameters(), lr=lr)

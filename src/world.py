@@ -125,11 +125,23 @@ class World:
 
     # ---------------------------------------------------------------------- food
 
-    def place_feeders(self, n: int, rng=None) -> None:
-        """Put n feeding sites down. Food will only appear around these."""
-        rng = rng or self.rng
-        while len(self.feeders) < n:
-            self.feeders.add(self.random_square())
+    def place_feeders(self, n: int, inset: int = 0) -> None:
+        """Put n feeding sites down. Food will only appear around these.
+
+        inset keeps them that many squares away from the walls. It is used when the nest
+        boxes are around the walls, so that a feeder cannot land among them. If it did, that
+        run would have a corner where a creature could eat without ever leaving its young,
+        and the travel that makes the two compete would be gone.
+        """
+        attempts = 0
+        limit = max(n, 1) * 200
+        while len(self.feeders) < n and attempts < limit:
+            attempts += 1
+            x, y = self.random_square()
+            if inset and (x < inset or x >= self.width - inset
+                          or y < inset or y >= self.height - inset):
+                continue
+            self.feeders.add((x, y))
 
     def scatter_food(self, n: int, spread: int = 3) -> None:
         """Place n new food items.
