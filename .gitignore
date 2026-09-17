@@ -6,4 +6,8 @@ venv/
 .idea/
 .vscode/
 results/*.csv
-results/*.png
+
+# Figures are kept, unlike the usual convention of ignoring generated images.
+# This is a graded project: the figures should be visible to anyone who opens the
+# repository, without having to install anything and re-run the experiments.
+!results/*.png
