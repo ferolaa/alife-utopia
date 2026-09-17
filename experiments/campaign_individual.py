@@ -136,10 +136,7 @@ def run(cfg, policy, seed, update_every=200, probe_every=500, lr=0.003, gamma=0.
                   "nests_free": len(world.nests) - len(world.occupied_nests)}
         measured = [a.neighbours for a in world.agents if a.neighbours is not None]
         record["mean_neighbours"] = (sum(measured) / len(measured)) if measured else 0.0
-        n = world.population
-        patch = (2 * cfg.crowding_radius + 1) ** 2
-        expected = (n - 1) * patch / (world.width * world.height) if n > 1 else 0.0
-        record["clustering"] = (record["mean_neighbours"] / expected) if expected > 0 else 0.0
+        record["clustering"] = world.clustering(measured, cfg.crowding_radius)
 
         if (tick + 1) % update_every == 0:
             pop.learn(optimiser, trajectories, gamma=gamma)

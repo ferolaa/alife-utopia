@@ -34,7 +34,6 @@ from torch.distributions import Categorical
 from agent import Agent, draw_lifespan
 from brain import ACTIONS, Brain
 from evaluate import care_under_conflict, food_seeking_score, pup_seeking_score
-from population import draw_founders
 from world import World
 
 # Reward for being alive one more tick. Both objectives include it, so both learn to eat.
@@ -90,7 +89,7 @@ def _build_world(cfg, rng):
     return world
 
 
-def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int, founders=None):
+def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int):
     """Run one simulation where every creature is driven by the shared policy.
 
     Returns the log probability and reward of every choice every creature made, along with
@@ -100,12 +99,8 @@ def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int, found
     rng = random.Random(seed)
     world = _build_world(cfg, rng)
 
-    brains = (
-        draw_founders(founders, cfg.n_initial_agents, rng) if founders
-        else [Brain.random(rng) for _ in range(cfg.n_initial_agents)]
-    )
     world.agents = []
-    for brain in brains:
+    for brain in [Brain.random(rng) for _ in range(cfg.n_initial_agents)]:
         x, y = world.random_square()
         a = Agent(x, y, cfg.energy_start, brain, lifespan=draw_lifespan(cfg, rng))
         if cfg.ageing_enabled:
@@ -196,8 +191,7 @@ def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int, found
 
 
 def train(cfg, reward_offspring: bool, iterations: int = 40, lr: float = 0.01,
-          gamma: float = 0.99, seed: int = 0, founders=None, log_every: int = 5,
-          probe_every: int = 0):
+          gamma: float = 0.99, seed: int = 0, log_every: int = 5, probe_every: int = 0):
     """Train one shared policy with REINFORCE.
 
     Every creature alive contributes its own trajectory, and all of them update the same
@@ -217,7 +211,7 @@ def train(cfg, reward_offspring: bool, iterations: int = 40, lr: float = 0.01,
 
     for step in range(iterations):
         log_probs, rewards, stats = run_episode(
-            cfg, policy, reward_offspring, seed=seed * 1000 + step, founders=founders
+            cfg, policy, reward_offspring, seed=seed * 1000 + step
         )
         if not log_probs:
             history.append({"iteration": step, **stats, "loss": 0.0})
@@ -392,10 +386,7 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
         }
         measured = [a.neighbours for a in world.agents if a.neighbours is not None]
         record["mean_neighbours"] = (sum(measured) / len(measured)) if measured else 0.0
-        n = world.population
-        patch = (2 * cfg.crowding_radius + 1) ** 2
-        expected = (n - 1) * patch / (world.width * world.height) if n > 1 else 0.0
-        record["clustering"] = (record["mean_neighbours"] / expected) if expected > 0 else 0.0
+        record["clustering"] = world.clustering(measured, cfg.crowding_radius)
 
         if (tick + 1) % update_every == 0:
             record["loss"] = flush()

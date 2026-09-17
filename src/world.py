@@ -386,5 +386,27 @@ class World:
 
     @property
     def density(self) -> float:
-        """Agents per square. This is the headline number for the crowding question."""
+        """Agents per square, across the whole grid."""
         return len(self.agents) / (self.width * self.height)
+
+    def clustering(self, neighbour_counts, radius: int) -> float:
+        """How much more crowded agents are than an even spread would make them.
+
+        One means evenly spread. Above one means they are gathering, which is the thing
+        Calhoun called the behavioural sink.
+
+        The comparison is against (n - 1) * patch / cells, which is what each agent would
+        see if every other agent were placed independently at random: each of the other
+        n - 1 agents has a patch/cells chance of landing in view. An earlier version used
+        density * patch - 1, which is close for a dense population but collapses towards
+        zero for a sparse one and sends the ratio to absurd values in exactly the case of a
+        small population in a large pen.
+        """
+        n = len(self.agents)
+        if n < 2 or not neighbour_counts:
+            return 0.0
+        patch = (2 * radius + 1) ** 2
+        expected = (n - 1) * patch / (self.width * self.height)
+        if expected <= 0:
+            return 0.0
+        return (sum(neighbour_counts) / len(neighbour_counts)) / expected
