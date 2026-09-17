@@ -1,2 +1,7 @@
 numpy>=1.24
 matplotlib>=3.7
+
+# Needed by the reinforcement learning side: src/rl.py, src/individual.py, everything
+# under experiments/ that trains a policy, and tests/test_individual.py. Without it the
+# simulation and its tests still run, but none of the learning does.
+torch>=2.0
