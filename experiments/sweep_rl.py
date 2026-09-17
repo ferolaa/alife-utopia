@@ -1,16 +1,18 @@
 import sys, json, os
-sys.path.insert(0, 'src')
-from config import DEFAULT
+sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parents[1] / 'src'))
+from config import UNIVERSE_25
 from rl import train
 
 mode = sys.argv[1]
 seeds = [int(s) for s in sys.argv[2].split(',')]
-PATH = 'results/rl_curves.json'
+PATH = str(__import__('pathlib').Path(__file__).resolve().parents[1] / 'results' / 'rl_curves.json')
 
-cfg = DEFAULT.variant('rl', n_ticks=400, n_initial_agents=80, max_population=400,
-                      ageing_enabled=True, food_unlimited=True, n_food=300,
-                      nests_enabled=True, n_nests=40, parental_care_enabled=True,
-                      crowding_cost_enabled=True)
+# The enclosure, with the population held low. These are the same conditions the founding
+# policies are trained under, so this comparison now happens in the same pen as every other
+# experiment. It previously ran in an earlier, simpler world with open edges and food
+# scattered everywhere, which made it the one result that could not be set beside the rest.
+cfg = UNIVERSE_25.variant('reward_comparison', n_ticks=500, n_initial_agents=40,
+                          max_population=120)
 
 out = json.load(open(PATH)) if os.path.exists(PATH) else []
 for seed in seeds:
