@@ -22,7 +22,7 @@ if __name__ == "__main__":
     ticks = int(sys.argv[2]) if len(sys.argv) > 2 else 6000
 
     for seed in seeds:
-        policy = PolicyNet()
+        policy = PolicyNet(seed=0)
         policy.load_state_dict(torch.load(ROOT / "results" / f"pen_policy_s{seed}.pt"))
         optimiser = torch.optim.Adam(policy.parameters(), lr=0.003)
 

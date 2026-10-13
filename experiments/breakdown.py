@@ -41,7 +41,7 @@ if __name__ == "__main__":
     # that only appears with one particular brain is not a finding.
     policy_seed = int(sys.argv[4]) if len(sys.argv) > 4 else seed
 
-    policy = PolicyNet()
+    policy = PolicyNet(seed=0)
     policy.load_state_dict(torch.load(ROOT / "results" / f"pen_policy_s{policy_seed}.pt"))
     optimiser = torch.optim.Adam(policy.parameters(), lr=0.003)
 

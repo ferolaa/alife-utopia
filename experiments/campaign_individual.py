@@ -27,9 +27,12 @@ from config import UNIVERSE_25  # noqa: E402
 from individual import Population  # noqa: E402
 from rl import OFFSPRING_REWARD, SURVIVAL_REWARD, PolicyNet, _build_world  # noqa: E402
 
+from randomness import seeded_run  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
+@seeded_run
 def run(cfg, policy, seed, update_every=200, probe_every=500, lr=0.003, gamma=0.99):
     rng = random.Random(seed)
     # The same pen as every other run, built by the same function. This used to finish the
@@ -138,7 +141,8 @@ def run(cfg, policy, seed, update_every=200, probe_every=500, lr=0.003, gamma=0.
         record["mean_neighbours"] = (sum(measured) / len(measured)) if measured else 0.0
         record["clustering"] = world.clustering(measured, cfg.crowding_radius)
 
-        if (tick + 1) % update_every == 0:
+        if ((tick + 1) % update_every == 0
+                or tick == cfg.n_ticks - 1 or world.population == 0):
             pop.learn(optimiser, trajectories, gamma=gamma)
             trajectories = {}
 
@@ -158,7 +162,7 @@ if __name__ == "__main__":
     ticks = int(sys.argv[2]) if len(sys.argv) > 2 else 6000
 
     for seed in seeds:
-        policy = PolicyNet()
+        policy = PolicyNet(seed=0)
         policy.load_state_dict(torch.load(ROOT / "results" / f"pen_policy_s{seed}.pt"))
         cfg = UNIVERSE_25.variant(f"individual_s{seed}", n_ticks=ticks, seed=seed)
         world, pop, history = run(cfg, policy, seed)

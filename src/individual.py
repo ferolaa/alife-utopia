@@ -223,7 +223,26 @@ class Population(nn.Module):
 
         optimiser.zero_grad()
         loss.backward()
+        # Dense stacked parameters give inactive slices zero gradients, but Adam still
+        # moves them using old momentum. Preserve their weights and moment buffers.
+        # The optimiser's tensor-wide step counter remains shared (as before).
+        inactive = torch.ones(self.capacity, dtype=torch.bool, device=self.device)
+        for slot, (log_probs, _) in trajectories.items():
+            if log_probs:
+                inactive[slot] = False
+        saved = []
+        for parameter in self.parameters():
+            state = optimiser.state.get(parameter, {})
+            buffers = {key: value[inactive].clone() for key, value in state.items()
+                       if torch.is_tensor(value) and value.shape == parameter.shape}
+            saved.append((parameter, parameter.detach()[inactive].clone(), buffers))
         optimiser.step()
+        with torch.no_grad():
+            for parameter, values, buffers in saved:
+                parameter[inactive] = values
+                for key, value in optimiser.state.get(parameter, {}).items():
+                    if torch.is_tensor(value) and value.shape == parameter.shape:
+                        value[inactive] = buffers.get(key, torch.zeros_like(value[inactive]))
         return float(loss.item())
 
     # -------------------------------------------------------------- inspection
