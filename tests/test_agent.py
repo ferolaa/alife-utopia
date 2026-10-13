@@ -476,6 +476,94 @@ def test_no_damage_when_the_mechanism_is_off():
     assert pup.impairment == 0.0
 
 
+
+BLOCKED = DEFAULT.variant("blocked", parental_care_enabled=True,
+                          crowding_blocks_care=True, care_radius_decay=0.10)
+INTRUDE = DEFAULT.variant("intrude", parental_care_enabled=True,
+                          nest_intrusion_enabled=True, intrusion_threshold=6)
+
+
+def _with_pup(cfg):
+    world, parent, rng = make(cfg)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, cfg, rng)
+    world.agents.append(pup)
+    world.rebuild_occupancy(cfg.crowding_radius)
+    return world, parent, pup, rng
+
+
+def _tended_with_crowd(cfg, gap, n_others):
+    """Is a parent `gap` squares from its pup still counted as tending it, in a crowd?"""
+    world, parent, rng = make(cfg)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, cfg, rng)
+    pup.x, pup.y = parent.x + gap, parent.y
+    crowd = [Agent(pup.x, pup.y, 50.0, Brain.random(random.Random(i)))
+             for i in range(n_others)]
+    world.agents = [parent, pup] + crowd
+    world.rebuild_occupancy(cfg.crowding_radius)
+    before = pup.neglect_ticks
+    pup.act(world, cfg, rng)
+    return pup.neglect_ticks <= before
+
+
+def test_a_crowd_puts_a_parent_out_of_reach_of_its_own_pup():
+    # Two squares away is well within the care radius of three when nobody else is around,
+    # and outside it once a crowd has gathered. The parent has not moved and its senses are
+    # untouched; only what the world does with its presence has changed.
+    assert _tended_with_crowd(BLOCKED, gap=2, n_others=0) is True
+    assert _tended_with_crowd(BLOCKED, gap=2, n_others=12) is False
+
+
+def test_a_parent_right_on_top_of_its_pup_still_gets_through():
+    # The mechanism shrinks the reach, it does not sever the relationship. A parent on the
+    # same square must always count, however dense it gets, or neglect becomes unavoidable
+    # rather than merely harder to avoid.
+    assert _tended_with_crowd(BLOCKED, gap=0, n_others=30) is True
+
+
+def test_reach_is_unaffected_when_the_mechanism_is_off():
+    plain = DEFAULT.variant("plain", parental_care_enabled=True)
+    assert _tended_with_crowd(plain, gap=2, n_others=0) is True
+    assert _tended_with_crowd(plain, gap=2, n_others=12) is True
+
+
+def _neglect_after_a_tick(cfg, n_intruders):
+    world, parent, rng = make(cfg)
+    parent.energy = 1000
+    pup = parent._try_reproduce(world, cfg, rng)
+    pup.x, pup.y = parent.x, parent.y          # parent right beside it
+    crowd = [Agent(parent.x, parent.y, 50.0, Brain.random(random.Random(i)))
+             for i in range(n_intruders)]
+    world.agents = [parent, pup] + crowd
+    world.rebuild_occupancy(cfg.crowding_radius)
+    before = pup.neglect_ticks
+    pup.act(world, cfg, rng)
+    return pup.neglect_ticks - before
+
+
+def test_a_quiet_nest_is_fine_even_with_a_few_others_around():
+    assert _neglect_after_a_tick(INTRUDE, 0) == 0
+    assert _neglect_after_a_tick(INTRUDE, 3) == 0
+
+
+def test_a_crowded_nest_harms_the_pup_despite_the_parent_being_there():
+    # This is the point of the mechanism: attentive parenting stops being enough.
+    assert _neglect_after_a_tick(INTRUDE, 8) > 0
+
+
+def test_intruders_are_ignored_when_the_mechanism_is_off():
+    quiet = DEFAULT.variant("quiet", parental_care_enabled=True)
+    assert _neglect_after_a_tick(quiet, 8) == 0
+
+
+def test_the_parent_is_not_counted_as_an_intruder():
+    # With the threshold at 6, exactly 6 others plus the parent must still trip it, and 5
+    # others plus the parent must not. If the parent were miscounted the boundary moves.
+    assert _neglect_after_a_tick(INTRUDE, 5) == 0
+    assert _neglect_after_a_tick(INTRUDE, 6) > 0
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

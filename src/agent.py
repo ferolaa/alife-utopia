@@ -14,7 +14,7 @@ import random
 from brain import MOVES, Brain, make_senses
 
 
-def _within(world, one, other, radius: int) -> bool:
+def _within(world, one, other, radius: float) -> bool:
     """Is one creature close enough to the other to count as present?
 
     Distance is measured as the larger of the two axis gaps, which makes the area a square
@@ -48,7 +48,7 @@ class Agent:
         "x", "y", "energy", "brain", "age", "alive", "children",
         "dependents", "dependent_until", "neglect_ticks", "nest", "neighbours",
         "lifespan", "parent", "cause_of_death", "neglect_suffered", "impairment",
-        "last_senses",
+        "last_senses", "slot",
     )
 
     def __init__(
@@ -84,6 +84,11 @@ class Agent:
         # falls again when a parent returns, this only ever goes up. Being rescued keeps a
         # pup alive; it does not undo the time it already spent alone.
         self.neglect_suffered: int = 0
+
+        # Which slot in the population's weight tensors holds this creature's own
+        # network, when creatures have individual networks rather than sharing one. None
+        # means it is being driven by a shared policy, or by its plain numpy Brain.
+        self.slot: int | None = None
 
         # The sense vector this creature last acted on. Kept so that a trainer outside the
         # simulation can see what the creature saw when it made a choice, which is what
@@ -181,6 +186,7 @@ class Agent:
         # Its brain is untouched. What it lost was the childhood that would have let the
         # brain do its job.
         clarity = 1.0 - self.impairment
+
         return (
             max(-1.0, min(1.0, dx / scale)) * clarity,
             max(-1.0, min(1.0, dy / scale)) * clarity,
@@ -277,12 +283,35 @@ class Agent:
         cannot raise its young has no future however many adults it currently has.
         """
         parent = self.parent
+
+        # How close the parent has to be for its presence to do any good. A crowd around
+        # the pup shrinks this, so the same parent standing in the same place stops
+        # counting as present once enough bodies are between them.
+        reach = cfg.care_radius
+        if cfg.crowding_blocks_care:
+            crowd = world.count_neighbours(
+                self.x, self.y, cfg.crowding_radius, exclude=self
+            )
+            reach = cfg.care_radius / (1.0 + cfg.care_radius_decay * crowd)
+
         attended = (
             parent is not None
             and parent.alive
             and not parent.is_dependent
-            and _within(world, parent, self, cfg.care_radius)
+            and _within(world, parent, self, reach)
         )
+
+        # Too many bodies around the nest and the pup suffers whatever its parent does.
+        # This is the only harm in the model that diligent parenting cannot prevent, which
+        # is precisely why it is worth testing: every other pressure here has an escape.
+        if cfg.nest_intrusion_enabled and attended:
+            intruders = world.count_neighbours(
+                self.x, self.y, cfg.crowding_radius, exclude=self
+            )
+            if parent is not None and _within(world, parent, self, cfg.crowding_radius):
+                intruders -= 1          # the parent is not an intruder
+            if intruders >= cfg.intrusion_threshold:
+                attended = False
 
         if attended:
             if self.neglect_ticks > 0:

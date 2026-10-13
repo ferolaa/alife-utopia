@@ -34,7 +34,6 @@ from torch.distributions import Categorical
 from agent import Agent, draw_lifespan
 from brain import ACTIONS, Brain
 from evaluate import care_under_conflict, food_seeking_score, pup_seeking_score
-from population import draw_founders
 from world import World
 
 # Reward for being alive one more tick. Both objectives include it, so both learn to eat.
@@ -80,32 +79,56 @@ class PolicyNet(nn.Module):
 
 
 def _build_world(cfg, rng):
+    """Build the pen. Every phase builds it here, so every phase gets the same pen.
+
+    The order of the three steps matters. Feeders go down first, because food is scattered
+    around whatever feeders exist. Nests go down last, with the perimeter setting the config
+    asks for.
+
+    This used to be split in two, with the world half built here and finished off separately
+    for the long run. That let the two drift apart in ways nobody intended. Training happened
+    with food spread evenly over the whole grid, and the pen the trained creatures were then
+    released into had it piled around four feeders. Worse, the nests were scattered here
+    before the perimeter setting was ever consulted, and since scatter_nests stops once it
+    has enough, the later call asking for nests around the walls did nothing at all.
+    """
     world = World(
-        width=cfg.width, height=cfg.height, n_food=cfg.n_food,
+        # No food yet. It is scattered below, once the feeders it should cluster around
+        # are in place.
+        width=cfg.width, height=cfg.height, n_food=0,
         food_unlimited=cfg.food_unlimited, food_respawn_rate=cfg.food_respawn_rate,
         wrap_edges=cfg.wrap_edges, rng=rng,
     )
+    if cfg.n_feeders:
+        # Kept clear of the nesting band, and of a feeder's own spread of food, so that no
+        # food at all lands among the nest boxes.
+        inset = (cfg.perimeter_band + cfg.feeder_spread
+                 if cfg.nests_enabled and cfg.nests_on_perimeter else 0)
+        world.place_feeders(cfg.n_feeders, inset=inset)
+    world.scatter_food(cfg.n_food, spread=cfg.feeder_spread)
     if cfg.nests_enabled:
-        world.scatter_nests(cfg.n_nests)
+        world.scatter_nests(cfg.n_nests, on_perimeter=cfg.nests_on_perimeter,
+                            band=cfg.perimeter_band)
     return world
 
 
-def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int, founders=None):
+def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int,
+                senses_sink: list | None = None):
     """Run one simulation where every creature is driven by the shared policy.
 
     Returns the log probability and reward of every choice every creature made, along with
     some statistics about how the population did. Dependent pups are skipped: they cannot
     act, so they make no choices to learn from.
+
+    Pass a list as senses_sink to keep a copy of every sense vector the population received.
+    The representation analysis needs the situations creatures are actually in, and this is
+    where they pass through. Nothing else changes when it is given.
     """
     rng = random.Random(seed)
     world = _build_world(cfg, rng)
 
-    brains = (
-        draw_founders(founders, cfg.n_initial_agents, rng) if founders
-        else [Brain.random(rng) for _ in range(cfg.n_initial_agents)]
-    )
     world.agents = []
-    for brain in brains:
+    for brain in [Brain.random(rng) for _ in range(cfg.n_initial_agents)]:
         x, y = world.random_square()
         a = Agent(x, y, cfg.energy_start, brain, lifespan=draw_lifespan(cfg, rng))
         if cfg.ageing_enabled:
@@ -120,7 +143,8 @@ def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int, found
     for _ in range(cfg.n_ticks):
         world.rebuild_occupancy(cfg.crowding_radius)
 
-        movers = [a for a in world.agents if a.alive and not a.is_dependent]
+        # act() increments age before checking dependency, so include pups maturing now.
+        movers = [a for a in world.agents if a.alive and a.age + 1 >= a.dependent_until]
         pups_in_care = [(a, a.parent) for a in world.agents
                         if a.alive and a.is_dependent and a.parent is not None]
 
@@ -129,10 +153,11 @@ def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int, found
             # Every creature's senses in one tensor, one forward pass for the whole
             # population. Asking the network once per creature would be far slower and
             # would make training on populations of this size impractical.
-            senses = torch.tensor(
-                np.array([a.sense(world, cfg, neighbours=a.neighbours) for a in movers]),
-                dtype=torch.float32,
-            )
+            # Read this tick's occupancy snapshot, not the count cached by the last act.
+            raw = np.array([a.sense(world, cfg) for a in movers])
+            if senses_sink is not None:
+                senses_sink.append(raw)
+            senses = torch.tensor(raw, dtype=torch.float32)
             dist = Categorical(logits=policy(senses))
             picks = dist.sample()
             step_log_probs = dist.log_prob(picks)
@@ -196,8 +221,7 @@ def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int, found
 
 
 def train(cfg, reward_offspring: bool, iterations: int = 40, lr: float = 0.01,
-          gamma: float = 0.99, seed: int = 0, founders=None, log_every: int = 5,
-          probe_every: int = 0):
+          gamma: float = 0.99, seed: int = 0, log_every: int = 5, probe_every: int = 0):
     """Train one shared policy with REINFORCE.
 
     Every creature alive contributes its own trajectory, and all of them update the same
@@ -217,7 +241,7 @@ def train(cfg, reward_offspring: bool, iterations: int = 40, lr: float = 0.01,
 
     for step in range(iterations):
         log_probs, rewards, stats = run_episode(
-            cfg, policy, reward_offspring, seed=seed * 1000 + step, founders=founders
+            cfg, policy, reward_offspring, seed=seed * 1000 + step
         )
         if not log_probs:
             history.append({"iteration": step, **stats, "loss": 0.0})
@@ -278,12 +302,6 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
     """
     rng = random.Random(seed)
     world = _build_world(cfg, rng)
-    if cfg.n_feeders:
-        world.place_feeders(cfg.n_feeders)
-        world.food.clear()
-        world.scatter_food(cfg.n_food, spread=cfg.feeder_spread)
-    if cfg.nests_enabled:
-        world.scatter_nests(cfg.n_nests, on_perimeter=cfg.nests_on_perimeter)
 
     world.agents = []
     for _ in range(cfg.n_initial_agents):
@@ -325,14 +343,16 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
 
     for tick in range(cfg.n_ticks):
         world.rebuild_occupancy(cfg.crowding_radius)
-        movers = [a for a in world.agents if a.alive and not a.is_dependent]
+        # act() increments age before checking dependency, so include pups maturing now.
+        movers = [a for a in world.agents if a.alive and a.age + 1 >= a.dependent_until]
         pups_in_care = [(a, a.parent) for a in world.agents
                         if a.alive and a.is_dependent and a.parent is not None]
 
         chosen: dict = {}
         if movers:
+            # Read this tick's occupancy snapshot, not the count cached by the last act.
             senses = torch.tensor(
-                np.array([a.sense(world, cfg, neighbours=a.neighbours) for a in movers]),
+                np.array([a.sense(world, cfg) for a in movers]),
                 dtype=torch.float32,
             )
             dist = Categorical(logits=policy(senses))
@@ -392,9 +412,7 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
         }
         measured = [a.neighbours for a in world.agents if a.neighbours is not None]
         record["mean_neighbours"] = (sum(measured) / len(measured)) if measured else 0.0
-        patch = (2 * cfg.crowding_radius + 1) ** 2
-        expected = world.density * patch - 1.0
-        record["clustering"] = (record["mean_neighbours"] / expected) if expected > 0 else 0.0
+        record["clustering"] = world.clustering(measured, cfg.crowding_radius)
 
         if (tick + 1) % update_every == 0:
             record["loss"] = flush()

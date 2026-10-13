@@ -34,13 +34,20 @@ PRETRAIN = UNIVERSE_25.variant(
 if __name__ == "__main__":
     iterations = int(sys.argv[1]) if len(sys.argv) > 1 else 120
     seed = int(sys.argv[2]) if len(sys.argv) > 2 else 0
+    # Which reward to train on. The experiments all use the offspring reward, which is the
+    # default. The survival one is here so the representation analysis has a policy trained
+    # under identical conditions in every other respect to compare against.
+    objective = sys.argv[3] if len(sys.argv) > 3 else "offspring"
+    if objective not in ("offspring", "survival"):
+        raise SystemExit("objective must be offspring or survival")
 
     policy, history = train(
-        PRETRAIN, reward_offspring=True, iterations=iterations,
+        PRETRAIN, reward_offspring=(objective == "offspring"), iterations=iterations,
         seed=seed, log_every=20, probe_every=20,
     )
 
-    out = Path(__file__).resolve().parents[1] / "results" / f"pen_policy_s{seed}.pt"
+    name = "pen_policy" if objective == "offspring" else "survival_policy"
+    out = Path(__file__).resolve().parents[1] / "results" / f"{name}_s{seed}.pt"
     torch.save(policy.state_dict(), out)
 
     brain = policy.to_brain()

@@ -145,6 +145,52 @@ def test_nest_search_gives_up_when_every_nest_is_taken():
     assert w.nearest_free_nest_direction(5, 5, vision=4) == (0.0, 0.0, 0.0)
 
 
+
+def _counts(w, radius=2):
+    w.rebuild_occupancy(radius)
+    return [w.count_neighbours(a.x, a.y, radius, exclude=a) for a in w.agents]
+
+
+def test_clustering_is_about_one_when_agents_are_spread_out():
+    """Evenly spread agents score near one, whatever the population size.
+
+    This is the check that catches the original formula, which compared against
+    density * patch - 1 instead of (n - 1) * patch / cells. The two barely differ for a
+    dense population but the wrong one collapses towards zero for a sparse one, sending
+    the ratio to absurd values in exactly the case of a small population in a large pen.
+    """
+    import random as _random
+    rng = _random.Random(1)
+    w = make_world(width=40, height=40)
+    w.agents = [_Dummy(rng.randrange(40), rng.randrange(40)) for _ in range(60)]
+    assert 0.3 < w.clustering(_counts(w), 2) < 3.0
+
+
+def test_a_sparse_population_does_not_produce_an_absurd_score():
+    import random as _random
+    rng = _random.Random(2)
+    w = make_world(width=40, height=40)
+    w.agents = [_Dummy(rng.randrange(40), rng.randrange(40)) for _ in range(12)]
+    assert w.clustering(_counts(w), 2) < 10.0
+
+
+def test_clustering_rises_when_agents_pile_up():
+    import random as _random
+    rng = _random.Random(3)
+    piled = make_world(width=40, height=40)
+    piled.agents = [_Dummy(20, 20) for _ in range(60)]
+    spread = make_world(width=40, height=40)
+    spread.agents = [_Dummy(rng.randrange(40), rng.randrange(40)) for _ in range(60)]
+    assert piled.clustering(_counts(piled), 2) > spread.clustering(_counts(spread), 2) * 5
+
+
+def test_clustering_is_zero_without_a_population_to_measure():
+    w = make_world()
+    assert w.clustering([], 2) == 0.0
+    w.agents = [_Dummy(5, 5)]
+    assert w.clustering([0], 2) == 0.0
+
+
 if __name__ == "__main__":
     passed = failed = 0
     for name, fn in sorted(globals().items()):

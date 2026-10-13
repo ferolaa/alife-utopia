@@ -73,10 +73,15 @@ class SimConfig:
     nests_enabled: bool = False
     n_nests: int = 60
     nests_on_perimeter: bool = False   # put the nest boxes around the walls, as in the pen
+    perimeter_band: int = 3            # how wide that band of wall is
 
     # ---------------------------- feeding sites -----------------------------------
     # Zero means food falls anywhere. Any higher number concentrates it at that many
     # fixed sites, which is what the real enclosure had and what makes gathering possible.
+    #
+    # When the nests are around the walls, the feeders are kept out of that band. Otherwise
+    # a feeder can land among the nest boxes by chance, and for that run feeding and minding
+    # young stop being rival activities, which is the whole reason for separating them.
     n_feeders: int = 0
     feeder_spread: int = 3             # how far from a feeder its food can land
 
@@ -107,6 +112,28 @@ class SimConfig:
     # than through genes.
     developmental_damage_enabled: bool = False
     damage_scale: float = 1.0          # how strongly time spent unattended translates to harm
+
+    # ------------- a crowd gets between parent and pup -----------------------------
+    # As neighbours accumulate around a pup, the distance at which a parent counts as
+    # actually tending it shrinks. In an empty pen, being a few squares away is enough. In
+    # a crush you have to be right on top of it.
+    #
+    # This changes what the world does, not what the creature perceives. An earlier version
+    # scaled down the pup inputs before they reached the network instead, and that was a
+    # mistake: the policy had never been trained on shrunken inputs, so its behaviour on
+    # them was arbitrary, and foraging degraded alongside parenting for no reason anyone
+    # could point to. Intervening on observations confounds the manipulation with
+    # distribution shift. Intervening on dynamics does not.
+    crowding_blocks_care: bool = False
+    care_radius_decay: float = 0.10    # how fast the effective care distance shrinks
+
+    # ------------- intruders disturb the nest -------------------------------------
+    # A pup is harmed by other creatures crowding its nest, not only by its parent being
+    # away. This matters because it is the one source of harm a diligent parent cannot
+    # prevent: in the real pen, mothers under constant intrusion abandoned young they were
+    # otherwise perfectly able to raise.
+    nest_intrusion_enabled: bool = False
+    intrusion_threshold: int = 6       # neighbours around the nest before it counts
 
     # -------------------------------------------------------------- the evolution
     mutation_std: float = 0.12         # standard deviation of the mutation noise
@@ -149,10 +176,24 @@ UNIVERSE_25 = SimConfig(
     n_feeders=4,
     feeder_spread=3,
 
-    # Nest boxes in the walls, well short of what the population will need.
+    # Nest boxes, well short of what the population will need. Scattered, not in the walls,
+    # and that is a deliberate choice rather than the obvious one.
+    #
+    # In the real pen the nest boxes were up in the walls and the food was down in the
+    # middle, so leaving a litter to eat meant a journey. Reproducing that here kills the
+    # colony every time. The median nest sits 27 steps from the nearest feeder, a pup dies
+    # after 25 ticks alone, and a creature can only see four squares, so it cannot find a
+    # free nest on the far side of the pen in the first place. Populations founded in that
+    # layout go extinct before tick 1000, whatever the timings are set to.
+    #
+    # The reason is the sensing, not the distance. Calhoun's mice had lived in that pen for
+    # months and knew where everything was. These creatures know only what is within four
+    # squares of them, and a layout that has to be learned by heart is one they cannot use.
+    # Scattering the nests puts a free one within sight often enough for the population to
+    # function, which is the condition every other question here depends on.
     nests_enabled=True,
     n_nests=70,
-    nests_on_perimeter=True,
+    nests_on_perimeter=False,
 
     # A small founding group in a large space, as in the original.
     n_initial_agents=16,
