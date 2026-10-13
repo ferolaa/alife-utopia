@@ -143,7 +143,8 @@ def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int,
     for _ in range(cfg.n_ticks):
         world.rebuild_occupancy(cfg.crowding_radius)
 
-        movers = [a for a in world.agents if a.alive and not a.is_dependent]
+        # act() increments age before checking dependency, so include pups maturing now.
+        movers = [a for a in world.agents if a.alive and a.age + 1 >= a.dependent_until]
         pups_in_care = [(a, a.parent) for a in world.agents
                         if a.alive and a.is_dependent and a.parent is not None]
 
@@ -342,7 +343,8 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
 
     for tick in range(cfg.n_ticks):
         world.rebuild_occupancy(cfg.crowding_radius)
-        movers = [a for a in world.agents if a.alive and not a.is_dependent]
+        # act() increments age before checking dependency, so include pups maturing now.
+        movers = [a for a in world.agents if a.alive and a.age + 1 >= a.dependent_until]
         pups_in_care = [(a, a.parent) for a in world.agents
                         if a.alive and a.is_dependent and a.parent is not None]
 

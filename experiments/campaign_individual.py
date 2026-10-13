@@ -55,7 +55,9 @@ def run(cfg, policy, seed, update_every=200, probe_every=500, lr=0.003, gamma=0.
 
     for tick in range(cfg.n_ticks):
         world.rebuild_occupancy(cfg.crowding_radius)
-        movers = [a for a in world.agents if a.alive and not a.is_dependent and a.slot is not None]
+        # act() increments age before checking dependency, so include pups maturing now.
+        movers = [a for a in world.agents
+                  if a.alive and a.age + 1 >= a.dependent_until and a.slot is not None]
         pups_in_care = [(a, a.parent) for a in world.agents
                         if a.alive and a.is_dependent and a.parent is not None]
 
