@@ -62,8 +62,9 @@ def run(cfg, policy, seed, update_every=200, probe_every=500, lr=0.003, gamma=0.
         chosen = {}
         if movers:
             slots = [a.slot for a in movers]
+            # Read this tick's occupancy snapshot, not the count cached by the last act.
             senses = torch.tensor(
-                np.array([a.sense(world, cfg, neighbours=a.neighbours) for a in movers]),
+                np.array([a.sense(world, cfg) for a in movers]),
                 dtype=torch.float32,
             )
             dist = Categorical(logits=pop.action_scores(slots, senses))

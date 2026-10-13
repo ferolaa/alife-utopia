@@ -152,7 +152,8 @@ def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int,
             # Every creature's senses in one tensor, one forward pass for the whole
             # population. Asking the network once per creature would be far slower and
             # would make training on populations of this size impractical.
-            raw = np.array([a.sense(world, cfg, neighbours=a.neighbours) for a in movers])
+            # Read this tick's occupancy snapshot, not the count cached by the last act.
+            raw = np.array([a.sense(world, cfg) for a in movers])
             if senses_sink is not None:
                 senses_sink.append(raw)
             senses = torch.tensor(raw, dtype=torch.float32)
@@ -347,8 +348,9 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
 
         chosen: dict = {}
         if movers:
+            # Read this tick's occupancy snapshot, not the count cached by the last act.
             senses = torch.tensor(
-                np.array([a.sense(world, cfg, neighbours=a.neighbours) for a in movers]),
+                np.array([a.sense(world, cfg) for a in movers]),
                 dtype=torch.float32,
             )
             dist = Categorical(logits=policy(senses))
