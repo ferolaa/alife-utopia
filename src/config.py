@@ -84,6 +84,7 @@ class SimConfig:
     # young stop being rival activities, which is the whole reason for separating them.
     n_feeders: int = 0
     feeder_spread: int = 3             # how far from a feeder its food can land
+    feeder_regions_disjoint: bool = False  # opt in to full, non-overlapping regions
 
     # ---------------------------- parental care, the third mechanism --------------
     # Newborns are helpless. They cannot act, and they die if no parent stays close. This
@@ -170,11 +171,14 @@ UNIVERSE_25 = SimConfig(
     height=48,
     wrap_edges=False,
 
-    # Food is never the constraint, but it comes from a handful of places.
+    # Four disjoint 7x7 feeding regions give every seed 196 legal food squares.
+    # Sixty immediately replenished items keep occupancy fixed at 60/196.
+    # Replenishment does not guarantee that every individual reaches food in time.
     food_unlimited=True,
-    n_food=260,
+    n_food=60,
     n_feeders=4,
     feeder_spread=3,
+    feeder_regions_disjoint=True,
 
     # Nest boxes, well short of what the population will need. Scattered, not in the walls,
     # and that is a deliberate choice rather than the obvious one.

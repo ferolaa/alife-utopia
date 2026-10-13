@@ -64,6 +64,10 @@ def run(cfg, policy, seed, update_every=200, probe_every=500, lr=0.003, gamma=0.
         pups_in_care = [(a, a.parent) for a in world.agents
                         if a.alive and a.is_dependent and a.parent is not None]
 
+        measured = [world.count_neighbours(a.x, a.y, cfg.crowding_radius, exclude=a)
+                    for a in movers]
+        clustering = world.clustering(measured, cfg.crowding_radius,
+                                      positions=[(a.x, a.y) for a in movers])
         chosen = {}
         if movers:
             slots = [a.slot for a in movers]
@@ -137,9 +141,8 @@ def run(cfg, policy, seed, update_every=200, probe_every=500, lr=0.003, gamma=0.
                   "deaths": deaths, "died_neglected": toll["neglect"],
                   "died_starving": toll["starvation"], "died_old": toll["old age"],
                   "nests_free": len(world.nests) - len(world.occupied_nests)}
-        measured = [a.neighbours for a in world.agents if a.neighbours is not None]
         record["mean_neighbours"] = (sum(measured) / len(measured)) if measured else 0.0
-        record["clustering"] = world.clustering(measured, cfg.crowding_radius)
+        record["clustering"] = clustering
 
         if ((tick + 1) % update_every == 0
                 or tick == cfg.n_ticks - 1 or world.population == 0):

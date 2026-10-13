@@ -103,14 +103,15 @@ def _build_world(cfg, rng):
         # are in place.
         width=cfg.width, height=cfg.height, n_food=0,
         food_unlimited=cfg.food_unlimited, food_respawn_rate=cfg.food_respawn_rate,
-        wrap_edges=cfg.wrap_edges, rng=rng,
+        wrap_edges=cfg.wrap_edges, rng=rng, feeder_spread=cfg.feeder_spread,
     )
     if cfg.n_feeders:
         # Kept clear of the nesting band, and of a feeder's own spread of food, so that no
         # food at all lands among the nest boxes.
         inset = (cfg.perimeter_band + cfg.feeder_spread
                  if cfg.nests_enabled and cfg.nests_on_perimeter else 0)
-        world.place_feeders(cfg.n_feeders, inset=inset)
+        world.place_feeders(cfg.n_feeders, inset=inset,
+                            disjoint_regions=cfg.feeder_regions_disjoint)
     world.scatter_food(cfg.n_food, spread=cfg.feeder_spread)
     if cfg.nests_enabled:
         world.scatter_nests(cfg.n_nests, on_perimeter=cfg.nests_on_perimeter,
@@ -359,6 +360,10 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
         pups_in_care = [(a, a.parent) for a in world.agents
                         if a.alive and a.is_dependent and a.parent is not None]
 
+        measured = [world.count_neighbours(a.x, a.y, cfg.crowding_radius, exclude=a)
+                    for a in movers]
+        clustering = world.clustering(measured, cfg.crowding_radius,
+                                      positions=[(a.x, a.y) for a in movers])
         chosen: dict = {}
         if movers:
             # Read this tick's occupancy snapshot, not the count cached by the last act.
@@ -421,9 +426,8 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
             "died_starving": toll["starvation"], "died_old": toll["old age"],
             "nests_free": len(world.nests) - len(world.occupied_nests),
         }
-        measured = [a.neighbours for a in world.agents if a.neighbours is not None]
         record["mean_neighbours"] = (sum(measured) / len(measured)) if measured else 0.0
-        record["clustering"] = world.clustering(measured, cfg.crowding_radius)
+        record["clustering"] = clustering
 
         if ((tick + 1) % update_every == 0
                 or tick == cfg.n_ticks - 1 or world.population == 0):

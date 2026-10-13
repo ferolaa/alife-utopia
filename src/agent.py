@@ -204,9 +204,10 @@ class Agent:
         than each creature being asked separately.
 
         The order of the steps is deliberate, and worth stating in the report. Costs are
-        paid first, then the action is taken, then death is checked. So an agent can
-        starve on the same tick it found food. That keeps the energy budget honest and
-        stops agents from escaping death by feeding at the last moment.
+        paid first, then the action is taken, then food is eaten at the resulting
+        square, and finally starvation and old age are checked. Eating can rescue an
+        agent whose energy fell to zero or below during costs, but cannot prevent
+        death from old age. No energy-debt death check occurs before eating.
         """
         self.age += 1
 
