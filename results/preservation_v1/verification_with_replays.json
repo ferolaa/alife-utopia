@@ -1,0 +1,292 @@
+{
+  "phase1_primary": {
+    "mean": 0.41000000000000003,
+    "ci95": [
+      0.33249999999999996,
+      0.48999999999999994
+    ],
+    "p": 0.001953125
+  },
+  "phase2_contrasts": [
+    {
+      "contrast": "policy_advantage_background_0_disruption_0",
+      "energy": null,
+      "mean": 0.4774999999999999,
+      "ci95": [
+        0.40499999999999997,
+        0.5549999999999999
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_1",
+      "energy": null,
+      "mean": 0.4725,
+      "ci95": [
+        0.4000000000000001,
+        0.5475000000000001
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_0",
+      "energy": null,
+      "mean": 0.475,
+      "ci95": [
+        0.39249999999999996,
+        0.5625
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_1",
+      "energy": null,
+      "mean": 0.03250000000000001,
+      "ci95": [
+        0.015,
+        0.052500000000000005
+      ],
+      "p": 0.015625
+    },
+    {
+      "contrast": "disruption_effect_survival_background_0",
+      "energy": null,
+      "mean": -0.005000000000000001,
+      "ci95": [
+        -0.0125,
+        0.0
+      ],
+      "p": 0.5
+    },
+    {
+      "contrast": "disruption_effect_survival_background_8",
+      "energy": null,
+      "mean": -0.1,
+      "ci95": [
+        -0.13999999999999999,
+        -0.065
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_0",
+      "energy": null,
+      "mean": -0.010000000000000009,
+      "ci95": [
+        -0.017500000000000016,
+        -0.0025000000000000022
+      ],
+      "p": 0.125
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_8",
+      "energy": null,
+      "mean": -0.5424999999999999,
+      "ci95": [
+        -0.615,
+        -0.475
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_x_crowding_x_disruption",
+      "energy": null,
+      "mean": -0.4375,
+      "ci95": [
+        -0.5299999999999999,
+        -0.35
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_0",
+      "energy": 10,
+      "mean": 0.43499999999999994,
+      "ci95": [
+        0.36,
+        0.51
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_1",
+      "energy": 10,
+      "mean": 0.42000000000000004,
+      "ci95": [
+        0.355,
+        0.48999999999999994
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_0",
+      "energy": 10,
+      "mean": 0.43999999999999995,
+      "ci95": [
+        0.35500000000000004,
+        0.525
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_1",
+      "energy": 10,
+      "mean": 0.015000000000000003,
+      "ci95": [
+        0.0,
+        0.035
+      ],
+      "p": 0.5
+    },
+    {
+      "contrast": "disruption_effect_survival_background_0",
+      "energy": 10,
+      "mean": -0.005,
+      "ci95": [
+        -0.015000000000000003,
+        0.0
+      ],
+      "p": 1.0
+    },
+    {
+      "contrast": "disruption_effect_survival_background_8",
+      "energy": 10,
+      "mean": -0.095,
+      "ci95": [
+        -0.135,
+        -0.05500000000000001
+      ],
+      "p": 0.00390625
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_0",
+      "energy": 10,
+      "mean": -0.02,
+      "ci95": [
+        -0.03500000000000001,
+        -0.004999999999999999
+      ],
+      "p": 0.125
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_8",
+      "energy": 10,
+      "mean": -0.52,
+      "ci95": [
+        -0.595,
+        -0.45
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_x_crowding_x_disruption",
+      "energy": 10,
+      "mean": -0.41,
+      "ci95": [
+        -0.5,
+        -0.32499999999999996
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_0",
+      "energy": 20,
+      "mean": 0.52,
+      "ci95": [
+        0.44499999999999995,
+        0.6000000000000001
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_1",
+      "energy": 20,
+      "mean": 0.525,
+      "ci95": [
+        0.445,
+        0.61
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_0",
+      "energy": 20,
+      "mean": 0.51,
+      "ci95": [
+        0.425,
+        0.5999999999999999
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_1",
+      "energy": 20,
+      "mean": 0.05,
+      "ci95": [
+        0.025,
+        0.075
+      ],
+      "p": 0.015625
+    },
+    {
+      "contrast": "disruption_effect_survival_background_0",
+      "energy": 20,
+      "mean": -0.005,
+      "ci95": [
+        -0.015000000000000003,
+        0.0
+      ],
+      "p": 1.0
+    },
+    {
+      "contrast": "disruption_effect_survival_background_8",
+      "energy": 20,
+      "mean": -0.10500000000000001,
+      "ci95": [
+        -0.14,
+        -0.07000000000000002
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_0",
+      "energy": 20,
+      "mean": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "p": 1.0
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_8",
+      "energy": 20,
+      "mean": -0.5649999999999998,
+      "ci95": [
+        -0.6399999999999999,
+        -0.495
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "policy_x_crowding_x_disruption",
+      "energy": 20,
+      "mean": -0.46499999999999997,
+      "ci95": [
+        -0.56,
+        -0.36500000000000005
+      ],
+      "p": 0.001953125
+    }
+  ],
+  "verified_checkpoints": 20,
+  "unique_initializations": 10,
+  "unique_trained_weight_sets": 20,
+  "training_world_seeds": 1200,
+  "phase1_assigned_trials": 800,
+  "phase1_natural_episodes": 400,
+  "phase2_trials": 3200,
+  "evaluation_replays": 42,
+  "core_commit": "e9454128c506978f3154486c902120296691efdf",
+  "limitations": "Intervals condition on the fixed world panel; n=10 training pairs. Phase1 parent follow-up is censored by pup death. Phase2 attendance denominator ends at pup death/independence. No biological or unconstrained population-collapse inference."
+}

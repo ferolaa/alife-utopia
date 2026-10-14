@@ -1,0 +1,842 @@
+[
+  {
+    "iteration": 0,
+    "final_population": 0,
+    "births": 3,
+    "mean_return": 1.340952380952381,
+    "loss": -0.0019450165564194322
+  },
+  {
+    "iteration": 1,
+    "final_population": 0,
+    "births": 2,
+    "mean_return": 1.22875,
+    "loss": 0.0007838086457923055
+  },
+  {
+    "iteration": 2,
+    "final_population": 0,
+    "births": 2,
+    "mean_return": 1.2773809523809523,
+    "loss": -0.0018000504933297634
+  },
+  {
+    "iteration": 3,
+    "final_population": 1,
+    "births": 5,
+    "mean_return": 1.4993023255813953,
+    "loss": -0.0027451820205897093
+  },
+  {
+    "iteration": 4,
+    "final_population": 0,
+    "births": 0,
+    "mean_return": 1.1300000000000001,
+    "loss": -0.00571589358150959
+  },
+  {
+    "iteration": 5,
+    "final_population": 0,
+    "births": 2,
+    "mean_return": 1.515609756097561,
+    "loss": -0.0029053627513349056
+  },
+  {
+    "iteration": 6,
+    "final_population": 0,
+    "births": 1,
+    "mean_return": 1.4148780487804877,
+    "loss": -0.0026802823413163424
+  },
+  {
+    "iteration": 7,
+    "final_population": 1,
+    "births": 4,
+    "mean_return": 1.2948780487804876,
+    "loss": -0.003316155169159174
+  },
+  {
+    "iteration": 8,
+    "final_population": 0,
+    "births": 3,
+    "mean_return": 1.3390243902439025,
+    "loss": -0.005338976625353098
+  },
+  {
+    "iteration": 9,
+    "final_population": 0,
+    "births": 2,
+    "mean_return": 1.5631707317073171,
+    "loss": -0.004854183178395033
+  },
+  {
+    "iteration": 10,
+    "final_population": 0,
+    "births": 4,
+    "mean_return": 1.4279545454545457,
+    "loss": -0.0047151269391179085
+  },
+  {
+    "iteration": 11,
+    "final_population": 0,
+    "births": 1,
+    "mean_return": 1.572926829268293,
+    "loss": -0.002821028232574463
+  },
+  {
+    "iteration": 12,
+    "final_population": 0,
+    "births": 6,
+    "mean_return": 1.5937777777777777,
+    "loss": -0.002117923693731427
+  },
+  {
+    "iteration": 13,
+    "final_population": 1,
+    "births": 2,
+    "mean_return": 1.4614634146341463,
+    "loss": -0.00030369317391887307
+  },
+  {
+    "iteration": 14,
+    "final_population": 0,
+    "births": 2,
+    "mean_return": 1.2746341463414634,
+    "loss": 0.0018925037002190948
+  },
+  {
+    "iteration": 15,
+    "final_population": 0,
+    "births": 1,
+    "mean_return": 1.2120000000000002,
+    "loss": -0.005337138194590807
+  },
+  {
+    "iteration": 16,
+    "final_population": 0,
+    "births": 2,
+    "mean_return": 1.3170731707317074,
+    "loss": -0.004357845522463322
+  },
+  {
+    "iteration": 17,
+    "final_population": 0,
+    "births": 4,
+    "mean_return": 1.3646341463414635,
+    "loss": -0.004925616085529327
+  },
+  {
+    "iteration": 18,
+    "final_population": 0,
+    "births": 3,
+    "mean_return": 1.420952380952381,
+    "loss": -0.0035814018920063972
+  },
+  {
+    "iteration": 19,
+    "final_population": 1,
+    "births": 2,
+    "mean_return": 1.696190476190476,
+    "loss": -0.006619265303015709
+  },
+  {
+    "iteration": 20,
+    "final_population": 0,
+    "births": 3,
+    "mean_return": 1.5052380952380955,
+    "loss": -0.005883320234715939
+  },
+  {
+    "iteration": 21,
+    "final_population": 1,
+    "births": 3,
+    "mean_return": 1.6219047619047617,
+    "loss": -0.003238053061068058
+  },
+  {
+    "iteration": 22,
+    "final_population": 0,
+    "births": 3,
+    "mean_return": 1.3850000000000002,
+    "loss": -0.0033425188157707453
+  },
+  {
+    "iteration": 23,
+    "final_population": 0,
+    "births": 7,
+    "mean_return": 1.5573913043478265,
+    "loss": -0.0034535182639956474
+  },
+  {
+    "iteration": 24,
+    "final_population": 0,
+    "births": 1,
+    "mean_return": 1.1592682926829267,
+    "loss": -0.0003031593223568052
+  },
+  {
+    "iteration": 25,
+    "final_population": 0,
+    "births": 6,
+    "mean_return": 1.696046511627907,
+    "loss": -0.003256332129240036
+  },
+  {
+    "iteration": 26,
+    "final_population": 0,
+    "births": 4,
+    "mean_return": 1.3582926829268294,
+    "loss": -0.002921264385804534
+  },
+  {
+    "iteration": 27,
+    "final_population": 2,
+    "births": 2,
+    "mean_return": 1.678292682926829,
+    "loss": -0.007430728059262037
+  },
+  {
+    "iteration": 28,
+    "final_population": 0,
+    "births": 5,
+    "mean_return": 1.355813953488372,
+    "loss": -0.0012035015970468521
+  },
+  {
+    "iteration": 29,
+    "final_population": 2,
+    "births": 2,
+    "mean_return": 1.7426829268292683,
+    "loss": -0.007485660258680582
+  },
+  {
+    "iteration": 30,
+    "final_population": 2,
+    "births": 7,
+    "mean_return": 2.006521739130435,
+    "loss": -0.0040411981754004955
+  },
+  {
+    "iteration": 31,
+    "final_population": 0,
+    "births": 1,
+    "mean_return": 1.3014634146341464,
+    "loss": -0.0008158759446814656
+  },
+  {
+    "iteration": 32,
+    "final_population": 0,
+    "births": 2,
+    "mean_return": 1.161,
+    "loss": -0.0060479226522147655
+  },
+  {
+    "iteration": 33,
+    "final_population": 0,
+    "births": 9,
+    "mean_return": 1.6522448979591835,
+    "loss": -0.0036891750060021877
+  },
+  {
+    "iteration": 34,
+    "final_population": 2,
+    "births": 4,
+    "mean_return": 1.8160465116279068,
+    "loss": -0.0019736322574317455
+  },
+  {
+    "iteration": 35,
+    "final_population": 5,
+    "births": 7,
+    "mean_return": 1.8679999999999997,
+    "loss": -0.004469723906368017
+  },
+  {
+    "iteration": 36,
+    "final_population": 3,
+    "births": 5,
+    "mean_return": 1.6123255813953488,
+    "loss": 7.314770482480526e-05
+  },
+  {
+    "iteration": 37,
+    "final_population": 2,
+    "births": 5,
+    "mean_return": 1.6102222222222224,
+    "loss": 0.0006173609290271997
+  },
+  {
+    "iteration": 38,
+    "final_population": 4,
+    "births": 7,
+    "mean_return": 2.0768888888888886,
+    "loss": -0.0001462503132643178
+  },
+  {
+    "iteration": 39,
+    "final_population": 7,
+    "births": 7,
+    "mean_return": 1.8782608695652172,
+    "loss": -0.0008120909333229065
+  },
+  {
+    "iteration": 40,
+    "final_population": 3,
+    "births": 9,
+    "mean_return": 1.7829787234042553,
+    "loss": -0.0010312451049685478
+  },
+  {
+    "iteration": 41,
+    "final_population": 0,
+    "births": 2,
+    "mean_return": 1.4926190476190475,
+    "loss": 0.001911046332679689
+  },
+  {
+    "iteration": 42,
+    "final_population": 3,
+    "births": 2,
+    "mean_return": 1.3690476190476193,
+    "loss": -0.004308605566620827
+  },
+  {
+    "iteration": 43,
+    "final_population": 10,
+    "births": 10,
+    "mean_return": 2.08,
+    "loss": -0.0061694481410086155
+  },
+  {
+    "iteration": 44,
+    "final_population": 7,
+    "births": 8,
+    "mean_return": 1.684255319148936,
+    "loss": -0.006544490344822407
+  },
+  {
+    "iteration": 45,
+    "final_population": 16,
+    "births": 14,
+    "mean_return": 2.2411538461538463,
+    "loss": -0.00046838546404615045
+  },
+  {
+    "iteration": 46,
+    "final_population": 5,
+    "births": 5,
+    "mean_return": 2.384186046511628,
+    "loss": -0.002002968220040202
+  },
+  {
+    "iteration": 47,
+    "final_population": 3,
+    "births": 5,
+    "mean_return": 1.6295348837209305,
+    "loss": -0.006299083586782217
+  },
+  {
+    "iteration": 48,
+    "final_population": 6,
+    "births": 6,
+    "mean_return": 1.8851111111111114,
+    "loss": -0.0068703508004546165
+  },
+  {
+    "iteration": 49,
+    "final_population": 13,
+    "births": 10,
+    "mean_return": 2.2161702127659573,
+    "loss": -0.007436925079673529
+  },
+  {
+    "iteration": 50,
+    "final_population": 14,
+    "births": 18,
+    "mean_return": 2.359807692307692,
+    "loss": -0.0065751816146075726
+  },
+  {
+    "iteration": 51,
+    "final_population": 10,
+    "births": 12,
+    "mean_return": 1.9115384615384614,
+    "loss": 0.001046053017489612
+  },
+  {
+    "iteration": 52,
+    "final_population": 11,
+    "births": 4,
+    "mean_return": 2.3379069767441862,
+    "loss": 0.0016246455488726497
+  },
+  {
+    "iteration": 53,
+    "final_population": 7,
+    "births": 7,
+    "mean_return": 2.0177272727272726,
+    "loss": -0.004188207909464836
+  },
+  {
+    "iteration": 54,
+    "final_population": 7,
+    "births": 9,
+    "mean_return": 1.953404255319149,
+    "loss": -0.005517470650374889
+  },
+  {
+    "iteration": 55,
+    "final_population": 25,
+    "births": 21,
+    "mean_return": 2.40271186440678,
+    "loss": -0.0006107598310336471
+  },
+  {
+    "iteration": 56,
+    "final_population": 11,
+    "births": 10,
+    "mean_return": 1.9729166666666667,
+    "loss": -0.0017933630151674151
+  },
+  {
+    "iteration": 57,
+    "final_population": 10,
+    "births": 9,
+    "mean_return": 1.931489361702128,
+    "loss": -0.0024591635446995497
+  },
+  {
+    "iteration": 58,
+    "final_population": 21,
+    "births": 16,
+    "mean_return": 2.2276470588235293,
+    "loss": -0.002328875008970499
+  },
+  {
+    "iteration": 59,
+    "final_population": 6,
+    "births": 6,
+    "mean_return": 1.777111111111111,
+    "loss": -0.00822700560092926
+  },
+  {
+    "iteration": 60,
+    "final_population": 13,
+    "births": 11,
+    "mean_return": 1.9253061224489796,
+    "loss": -0.009789811447262764
+  },
+  {
+    "iteration": 61,
+    "final_population": 12,
+    "births": 14,
+    "mean_return": 2.3605769230769234,
+    "loss": -0.0038014352321624756
+  },
+  {
+    "iteration": 62,
+    "final_population": 11,
+    "births": 11,
+    "mean_return": 2.1719148936170214,
+    "loss": -0.010508421808481216
+  },
+  {
+    "iteration": 63,
+    "final_population": 17,
+    "births": 10,
+    "mean_return": 2.4410000000000003,
+    "loss": 0.001344091142527759
+  },
+  {
+    "iteration": 64,
+    "final_population": 15,
+    "births": 13,
+    "mean_return": 2.1752000000000002,
+    "loss": -0.008449236862361431
+  },
+  {
+    "iteration": 65,
+    "final_population": 27,
+    "births": 24,
+    "mean_return": 2.29728813559322,
+    "loss": -0.006968868430703878
+  },
+  {
+    "iteration": 66,
+    "final_population": 21,
+    "births": 14,
+    "mean_return": 2.2578846153846155,
+    "loss": -0.0017113417852669954
+  },
+  {
+    "iteration": 67,
+    "final_population": 19,
+    "births": 14,
+    "mean_return": 2.312156862745098,
+    "loss": -0.003949294798076153
+  },
+  {
+    "iteration": 68,
+    "final_population": 30,
+    "births": 29,
+    "mean_return": 2.337846153846154,
+    "loss": -0.0031122376676648855
+  },
+  {
+    "iteration": 69,
+    "final_population": 16,
+    "births": 11,
+    "mean_return": 2.138510638297872,
+    "loss": -0.0030094641260802746
+  },
+  {
+    "iteration": 70,
+    "final_population": 27,
+    "births": 25,
+    "mean_return": 2.1470491803278695,
+    "loss": -0.006562645547091961
+  },
+  {
+    "iteration": 71,
+    "final_population": 31,
+    "births": 24,
+    "mean_return": 2.583454545454546,
+    "loss": -0.004044231493026018
+  },
+  {
+    "iteration": 72,
+    "final_population": 20,
+    "births": 15,
+    "mean_return": 2.5494,
+    "loss": 0.001016325899399817
+  },
+  {
+    "iteration": 73,
+    "final_population": 15,
+    "births": 16,
+    "mean_return": 1.9642857142857142,
+    "loss": -0.009848464280366898
+  },
+  {
+    "iteration": 74,
+    "final_population": 28,
+    "births": 25,
+    "mean_return": 2.1944999999999997,
+    "loss": -0.009993256069719791
+  },
+  {
+    "iteration": 75,
+    "final_population": 37,
+    "births": 31,
+    "mean_return": 2.5136923076923074,
+    "loss": -0.00882135983556509
+  },
+  {
+    "iteration": 76,
+    "final_population": 14,
+    "births": 8,
+    "mean_return": 2.2384444444444447,
+    "loss": -0.011013944633305073
+  },
+  {
+    "iteration": 77,
+    "final_population": 24,
+    "births": 14,
+    "mean_return": 2.631,
+    "loss": -0.005738056730479002
+  },
+  {
+    "iteration": 78,
+    "final_population": 30,
+    "births": 23,
+    "mean_return": 2.7748275862068965,
+    "loss": -0.003029082901775837
+  },
+  {
+    "iteration": 79,
+    "final_population": 18,
+    "births": 9,
+    "mean_return": 2.650425531914894,
+    "loss": -0.005103102419525385
+  },
+  {
+    "iteration": 80,
+    "final_population": 24,
+    "births": 21,
+    "mean_return": 2.5458928571428574,
+    "loss": -0.012131423689424992
+  },
+  {
+    "iteration": 81,
+    "final_population": 25,
+    "births": 16,
+    "mean_return": 2.8029629629629627,
+    "loss": -0.007494501303881407
+  },
+  {
+    "iteration": 82,
+    "final_population": 13,
+    "births": 12,
+    "mean_return": 2.2331372549019606,
+    "loss": -0.013614976778626442
+  },
+  {
+    "iteration": 83,
+    "final_population": 20,
+    "births": 16,
+    "mean_return": 2.423454545454546,
+    "loss": -0.013270865194499493
+  },
+  {
+    "iteration": 84,
+    "final_population": 18,
+    "births": 18,
+    "mean_return": 2.3266071428571427,
+    "loss": -0.005123205482959747
+  },
+  {
+    "iteration": 85,
+    "final_population": 21,
+    "births": 15,
+    "mean_return": 2.4748076923076923,
+    "loss": -0.0131855309009552
+  },
+  {
+    "iteration": 86,
+    "final_population": 31,
+    "births": 26,
+    "mean_return": 2.460322580645161,
+    "loss": -0.011074642650783062
+  },
+  {
+    "iteration": 87,
+    "final_population": 22,
+    "births": 21,
+    "mean_return": 2.009152542372881,
+    "loss": -0.005524757318198681
+  },
+  {
+    "iteration": 88,
+    "final_population": 38,
+    "births": 31,
+    "mean_return": 2.66828125,
+    "loss": -0.011531916446983814
+  },
+  {
+    "iteration": 89,
+    "final_population": 29,
+    "births": 22,
+    "mean_return": 2.651016949152542,
+    "loss": -0.006540278904139996
+  },
+  {
+    "iteration": 90,
+    "final_population": 36,
+    "births": 30,
+    "mean_return": 2.353787878787879,
+    "loss": -0.01069598738104105
+  },
+  {
+    "iteration": 91,
+    "final_population": 20,
+    "births": 13,
+    "mean_return": 2.2492,
+    "loss": -0.013081214390695095
+  },
+  {
+    "iteration": 92,
+    "final_population": 31,
+    "births": 29,
+    "mean_return": 2.506615384615385,
+    "loss": -0.017822634428739548
+  },
+  {
+    "iteration": 93,
+    "final_population": 12,
+    "births": 10,
+    "mean_return": 2.079,
+    "loss": -0.017224054783582687
+  },
+  {
+    "iteration": 94,
+    "final_population": 31,
+    "births": 26,
+    "mean_return": 2.473492063492064,
+    "loss": -0.005021519958972931
+  },
+  {
+    "iteration": 95,
+    "final_population": 27,
+    "births": 18,
+    "mean_return": 2.3249999999999997,
+    "loss": -0.013719727285206318
+  },
+  {
+    "iteration": 96,
+    "final_population": 14,
+    "births": 8,
+    "mean_return": 2.221276595744681,
+    "loss": -0.015140795148909092
+  },
+  {
+    "iteration": 97,
+    "final_population": 32,
+    "births": 21,
+    "mean_return": 2.853166666666667,
+    "loss": -0.012823768891394138
+  },
+  {
+    "iteration": 98,
+    "final_population": 46,
+    "births": 35,
+    "mean_return": 2.794705882352941,
+    "loss": -0.005294859409332275
+  },
+  {
+    "iteration": 99,
+    "final_population": 16,
+    "births": 19,
+    "mean_return": 2.2325000000000004,
+    "loss": -0.007645138539373875
+  },
+  {
+    "iteration": 100,
+    "final_population": 37,
+    "births": 34,
+    "mean_return": 2.587142857142857,
+    "loss": -0.01004833448678255
+  },
+  {
+    "iteration": 101,
+    "final_population": 21,
+    "births": 13,
+    "mean_return": 2.285471698113208,
+    "loss": -0.015893692150712013
+  },
+  {
+    "iteration": 102,
+    "final_population": 31,
+    "births": 23,
+    "mean_return": 2.6935087719298245,
+    "loss": -0.007953793741762638
+  },
+  {
+    "iteration": 103,
+    "final_population": 42,
+    "births": 33,
+    "mean_return": 3.281764705882353,
+    "loss": -0.0074110617861151695
+  },
+  {
+    "iteration": 104,
+    "final_population": 38,
+    "births": 24,
+    "mean_return": 2.7518333333333334,
+    "loss": -0.00782147515565157
+  },
+  {
+    "iteration": 105,
+    "final_population": 26,
+    "births": 22,
+    "mean_return": 2.2703508771929823,
+    "loss": -0.019110601395368576
+  },
+  {
+    "iteration": 106,
+    "final_population": 11,
+    "births": 10,
+    "mean_return": 2.176326530612245,
+    "loss": -0.031416893005371094
+  },
+  {
+    "iteration": 107,
+    "final_population": 2,
+    "births": 5,
+    "mean_return": 1.923777777777778,
+    "loss": -0.028739145025610924
+  },
+  {
+    "iteration": 108,
+    "final_population": 27,
+    "births": 24,
+    "mean_return": 2.305084745762712,
+    "loss": -0.02245856635272503
+  },
+  {
+    "iteration": 109,
+    "final_population": 23,
+    "births": 18,
+    "mean_return": 2.3841071428571428,
+    "loss": -0.01803496852517128
+  },
+  {
+    "iteration": 110,
+    "final_population": 41,
+    "births": 39,
+    "mean_return": 2.6083333333333334,
+    "loss": -0.01591610349714756
+  },
+  {
+    "iteration": 111,
+    "final_population": 36,
+    "births": 27,
+    "mean_return": 2.7104838709677415,
+    "loss": -0.013372110202908516
+  },
+  {
+    "iteration": 112,
+    "final_population": 55,
+    "births": 42,
+    "mean_return": 2.8295999999999997,
+    "loss": 0.0020451252348721027
+  },
+  {
+    "iteration": 113,
+    "final_population": 29,
+    "births": 23,
+    "mean_return": 2.5993333333333335,
+    "loss": -0.011252909898757935
+  },
+  {
+    "iteration": 114,
+    "final_population": 37,
+    "births": 28,
+    "mean_return": 2.70125,
+    "loss": -0.008554687723517418
+  },
+  {
+    "iteration": 115,
+    "final_population": 64,
+    "births": 51,
+    "mean_return": 2.846829268292683,
+    "loss": -0.012966375797986984
+  },
+  {
+    "iteration": 116,
+    "final_population": 41,
+    "births": 38,
+    "mean_return": 2.2270833333333333,
+    "loss": -0.0244000144302845
+  },
+  {
+    "iteration": 117,
+    "final_population": 33,
+    "births": 26,
+    "mean_return": 2.5584745762711862,
+    "loss": -0.015246693976223469
+  },
+  {
+    "iteration": 118,
+    "final_population": 45,
+    "births": 39,
+    "mean_return": 2.5732876712328765,
+    "loss": -0.011697379872202873
+  },
+  {
+    "iteration": 119,
+    "final_population": 30,
+    "births": 26,
+    "mean_return": 2.314262295081967,
+    "loss": -0.009956631809473038
+  }
+]

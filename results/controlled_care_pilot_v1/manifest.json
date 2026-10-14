@@ -1,0 +1,32 @@
+{
+  "commit": "e9454128c506978f3154486c902120296691efdf",
+  "runner_sha256": "767be9e10535dd964a133cfbfa592de10d8bba31ccace9a1f8de8d64c470d1cc",
+  "training_seeds": [
+    0,
+    1
+  ],
+  "world_seeds": [
+    300000,
+    300001,
+    300002
+  ],
+  "energies": [
+    10,
+    20
+  ],
+  "background_counts": [
+    0,
+    8
+  ],
+  "horizon": 60,
+  "checkpoint_sha256": {
+    "survival_s0.pt": "e4840e58dfc6701b064bbff40e0da692c336969df02761781b8ef89be7fe63e7",
+    "offspring_s0.pt": "2bd7836236a9aa46ebf356482099293070114ab48326fc5b4b5f2977df33f4fa",
+    "survival_s1.pt": "cdb0f16b0c5db3b04a99ee634175b5caeebcdd13c27cda0d55e0cf9283af235a",
+    "offspring_s1.pt": "bfa66a0724095fb626ef7c75218f3e022506062a320f76e2dc8dcb9dabee25c2"
+  },
+  "torch": "2.14.1+cpu",
+  "intervention": "Frozen-policy care stress assay, not a natural colony or Calhoun replication.\n\nZero/eight immobile, resource-neutral background bodies enter the ordinary occupancy\nindex and policy crowding sense. Only the parent and pup act. Background bodies have\nno physiology, eat nothing, claim no nests and cannot block movement. Their placement\nuses a separate RNG and cannot change initial geometry or the food respawn RNG.\n\nThe existing care formula is unchanged (its tick-start count includes a nearby\nparent, whereas attendance uses the post-movement parent position). Consequently,\neven zero-background disruption can block care if a parent moves from radius two\nto distance three. Background-only and total crowding are reported separately.\nCrowding energy cost, intrusion, developmental damage and further reproduction are\ndisabled in this evaluation only. Ordinary metabolism, feeding, movement and neglect\nremain unchanged. All trials last 60 ticks, including after early pup death, to give\nparent survival a common follow-up. Only focal bodies enter mortality accounting.\n\nCrowding remains visible to the policy: density can change actions intentionally.\nWithin-density disruption off/on isolates the intervention on care effectiveness;\nacross-density contrasts also include the policy's response to perceived crowding.\n",
+  "crowding_energy_penalty": false,
+  "retraining": false
+}

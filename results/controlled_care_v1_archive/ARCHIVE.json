@@ -1,0 +1,169 @@
+{
+  "format": "gzip of byte-identical original JSON; mtime=0",
+  "source_manifest_sha256": "4da076c8afe0fd472c4cbf24e09bc5133accd7f55c859176163fc7f91e1b00b0",
+  "source_summary_sha256": "b354e3d6f64e2c30969cdf7e8e0e6eae10866fa7d7b22c70b405a984ea50caf0",
+  "files": [
+    {
+      "source": "results/controlled_care_v1/survival_s0.json",
+      "archive": "survival_s0.json.gz",
+      "source_bytes": 7681756,
+      "archive_bytes": 376391,
+      "source_sha256": "928867a8d5c1d6d2b1ac8ecbb38896bdcb3588edbc22997f26d898945a68fc6a",
+      "archive_sha256": "c7bd74ae173959c5164730c88a62d6d0e14c3b4a38c02494778a22440cc385a9"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s1.json",
+      "archive": "survival_s1.json.gz",
+      "source_bytes": 7674972,
+      "archive_bytes": 355920,
+      "source_sha256": "218e83c7d5d0eec9d5e30a1f18422f80f43c64ba0dbe8287c93124bfef93a7d7",
+      "archive_sha256": "1ca71b7bcbf90bff1cc30a52474cd94a69d23deb2c10a2798b39513d9daecf7a"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s2.json",
+      "archive": "survival_s2.json.gz",
+      "source_bytes": 7736416,
+      "archive_bytes": 361157,
+      "source_sha256": "c70915952e56a39b5e5d69d750e78eaeea87b10d8688a01c23443bcdf9e328c5",
+      "archive_sha256": "43835c979404b084b62bd9a9e8755558df5ba6f399ea59efbe52313e4f2f2e40"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s3.json",
+      "archive": "survival_s3.json.gz",
+      "source_bytes": 7802041,
+      "archive_bytes": 356054,
+      "source_sha256": "32e5d4342f6c25290393790a2a186c6d4478ecfdb909dce75ce823758a62de07",
+      "archive_sha256": "92c9a11dd8b7e1f16b9a27f21991e47199d7f245aec40b927c46a49fa33ffb52"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s4.json",
+      "archive": "survival_s4.json.gz",
+      "source_bytes": 7608978,
+      "archive_bytes": 353277,
+      "source_sha256": "7d8ba2cf9766b5efe443e30327597fdd063a9e19e0f4e23fdd5d2aeeb862490f",
+      "archive_sha256": "da9fed916757d52c1ec1f1ff29d4a7e81c3babceb1e77477d8375dc0b800ee29"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s5.json",
+      "archive": "survival_s5.json.gz",
+      "source_bytes": 7698077,
+      "archive_bytes": 344007,
+      "source_sha256": "9ec16e76181e7116d768e5b6b6fd366de373603e21206e2a20dcfa6cecce7ee2",
+      "archive_sha256": "2f94338dbdbe73ab106079155d15ee77ba248e21bf12845c6073b3fbac117c89"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s6.json",
+      "archive": "survival_s6.json.gz",
+      "source_bytes": 7660339,
+      "archive_bytes": 368129,
+      "source_sha256": "0f0eafe58e7986e533e3374f255df41da370e28436f0cad9b2fce90a8e3d59dd",
+      "archive_sha256": "91291a781b263ccbd4a1b171f01ff1be9c712e7827ef1c08f2d48a63ae4aacf3"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s7.json",
+      "archive": "survival_s7.json.gz",
+      "source_bytes": 7716997,
+      "archive_bytes": 378484,
+      "source_sha256": "c2f59b61e026f508a5d09ad7ecb83fa334c5c1070c1268749d0812a6cb75f5b0",
+      "archive_sha256": "4075afd8af546aa35d4903af1fb1e1e2b416df5c699bae7228a735e09e8bdaba"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s8.json",
+      "archive": "survival_s8.json.gz",
+      "source_bytes": 7625014,
+      "archive_bytes": 359974,
+      "source_sha256": "073ed7bb44af5737de0509a7ee7a3f8ceedb2f8eac9b9004e79fef41b60fdbd0",
+      "archive_sha256": "2ed7ad18105fb76325c2c04d6fde38016fcefdbb983db6b2841eeafc550ff765"
+    },
+    {
+      "source": "results/controlled_care_v1/survival_s9.json",
+      "archive": "survival_s9.json.gz",
+      "source_bytes": 7645405,
+      "archive_bytes": 353150,
+      "source_sha256": "45f67f76991d89e8655789294ba48ead4dc4e2a4251170be75b5e713e91cd402",
+      "archive_sha256": "69d624078de2ff9175c21ab371f208df4409638f6a63164398c422dbc1c03949"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s0.json",
+      "archive": "offspring_s0.json.gz",
+      "source_bytes": 8047984,
+      "archive_bytes": 339693,
+      "source_sha256": "b07a46f24246fef1370e86b1dd350bbad082c9e5b113ae413ee21c381ee53fc1",
+      "archive_sha256": "e60279ecdb9e2aba25199406e45b28dc568fa7ab305884d2b23acc6c820dd6e8"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s1.json",
+      "archive": "offspring_s1.json.gz",
+      "source_bytes": 8079084,
+      "archive_bytes": 343635,
+      "source_sha256": "8978c19100da1d6227eb2a0d4852e8f3f8341bdc898865f9c32295535a336c96",
+      "archive_sha256": "9e68acbe7fc86c5ae4e15140c45af7c3c9b37040c9f9b84d6778683734fc524c"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s2.json",
+      "archive": "offspring_s2.json.gz",
+      "source_bytes": 8072251,
+      "archive_bytes": 343627,
+      "source_sha256": "1bd50523950d277d84188e1d23a375b1b96f43daa4232ce73a2c5bc5bb20696a",
+      "archive_sha256": "02e809a2261e244e683f81f702d204a76cce8a70119160d9fb61c2dea415658f"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s3.json",
+      "archive": "offspring_s3.json.gz",
+      "source_bytes": 8064902,
+      "archive_bytes": 351028,
+      "source_sha256": "caa0f285c449a5b24b16f771444ffdd63bdc3cc033179b2864211a7b26aa3d1b",
+      "archive_sha256": "edc1a52fb49f061b277724b7f37dafbaaa8e19fd0fa87039af8923ca650e27da"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s4.json",
+      "archive": "offspring_s4.json.gz",
+      "source_bytes": 8199385,
+      "archive_bytes": 337630,
+      "source_sha256": "3bf47d0f1627362ce996e00803a59df44e1a63ed6a46fee54f8ec00c0c3a238a",
+      "archive_sha256": "2955ecd866e6496741fc7e93ad6f1d11f6c318d9143f4d5af695ec64dfa90224"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s5.json",
+      "archive": "offspring_s5.json.gz",
+      "source_bytes": 7980318,
+      "archive_bytes": 340186,
+      "source_sha256": "29c08f97179556e8eed3020df18e60833f750bc101fd4a2ebf09ebaf3cb42abe",
+      "archive_sha256": "76e7fab1cfd8b6adf68330d88530e4255a3c74690e506e54797c3b5f789162ff"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s6.json",
+      "archive": "offspring_s6.json.gz",
+      "source_bytes": 8186108,
+      "archive_bytes": 345420,
+      "source_sha256": "9fb4917897a3f9887b747964c441d068e5798ddaab3dcabb3fc4a9f33c19aab8",
+      "archive_sha256": "e6c438f1370b6a88c8b4cbf77fe6a53614a40b40b5c679e5a618af1dd2db4d88"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s7.json",
+      "archive": "offspring_s7.json.gz",
+      "source_bytes": 8002341,
+      "archive_bytes": 354565,
+      "source_sha256": "c7912861dc8d271b706232615833114988dd24912d4a5d7ddad04753d6355868",
+      "archive_sha256": "9ccaab308c36ad7e1890d2e209d62743bec7b2bbc358084dfb6247317fcb7c41"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s8.json",
+      "archive": "offspring_s8.json.gz",
+      "source_bytes": 8010653,
+      "archive_bytes": 341353,
+      "source_sha256": "58f849771958fa676d0dbf879ed7b75dd943f28b33326c50c2f37032645390ac",
+      "archive_sha256": "12e82d2707fb71feb931686a05a9989cfbf09764a0380b681ff73d3a9f3c06be"
+    },
+    {
+      "source": "results/controlled_care_v1/offspring_s9.json",
+      "archive": "offspring_s9.json.gz",
+      "source_bytes": 8027112,
+      "archive_bytes": 337270,
+      "source_sha256": "f5577664de2086f8a7e42a3fb96edcb7dd892ef3831e41a33f8e7331b925cedb",
+      "archive_sha256": "8f6a5dca7470ff58db70e061c60edf4db6bf414fb3dfa10d14b46156d94dca1a"
+    }
+  ],
+  "source_bytes": 157520133,
+  "archive_bytes": 7040950
+}
