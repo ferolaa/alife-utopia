@@ -1,0 +1,54 @@
+{
+  "trajectories": 1600,
+  "files": 1602,
+  "controls_identical_contexts": 400,
+  "sensory_audits": 96000,
+  "verified_checkpoints": 20,
+  "matched_replays": 40,
+  "statistical_contrasts": [
+    {
+      "contrast": "survival",
+      "mean": -0.009999999999999998,
+      "ci95": [
+        -0.045,
+        0.015000000000000003
+      ],
+      "p": 1.0
+    },
+    {
+      "contrast": "offspring",
+      "mean": -0.15,
+      "ci95": [
+        -0.21000000000000002,
+        -0.095
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "objective_interaction",
+      "mean": -0.14,
+      "ci95": [
+        -0.205,
+        -0.085
+      ],
+      "p": 0.001953125
+    }
+  ],
+  "all_integrity_checks_passed": true,
+  "metadata_correction_required": true,
+  "all_original_files_byte_identical_after_restore": 1652,
+  "full_archive_bytes": 14193394,
+  "full_original_bytes": 313727405,
+  "pilot_archive_bytes": 426282,
+  "pilot_original_bytes": 9426435,
+  "portable_analysis_json_png_csv_report_identical": true,
+  "tracked_files_unchanged": true,
+  "metadata_outputs_edited": false,
+  "metadata_correction_preserved": true,
+  "scientific_parameters_changed": false,
+  "retraining_performed": false,
+  "fresh_environment_installation_tested": false,
+  "fresh_local_clone_with_proposed_files_tested": true,
+  "test_count": 267,
+  "base_commit": "79b7a29df0ed53c6ef818f93ee2708354274fb83"
+}

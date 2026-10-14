@@ -1,0 +1,13 @@
+training_seed,objective,adult_world_seed,control_independent,impaired_independent,paired_success_difference,control_attended_ticks,impaired_attended_ticks,control_care_ticks,impaired_care_ticks,control_parent_meals,impaired_parent_meals
+0,survival,400000,True,True,0,34,49,59,59,3,3
+0,survival,400001,False,False,0,0,0,26,26,7,12
+0,survival,400002,False,False,0,0,0,26,26,7,7
+0,offspring,400000,True,True,0,59,54,59,59,0,0
+0,offspring,400001,True,False,-1,57,21,59,53,0,0
+0,offspring,400002,True,True,0,28,37,59,59,0,0
+1,survival,400000,True,True,0,37,42,59,59,5,2
+1,survival,400001,False,False,0,5,8,35,37,2,2
+1,survival,400002,False,False,0,0,0,26,26,5,8
+1,offspring,400000,True,True,0,59,54,59,59,0,0
+1,offspring,400001,True,True,0,57,57,59,59,0,0
+1,offspring,400002,False,False,0,3,2,32,30,6,5

@@ -1,0 +1,484 @@
+{
+  "groups": [
+    {
+      "objective": "survival",
+      "initial_energy": 10,
+      "background_count": 0,
+      "disruption": false,
+      "trials": 6,
+      "independence_successes": 0,
+      "parent_survivors": 5,
+      "counts": {
+        "parent_meals": 30,
+        "parent_action_ticks": 340,
+        "parent_crowd_sum": 24,
+        "care_ticks": 218,
+        "attended_ticks": 54,
+        "pup_crowd_sum": 24,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 6
+      },
+      "deaths_by_cause": {
+        "starvation": 1,
+        "old age": 0,
+        "neglect": 6
+      }
+    },
+    {
+      "objective": "survival",
+      "initial_energy": 10,
+      "background_count": 0,
+      "disruption": true,
+      "trials": 6,
+      "independence_successes": 0,
+      "parent_survivors": 5,
+      "counts": {
+        "parent_meals": 30,
+        "parent_action_ticks": 340,
+        "parent_crowd_sum": 24,
+        "care_ticks": 218,
+        "attended_ticks": 48,
+        "pup_crowd_sum": 24,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 6,
+        "counterfactual_blockable_ticks": 6
+      },
+      "deaths_by_cause": {
+        "starvation": 1,
+        "old age": 0,
+        "neglect": 6
+      }
+    },
+    {
+      "objective": "survival",
+      "initial_energy": 10,
+      "background_count": 8,
+      "disruption": false,
+      "trials": 6,
+      "independence_successes": 0,
+      "parent_survivors": 5,
+      "counts": {
+        "parent_meals": 33,
+        "parent_action_ticks": 340,
+        "parent_crowd_sum": 279,
+        "care_ticks": 209,
+        "attended_ticks": 43,
+        "pup_crowd_sum": 1690,
+        "third_party_crowd_sum": 1672,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 37
+      },
+      "deaths_by_cause": {
+        "starvation": 1,
+        "old age": 0,
+        "neglect": 6
+      }
+    },
+    {
+      "objective": "survival",
+      "initial_energy": 10,
+      "background_count": 8,
+      "disruption": true,
+      "trials": 6,
+      "independence_successes": 0,
+      "parent_survivors": 5,
+      "counts": {
+        "parent_meals": 35,
+        "parent_action_ticks": 340,
+        "parent_crowd_sum": 289,
+        "care_ticks": 168,
+        "attended_ticks": 6,
+        "pup_crowd_sum": 1364,
+        "third_party_crowd_sum": 1344,
+        "crowd_blocked_ticks": 47,
+        "counterfactual_blockable_ticks": 47
+      },
+      "deaths_by_cause": {
+        "starvation": 1,
+        "old age": 0,
+        "neglect": 6
+      }
+    },
+    {
+      "objective": "survival",
+      "initial_energy": 20,
+      "background_count": 0,
+      "disruption": false,
+      "trials": 6,
+      "independence_successes": 0,
+      "parent_survivors": 6,
+      "counts": {
+        "parent_meals": 30,
+        "parent_action_ticks": 360,
+        "parent_crowd_sum": 25,
+        "care_ticks": 218,
+        "attended_ticks": 54,
+        "pup_crowd_sum": 25,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 6
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 6
+      }
+    },
+    {
+      "objective": "survival",
+      "initial_energy": 20,
+      "background_count": 0,
+      "disruption": true,
+      "trials": 6,
+      "independence_successes": 0,
+      "parent_survivors": 6,
+      "counts": {
+        "parent_meals": 30,
+        "parent_action_ticks": 360,
+        "parent_crowd_sum": 25,
+        "care_ticks": 218,
+        "attended_ticks": 48,
+        "pup_crowd_sum": 25,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 6,
+        "counterfactual_blockable_ticks": 6
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 6
+      }
+    },
+    {
+      "objective": "survival",
+      "initial_energy": 20,
+      "background_count": 8,
+      "disruption": false,
+      "trials": 6,
+      "independence_successes": 0,
+      "parent_survivors": 6,
+      "counts": {
+        "parent_meals": 33,
+        "parent_action_ticks": 360,
+        "parent_crowd_sum": 282,
+        "care_ticks": 209,
+        "attended_ticks": 43,
+        "pup_crowd_sum": 1690,
+        "third_party_crowd_sum": 1672,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 37
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 6
+      }
+    },
+    {
+      "objective": "survival",
+      "initial_energy": 20,
+      "background_count": 8,
+      "disruption": true,
+      "trials": 6,
+      "independence_successes": 0,
+      "parent_survivors": 6,
+      "counts": {
+        "parent_meals": 34,
+        "parent_action_ticks": 360,
+        "parent_crowd_sum": 290,
+        "care_ticks": 168,
+        "attended_ticks": 6,
+        "pup_crowd_sum": 1365,
+        "third_party_crowd_sum": 1344,
+        "crowd_blocked_ticks": 46,
+        "counterfactual_blockable_ticks": 46
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 6
+      }
+    },
+    {
+      "objective": "offspring",
+      "initial_energy": 10,
+      "background_count": 0,
+      "disruption": false,
+      "trials": 6,
+      "independence_successes": 3,
+      "parent_survivors": 4,
+      "counts": {
+        "parent_meals": 11,
+        "parent_action_ticks": 320,
+        "parent_crowd_sum": 100,
+        "care_ticks": 294,
+        "attended_ticks": 159,
+        "pup_crowd_sum": 100,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 10,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 2,
+        "old age": 0,
+        "neglect": 3
+      }
+    },
+    {
+      "objective": "offspring",
+      "initial_energy": 10,
+      "background_count": 0,
+      "disruption": true,
+      "trials": 6,
+      "independence_successes": 3,
+      "parent_survivors": 4,
+      "counts": {
+        "parent_meals": 11,
+        "parent_action_ticks": 320,
+        "parent_crowd_sum": 100,
+        "care_ticks": 294,
+        "attended_ticks": 149,
+        "pup_crowd_sum": 100,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 10,
+        "counterfactual_blockable_ticks": 10,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 2,
+        "old age": 0,
+        "neglect": 3
+      }
+    },
+    {
+      "objective": "offspring",
+      "initial_energy": 10,
+      "background_count": 8,
+      "disruption": false,
+      "trials": 6,
+      "independence_successes": 3,
+      "parent_survivors": 4,
+      "counts": {
+        "parent_meals": 11,
+        "parent_action_ticks": 320,
+        "parent_crowd_sum": 920,
+        "care_ticks": 308,
+        "attended_ticks": 177,
+        "pup_crowd_sum": 2567,
+        "third_party_crowd_sum": 2464,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 134,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 2,
+        "old age": 0,
+        "neglect": 3
+      }
+    },
+    {
+      "objective": "offspring",
+      "initial_energy": 10,
+      "background_count": 8,
+      "disruption": true,
+      "trials": 6,
+      "independence_successes": 1,
+      "parent_survivors": 4,
+      "counts": {
+        "parent_meals": 13,
+        "parent_action_ticks": 320,
+        "parent_crowd_sum": 939,
+        "care_ticks": 238,
+        "attended_ticks": 48,
+        "pup_crowd_sum": 2010,
+        "third_party_crowd_sum": 1904,
+        "crowd_blocked_ticks": 125,
+        "counterfactual_blockable_ticks": 125,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 2,
+        "old age": 0,
+        "neglect": 5
+      }
+    },
+    {
+      "objective": "offspring",
+      "initial_energy": 20,
+      "background_count": 0,
+      "disruption": false,
+      "trials": 6,
+      "independence_successes": 4,
+      "parent_survivors": 6,
+      "counts": {
+        "parent_meals": 11,
+        "parent_action_ticks": 360,
+        "parent_crowd_sum": 132,
+        "care_ticks": 312,
+        "attended_ticks": 226,
+        "pup_crowd_sum": 132,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 21,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 2
+      }
+    },
+    {
+      "objective": "offspring",
+      "initial_energy": 20,
+      "background_count": 0,
+      "disruption": true,
+      "trials": 6,
+      "independence_successes": 4,
+      "parent_survivors": 6,
+      "counts": {
+        "parent_meals": 11,
+        "parent_action_ticks": 360,
+        "parent_crowd_sum": 132,
+        "care_ticks": 312,
+        "attended_ticks": 205,
+        "pup_crowd_sum": 132,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 21,
+        "counterfactual_blockable_ticks": 21,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 2
+      }
+    },
+    {
+      "objective": "offspring",
+      "initial_energy": 20,
+      "background_count": 8,
+      "disruption": false,
+      "trials": 6,
+      "independence_successes": 4,
+      "parent_survivors": 6,
+      "counts": {
+        "parent_meals": 11,
+        "parent_action_ticks": 360,
+        "parent_crowd_sum": 1114,
+        "care_ticks": 312,
+        "attended_ticks": 217,
+        "pup_crowd_sum": 2627,
+        "third_party_crowd_sum": 2496,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 163,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 2
+      }
+    },
+    {
+      "objective": "offspring",
+      "initial_energy": 20,
+      "background_count": 8,
+      "disruption": true,
+      "trials": 6,
+      "independence_successes": 1,
+      "parent_survivors": 6,
+      "counts": {
+        "parent_meals": 13,
+        "parent_action_ticks": 360,
+        "parent_crowd_sum": 1023,
+        "care_ticks": 236,
+        "attended_ticks": 47,
+        "pup_crowd_sum": 1994,
+        "third_party_crowd_sum": 1888,
+        "crowd_blocked_ticks": 125,
+        "counterfactual_blockable_ticks": 125,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 5
+      }
+    }
+  ],
+  "training_pair_rates": [
+    {
+      "training_seed": 0,
+      "background_count": 0,
+      "disruption": false,
+      "survival": 0.0,
+      "offspring": 0.6666666666666666,
+      "difference": 0.6666666666666666
+    },
+    {
+      "training_seed": 0,
+      "background_count": 0,
+      "disruption": true,
+      "survival": 0.0,
+      "offspring": 0.6666666666666666,
+      "difference": 0.6666666666666666
+    },
+    {
+      "training_seed": 0,
+      "background_count": 8,
+      "disruption": false,
+      "survival": 0.0,
+      "offspring": 0.6666666666666666,
+      "difference": 0.6666666666666666
+    },
+    {
+      "training_seed": 0,
+      "background_count": 8,
+      "disruption": true,
+      "survival": 0.0,
+      "offspring": 0.0,
+      "difference": 0.0
+    },
+    {
+      "training_seed": 1,
+      "background_count": 0,
+      "disruption": false,
+      "survival": 0.0,
+      "offspring": 0.5,
+      "difference": 0.5
+    },
+    {
+      "training_seed": 1,
+      "background_count": 0,
+      "disruption": true,
+      "survival": 0.0,
+      "offspring": 0.5,
+      "difference": 0.5
+    },
+    {
+      "training_seed": 1,
+      "background_count": 8,
+      "disruption": false,
+      "survival": 0.0,
+      "offspring": 0.5,
+      "difference": 0.5
+    },
+    {
+      "training_seed": 1,
+      "background_count": 8,
+      "disruption": true,
+      "survival": 0.0,
+      "offspring": 0.3333333333333333,
+      "difference": 0.3333333333333333
+    }
+  ],
+  "inference": "Pilot descriptive only; worlds and energies are not independent training replicates",
+  "total_seconds": 2.4853735429987864,
+  "completed_trials": 96,
+  "expected_trials": 96,
+  "matching_verified": true,
+  "checkpoint_integrity_verified": true
+}

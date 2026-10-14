@@ -1,0 +1,156 @@
+{
+  "paired_primary_endpoint": [
+    {
+      "seed": 0,
+      "survival": 0.075,
+      "offspring": 0.7,
+      "difference": 0.625
+    },
+    {
+      "seed": 1,
+      "survival": 0.1,
+      "offspring": 0.575,
+      "difference": 0.475
+    },
+    {
+      "seed": 2,
+      "survival": 0.1,
+      "offspring": 0.55,
+      "difference": 0.45000000000000007
+    },
+    {
+      "seed": 3,
+      "survival": 0.275,
+      "offspring": 0.575,
+      "difference": 0.29999999999999993
+    },
+    {
+      "seed": 4,
+      "survival": 0.05,
+      "offspring": 0.625,
+      "difference": 0.575
+    },
+    {
+      "seed": 5,
+      "survival": 0.1,
+      "offspring": 0.375,
+      "difference": 0.275
+    },
+    {
+      "seed": 6,
+      "survival": 0.125,
+      "offspring": 0.5,
+      "difference": 0.375
+    },
+    {
+      "seed": 7,
+      "survival": 0.1,
+      "offspring": 0.35,
+      "difference": 0.24999999999999997
+    },
+    {
+      "seed": 8,
+      "survival": 0.0,
+      "offspring": 0.5,
+      "difference": 0.5
+    },
+    {
+      "seed": 9,
+      "survival": 0.05,
+      "offspring": 0.325,
+      "difference": 0.275
+    }
+  ],
+  "paired_analysis": {
+    "n_training_pairs": 10,
+    "mean_difference": 0.41000000000000003,
+    "paired_bootstrap_95_percent_interval": [
+      0.33249999999999996,
+      0.48999999999999994
+    ],
+    "exact_sign_flip_p": 0.001953125
+  },
+  "outcome_summary": {
+    "survival": {
+      "natural_episodes": 200,
+      "births": 6365,
+      "eligible_births": 6023,
+      "independent_offspring": 4333,
+      "deaths_by_cause": {
+        "starvation": 5643,
+        "old age": 3802,
+        "neglect": 1701
+      },
+      "founder_deaths_by_cause": {
+        "starvation": 4511,
+        "old age": 3468,
+        "neglect": 0
+      },
+      "offspring_deaths_by_cause": {
+        "starvation": 1132,
+        "old age": 334,
+        "neglect": 1701
+      },
+      "care_ticks": 342312,
+      "attended_ticks": 244985,
+      "mean_final_population": 16.095,
+      "extinct_episodes": 22,
+      "assigned_pup_trials": 400,
+      "assigned_pup_successes": 39,
+      "assigned_parent_meals": 887,
+      "assigned_parent_outcomes": {
+        "dead": 9,
+        "survived_full_trial": 34,
+        "alive_at_early_stop": 357
+      },
+      "assigned_parent_deaths_by_cause": {
+        "starvation": 9,
+        "old age": 0,
+        "neglect": 0
+      },
+      "assigned_care_ticks": 13531,
+      "assigned_attended_ticks": 2495
+    },
+    "offspring": {
+      "natural_episodes": 200,
+      "births": 15756,
+      "eligible_births": 14723,
+      "independent_offspring": 14305,
+      "deaths_by_cause": {
+        "starvation": 8398,
+        "old age": 4005,
+        "neglect": 424
+      },
+      "founder_deaths_by_cause": {
+        "starvation": 4678,
+        "old age": 3303,
+        "neglect": 0
+      },
+      "offspring_deaths_by_cause": {
+        "starvation": 3720,
+        "old age": 702,
+        "neglect": 424
+      },
+      "care_ticks": 894292,
+      "attended_ticks": 814763,
+      "mean_final_population": 54.645,
+      "extinct_episodes": 5,
+      "assigned_pup_trials": 400,
+      "assigned_pup_successes": 203,
+      "assigned_parent_meals": 405,
+      "assigned_parent_outcomes": {
+        "dead": 80,
+        "survived_full_trial": 146,
+        "alive_at_early_stop": 174
+      },
+      "assigned_parent_deaths_by_cause": {
+        "starvation": 80,
+        "old age": 0,
+        "neglect": 0
+      },
+      "assigned_care_ticks": 18817,
+      "assigned_attended_ticks": 8374
+    }
+  },
+  "total_seconds": 2039.266277138
+}

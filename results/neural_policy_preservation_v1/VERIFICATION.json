@@ -1,0 +1,71 @@
+{
+  "trials": 2000,
+  "unique_initial_networks": 10,
+  "trained_networks": 20,
+  "normal_historical_replays": 800,
+  "input_audits": 71024,
+  "exact_replays": 100,
+  "contrasts": [
+    {
+      "contrast": "survival_training",
+      "mean": -0.1,
+      "ci95": [
+        -0.17250000000000001,
+        -0.025
+      ],
+      "exact_p": 0.04296875
+    },
+    {
+      "contrast": "offspring_training",
+      "mean": 0.31,
+      "ci95": [
+        0.215,
+        0.39249999999999996
+      ],
+      "exact_p": 0.00390625
+    },
+    {
+      "contrast": "survival_masking",
+      "mean": -0.0425,
+      "ci95": [
+        -0.09,
+        -0.005
+      ],
+      "exact_p": 0.09375
+    },
+    {
+      "contrast": "offspring_masking",
+      "mean": -0.4625,
+      "ci95": [
+        -0.53,
+        -0.39249999999999996
+      ],
+      "exact_p": 0.001953125
+    }
+  ],
+  "all_checks_passed": true,
+  "full_original_bytes": 93303489,
+  "full_archive_bytes": 10968136,
+  "full_archive_sha256": "5d5f0bf7054dedc17e8a34756022201e4b20a801a2344bbc14431bb06996cf6d",
+  "all_full_files_restored_byte_identically": 4,
+  "all_pilot_files_restored_byte_identically": 4,
+  "pilot_subset_trials": 60,
+  "clean_clone_tests": 286,
+  "current_checkout_tests": 286,
+  "portable_reanalysis_json_png_csv_report_identical": true,
+  "prior_protected_artifacts_unchanged": 1906,
+  "original_neural_outputs_unchanged": true,
+  "original_pilot_unchanged": true,
+  "new_environment_dependency_installation_tested": false,
+  "new_experiment_or_training_run": false,
+  "independent_response_recalculation": {
+    "responses_recalculated": 71024,
+    "probability_kl_tolerance_absolute": 2e-06,
+    "probability_kl_tolerance_relative": 1e-05,
+    "input_channels_verified": [
+      "pup_dx",
+      "pup_dy",
+      "pup_need"
+    ]
+  }
+}

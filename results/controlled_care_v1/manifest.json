@@ -1,0 +1,73 @@
+{
+  "commit": "e9454128c506978f3154486c902120296691efdf",
+  "runner_sha256": "767be9e10535dd964a133cfbfa592de10d8bba31ccace9a1f8de8d64c470d1cc",
+  "training_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "world_seeds": [
+    300000,
+    300001,
+    300002,
+    300003,
+    300004,
+    300005,
+    300006,
+    300007,
+    300008,
+    300009,
+    300010,
+    300011,
+    300012,
+    300013,
+    300014,
+    300015,
+    300016,
+    300017,
+    300018,
+    300019
+  ],
+  "energies": [
+    10,
+    20
+  ],
+  "background_counts": [
+    0,
+    8
+  ],
+  "horizon": 60,
+  "checkpoint_sha256": {
+    "survival_s0.pt": "e4840e58dfc6701b064bbff40e0da692c336969df02761781b8ef89be7fe63e7",
+    "offspring_s0.pt": "2bd7836236a9aa46ebf356482099293070114ab48326fc5b4b5f2977df33f4fa",
+    "survival_s1.pt": "cdb0f16b0c5db3b04a99ee634175b5caeebcdd13c27cda0d55e0cf9283af235a",
+    "offspring_s1.pt": "bfa66a0724095fb626ef7c75218f3e022506062a320f76e2dc8dcb9dabee25c2",
+    "survival_s2.pt": "957f862f7d286e662e68091389eae4e4a3b2072b46543e7311312dd70c80e9a4",
+    "offspring_s2.pt": "968f2bd7c09e98633a12abddd4bdf9e07f73a116e581682bb6388922ea35aa55",
+    "survival_s3.pt": "2ec36b559c399957c8f679ef54c407b29078f0cc5dede2a4d19ff8dabece61c8",
+    "offspring_s3.pt": "b318fa7d514204d7fa1b6a9ede3d6ec60b0bbd49f3b9205b72cd3dce85f5a4c3",
+    "survival_s4.pt": "10df11c1337b30a297d879d97fdafbf7f90ef2df0cd05126bcecaed9bab7f067",
+    "offspring_s4.pt": "84fa019e32a90b3100c0491b5266b4f42a7ddf5c906eb842670b69889cbe781f",
+    "survival_s5.pt": "3d5be08d0d89147f4fc4648a16d2e85255ec9c552405d286561b4b06a2061149",
+    "offspring_s5.pt": "7586d6e7bfaed60dd399d9b4c41c1837a31637ac3ee587f93a2ce59f214fbb63",
+    "survival_s6.pt": "abe2e859420ab1348cf55c7b875a40b8065dbf67d8bb63a1631d07b6d4334f6f",
+    "offspring_s6.pt": "f8232f5378bb18c6214f93735b95b3a4d01fc34c9224d480c536e18bd03fbab7",
+    "survival_s7.pt": "88f31042b47ce9b8b12ca7c2575e20766d4375b8665ee05d98f7e26ce0f7bf79",
+    "offspring_s7.pt": "dbc6e243a046f8fd0e6da4e14df0424d2d099efe0d01ee89ced81e0832f1be57",
+    "survival_s8.pt": "be5d037764fac0f620cc31909253f566244d93450dcba876554d212e5dc45168",
+    "offspring_s8.pt": "143069b4f6dbb72b3afe533a0550b6335d6991508cf3caa772320c6bbbfabc03",
+    "survival_s9.pt": "0ecfb9be76adf90dc6e55dd46393a31b3692dbe315a3ad8236b401d82ad6a3ab",
+    "offspring_s9.pt": "c4507fd256085d1bc5fa50075507c6d0f63ba85c5c10ebbb59b3946b3cdaa6bd"
+  },
+  "torch": "2.14.1+cpu",
+  "intervention": "Frozen-policy care stress assay, not a natural colony or Calhoun replication.\n\nZero/eight immobile, resource-neutral background bodies enter the ordinary occupancy\nindex and policy crowding sense. Only the parent and pup act. Background bodies have\nno physiology, eat nothing, claim no nests and cannot block movement. Their placement\nuses a separate RNG and cannot change initial geometry or the food respawn RNG.\n\nThe existing care formula is unchanged (its tick-start count includes a nearby\nparent, whereas attendance uses the post-movement parent position). Consequently,\neven zero-background disruption can block care if a parent moves from radius two\nto distance three. Background-only and total crowding are reported separately.\nCrowding energy cost, intrusion, developmental damage and further reproduction are\ndisabled in this evaluation only. Ordinary metabolism, feeding, movement and neglect\nremain unchanged. All trials last 60 ticks, including after early pup death, to give\nparent survival a common follow-up. Only focal bodies enter mortality accounting.\n\nCrowding remains visible to the policy: density can change actions intentionally.\nWithin-density disruption off/on isolates the intervention on care effectiveness;\nacross-density contrasts also include the policy's response to perceived crowding.\n",
+  "crowding_energy_penalty": false,
+  "retraining": false
+}

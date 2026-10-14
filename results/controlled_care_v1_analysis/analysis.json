@@ -1,0 +1,1870 @@
+{
+  "groups": [
+    {
+      "objective": "survival",
+      "energy": null,
+      "background": 0,
+      "disruption": false,
+      "trials": 400,
+      "successes": 38,
+      "rate": 0.095,
+      "seed_rates": [
+        0.05,
+        0.05,
+        0.175,
+        0.15,
+        0.1,
+        0.15,
+        0.025,
+        0.1,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 1612,
+        "parent_action_ticks": 23080,
+        "parent_crowd_sum": 764,
+        "care_ticks": 13616,
+        "attended_ticks": 2523,
+        "pup_crowd_sum": 760,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 186,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 46,
+        "old age": 0,
+        "neglect": 362
+      },
+      "parent_survivors": 354,
+      "parent_deaths_by_cause": {
+        "starvation": 46
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 362
+      },
+      "success_after_parent_death": 5,
+      "attendance_observed_care_fraction": 0.18529670975323148,
+      "attended_ticks_per_planned_dependent_tick": 0.10690677966101694,
+      "mean_total_pup_crowding": 0.05581668625146886
+    },
+    {
+      "objective": "survival",
+      "energy": null,
+      "background": 0,
+      "disruption": true,
+      "trials": 400,
+      "successes": 36,
+      "rate": 0.09,
+      "seed_rates": [
+        0.05,
+        0.025,
+        0.175,
+        0.15,
+        0.1,
+        0.15,
+        0.025,
+        0.075,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 1608,
+        "parent_action_ticks": 23080,
+        "parent_crowd_sum": 758,
+        "care_ticks": 13550,
+        "attended_ticks": 2322,
+        "pup_crowd_sum": 756,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 191,
+        "counterfactual_blockable_ticks": 191,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 46,
+        "old age": 0,
+        "neglect": 364
+      },
+      "parent_survivors": 354,
+      "parent_deaths_by_cause": {
+        "starvation": 46
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 364
+      },
+      "success_after_parent_death": 5,
+      "attendance_observed_care_fraction": 0.17136531365313654,
+      "attended_ticks_per_planned_dependent_tick": 0.09838983050847458,
+      "mean_total_pup_crowding": 0.055793357933579334
+    },
+    {
+      "objective": "survival",
+      "energy": null,
+      "background": 8,
+      "disruption": false,
+      "trials": 400,
+      "successes": 40,
+      "rate": 0.1,
+      "seed_rates": [
+        0.05,
+        0.025,
+        0.1,
+        0.2,
+        0.05,
+        0.2,
+        0.075,
+        0.15,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 1602,
+        "parent_action_ticks": 23020,
+        "parent_crowd_sum": 11621,
+        "care_ticks": 13537,
+        "attended_ticks": 2464,
+        "pup_crowd_sum": 109006,
+        "third_party_crowd_sum": 108296,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 2361,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 49,
+        "old age": 0,
+        "neglect": 360
+      },
+      "parent_survivors": 351,
+      "parent_deaths_by_cause": {
+        "starvation": 49
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 360
+      },
+      "success_after_parent_death": 7,
+      "attendance_observed_care_fraction": 0.1820196498485632,
+      "attended_ticks_per_planned_dependent_tick": 0.10440677966101695,
+      "mean_total_pup_crowding": 8.052448843909286
+    },
+    {
+      "objective": "survival",
+      "energy": null,
+      "background": 8,
+      "disruption": true,
+      "trials": 400,
+      "successes": 0,
+      "rate": 0.0,
+      "seed_rates": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "zero_success_training_seeds": 10,
+      "counts": {
+        "parent_meals": 1675,
+        "parent_action_ticks": 23080,
+        "parent_crowd_sum": 10993,
+        "care_ticks": 10562,
+        "attended_ticks": 92,
+        "pup_crowd_sum": 85019,
+        "third_party_crowd_sum": 84496,
+        "crowd_blocked_ticks": 1649,
+        "counterfactual_blockable_ticks": 1649
+      },
+      "deaths_by_cause": {
+        "starvation": 46,
+        "old age": 0,
+        "neglect": 400
+      },
+      "parent_survivors": 354,
+      "parent_deaths_by_cause": {
+        "starvation": 46
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 400
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.008710471501609543,
+      "attended_ticks_per_planned_dependent_tick": 0.003898305084745763,
+      "mean_total_pup_crowding": 8.049517136905889
+    },
+    {
+      "objective": "survival",
+      "energy": 10,
+      "background": 0,
+      "disruption": false,
+      "trials": 200,
+      "successes": 19,
+      "rate": 0.095,
+      "seed_rates": [
+        0.05,
+        0.05,
+        0.2,
+        0.15,
+        0.1,
+        0.15,
+        0.0,
+        0.1,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 1,
+      "counts": {
+        "parent_meals": 778,
+        "parent_action_ticks": 11080,
+        "parent_crowd_sum": 372,
+        "care_ticks": 6825,
+        "attended_ticks": 1264,
+        "pup_crowd_sum": 370,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 91,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 46,
+        "old age": 0,
+        "neglect": 181
+      },
+      "parent_survivors": 154,
+      "parent_deaths_by_cause": {
+        "starvation": 46
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 181
+      },
+      "success_after_parent_death": 5,
+      "attendance_observed_care_fraction": 0.18520146520146522,
+      "attended_ticks_per_planned_dependent_tick": 0.10711864406779661,
+      "mean_total_pup_crowding": 0.054212454212454214
+    },
+    {
+      "objective": "survival",
+      "energy": 10,
+      "background": 0,
+      "disruption": true,
+      "trials": 200,
+      "successes": 18,
+      "rate": 0.09,
+      "seed_rates": [
+        0.05,
+        0.05,
+        0.2,
+        0.15,
+        0.1,
+        0.15,
+        0.0,
+        0.05,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 1,
+      "counts": {
+        "parent_meals": 777,
+        "parent_action_ticks": 11080,
+        "parent_crowd_sum": 367,
+        "care_ticks": 6791,
+        "attended_ticks": 1164,
+        "pup_crowd_sum": 366,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 94,
+        "counterfactual_blockable_ticks": 94,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 46,
+        "old age": 0,
+        "neglect": 182
+      },
+      "parent_survivors": 154,
+      "parent_deaths_by_cause": {
+        "starvation": 46
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 182
+      },
+      "success_after_parent_death": 5,
+      "attendance_observed_care_fraction": 0.17140332793403035,
+      "attended_ticks_per_planned_dependent_tick": 0.09864406779661017,
+      "mean_total_pup_crowding": 0.05389486084523634
+    },
+    {
+      "objective": "survival",
+      "energy": 10,
+      "background": 8,
+      "disruption": false,
+      "trials": 200,
+      "successes": 19,
+      "rate": 0.095,
+      "seed_rates": [
+        0.05,
+        0.0,
+        0.1,
+        0.2,
+        0.05,
+        0.2,
+        0.05,
+        0.15,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 1,
+      "counts": {
+        "parent_meals": 770,
+        "parent_action_ticks": 11020,
+        "parent_crowd_sum": 5694,
+        "care_ticks": 6779,
+        "attended_ticks": 1212,
+        "pup_crowd_sum": 54575,
+        "third_party_crowd_sum": 54232,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 1160,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 49,
+        "old age": 0,
+        "neglect": 181
+      },
+      "parent_survivors": 151,
+      "parent_deaths_by_cause": {
+        "starvation": 49
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 181
+      },
+      "success_after_parent_death": 7,
+      "attendance_observed_care_fraction": 0.17878743177459802,
+      "attended_ticks_per_planned_dependent_tick": 0.10271186440677967,
+      "mean_total_pup_crowding": 8.050597433249742
+    },
+    {
+      "objective": "survival",
+      "energy": 10,
+      "background": 8,
+      "disruption": true,
+      "trials": 200,
+      "successes": 0,
+      "rate": 0.0,
+      "seed_rates": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "zero_success_training_seeds": 10,
+      "counts": {
+        "parent_meals": 810,
+        "parent_action_ticks": 11080,
+        "parent_crowd_sum": 5374,
+        "care_ticks": 5281,
+        "attended_ticks": 46,
+        "pup_crowd_sum": 42506,
+        "third_party_crowd_sum": 42248,
+        "crowd_blocked_ticks": 822,
+        "counterfactual_blockable_ticks": 822
+      },
+      "deaths_by_cause": {
+        "starvation": 46,
+        "old age": 0,
+        "neglect": 200
+      },
+      "parent_survivors": 154,
+      "parent_deaths_by_cause": {
+        "starvation": 46
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 200
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.008710471501609543,
+      "attended_ticks_per_planned_dependent_tick": 0.003898305084745763,
+      "mean_total_pup_crowding": 8.048854383639462
+    },
+    {
+      "objective": "survival",
+      "energy": 20,
+      "background": 0,
+      "disruption": false,
+      "trials": 200,
+      "successes": 19,
+      "rate": 0.095,
+      "seed_rates": [
+        0.05,
+        0.05,
+        0.15,
+        0.15,
+        0.1,
+        0.15,
+        0.05,
+        0.1,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 834,
+        "parent_action_ticks": 12000,
+        "parent_crowd_sum": 392,
+        "care_ticks": 6791,
+        "attended_ticks": 1259,
+        "pup_crowd_sum": 390,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 95,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 181
+      },
+      "parent_survivors": 200,
+      "parent_deaths_by_cause": {},
+      "pup_deaths_by_cause": {
+        "neglect": 181
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.18539243115888676,
+      "attended_ticks_per_planned_dependent_tick": 0.10669491525423729,
+      "mean_total_pup_crowding": 0.05742895008098955
+    },
+    {
+      "objective": "survival",
+      "energy": 20,
+      "background": 0,
+      "disruption": true,
+      "trials": 200,
+      "successes": 18,
+      "rate": 0.09,
+      "seed_rates": [
+        0.05,
+        0.0,
+        0.15,
+        0.15,
+        0.1,
+        0.15,
+        0.05,
+        0.1,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 1,
+      "counts": {
+        "parent_meals": 831,
+        "parent_action_ticks": 12000,
+        "parent_crowd_sum": 391,
+        "care_ticks": 6759,
+        "attended_ticks": 1158,
+        "pup_crowd_sum": 390,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 97,
+        "counterfactual_blockable_ticks": 97,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 182
+      },
+      "parent_survivors": 200,
+      "parent_deaths_by_cause": {},
+      "pup_deaths_by_cause": {
+        "neglect": 182
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.17132711939636042,
+      "attended_ticks_per_planned_dependent_tick": 0.09813559322033898,
+      "mean_total_pup_crowding": 0.05770084332001776
+    },
+    {
+      "objective": "survival",
+      "energy": 20,
+      "background": 8,
+      "disruption": false,
+      "trials": 200,
+      "successes": 21,
+      "rate": 0.105,
+      "seed_rates": [
+        0.05,
+        0.05,
+        0.1,
+        0.2,
+        0.05,
+        0.2,
+        0.1,
+        0.15,
+        0.1,
+        0.05
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 832,
+        "parent_action_ticks": 12000,
+        "parent_crowd_sum": 5927,
+        "care_ticks": 6758,
+        "attended_ticks": 1252,
+        "pup_crowd_sum": 54431,
+        "third_party_crowd_sum": 54064,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 1201,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 179
+      },
+      "parent_survivors": 200,
+      "parent_deaths_by_cause": {},
+      "pup_deaths_by_cause": {
+        "neglect": 179
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.1852619118082273,
+      "attended_ticks_per_planned_dependent_tick": 0.10610169491525424,
+      "mean_total_pup_crowding": 8.054306007694585
+    },
+    {
+      "objective": "survival",
+      "energy": 20,
+      "background": 8,
+      "disruption": true,
+      "trials": 200,
+      "successes": 0,
+      "rate": 0.0,
+      "seed_rates": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "zero_success_training_seeds": 10,
+      "counts": {
+        "parent_meals": 865,
+        "parent_action_ticks": 12000,
+        "parent_crowd_sum": 5619,
+        "care_ticks": 5281,
+        "attended_ticks": 46,
+        "pup_crowd_sum": 42513,
+        "third_party_crowd_sum": 42248,
+        "crowd_blocked_ticks": 827,
+        "counterfactual_blockable_ticks": 827
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 200
+      },
+      "parent_survivors": 200,
+      "parent_deaths_by_cause": {},
+      "pup_deaths_by_cause": {
+        "neglect": 200
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.008710471501609543,
+      "attended_ticks_per_planned_dependent_tick": 0.003898305084745763,
+      "mean_total_pup_crowding": 8.050179890172316
+    },
+    {
+      "objective": "offspring",
+      "energy": null,
+      "background": 0,
+      "disruption": false,
+      "trials": 400,
+      "successes": 229,
+      "rate": 0.5725,
+      "seed_rates": [
+        0.65,
+        0.55,
+        0.525,
+        0.55,
+        0.775,
+        0.45,
+        0.675,
+        0.475,
+        0.55,
+        0.525
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 532,
+        "parent_action_ticks": 21560,
+        "parent_crowd_sum": 4658,
+        "care_ticks": 19448,
+        "attended_ticks": 9659,
+        "pup_crowd_sum": 4623,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 788,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 122,
+        "old age": 0,
+        "neglect": 171
+      },
+      "parent_survivors": 278,
+      "parent_deaths_by_cause": {
+        "starvation": 122
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 171
+      },
+      "success_after_parent_death": 79,
+      "attendance_observed_care_fraction": 0.4966577540106952,
+      "attended_ticks_per_planned_dependent_tick": 0.4092796610169491,
+      "mean_total_pup_crowding": 0.23771081859317153
+    },
+    {
+      "objective": "offspring",
+      "energy": null,
+      "background": 0,
+      "disruption": true,
+      "trials": 400,
+      "successes": 225,
+      "rate": 0.5625,
+      "seed_rates": [
+        0.625,
+        0.55,
+        0.525,
+        0.525,
+        0.775,
+        0.45,
+        0.65,
+        0.475,
+        0.525,
+        0.525
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 533,
+        "parent_action_ticks": 21560,
+        "parent_crowd_sum": 4663,
+        "care_ticks": 19428,
+        "attended_ticks": 8879,
+        "pup_crowd_sum": 4629,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 788,
+        "counterfactual_blockable_ticks": 788,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 122,
+        "old age": 0,
+        "neglect": 175
+      },
+      "parent_survivors": 278,
+      "parent_deaths_by_cause": {
+        "starvation": 122
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 175
+      },
+      "success_after_parent_death": 75,
+      "attendance_observed_care_fraction": 0.4570207947292567,
+      "attended_ticks_per_planned_dependent_tick": 0.37622881355932203,
+      "mean_total_pup_crowding": 0.23826436071649165
+    },
+    {
+      "objective": "offspring",
+      "energy": null,
+      "background": 8,
+      "disruption": false,
+      "trials": 400,
+      "successes": 230,
+      "rate": 0.575,
+      "seed_rates": [
+        0.6,
+        0.525,
+        0.5,
+        0.575,
+        0.8,
+        0.45,
+        0.7,
+        0.5,
+        0.55,
+        0.55
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 551,
+        "parent_action_ticks": 21580,
+        "parent_crowd_sum": 42565,
+        "care_ticks": 19362,
+        "attended_ticks": 9575,
+        "pup_crowd_sum": 159465,
+        "third_party_crowd_sum": 154896,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 8345,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 121,
+        "old age": 0,
+        "neglect": 170
+      },
+      "parent_survivors": 279,
+      "parent_deaths_by_cause": {
+        "starvation": 121
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 170
+      },
+      "success_after_parent_death": 79,
+      "attendance_observed_care_fraction": 0.49452535895052163,
+      "attended_ticks_per_planned_dependent_tick": 0.4057203389830508,
+      "mean_total_pup_crowding": 8.235977688255346
+    },
+    {
+      "objective": "offspring",
+      "energy": null,
+      "background": 8,
+      "disruption": true,
+      "trials": 400,
+      "successes": 13,
+      "rate": 0.0325,
+      "seed_rates": [
+        0.0,
+        0.1,
+        0.025,
+        0.025,
+        0.025,
+        0.075,
+        0.025,
+        0.05,
+        0.0,
+        0.0
+      ],
+      "zero_success_training_seeds": 3,
+      "counts": {
+        "parent_meals": 847,
+        "parent_action_ticks": 22080,
+        "parent_crowd_sum": 35255,
+        "care_ticks": 12181,
+        "attended_ticks": 1025,
+        "pup_crowd_sum": 100580,
+        "third_party_crowd_sum": 97448,
+        "crowd_blocked_ticks": 5119,
+        "counterfactual_blockable_ticks": 5119,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 96,
+        "old age": 0,
+        "neglect": 387
+      },
+      "parent_survivors": 304,
+      "parent_deaths_by_cause": {
+        "starvation": 96
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 387
+      },
+      "success_after_parent_death": 2,
+      "attendance_observed_care_fraction": 0.0841474427386914,
+      "attended_ticks_per_planned_dependent_tick": 0.04343220338983051,
+      "mean_total_pup_crowding": 8.257121746983007
+    },
+    {
+      "objective": "offspring",
+      "energy": 10,
+      "background": 0,
+      "disruption": false,
+      "trials": 200,
+      "successes": 106,
+      "rate": 0.53,
+      "seed_rates": [
+        0.65,
+        0.5,
+        0.5,
+        0.55,
+        0.7,
+        0.4,
+        0.6,
+        0.45,
+        0.5,
+        0.45
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 245,
+        "parent_action_ticks": 9560,
+        "parent_crowd_sum": 1953,
+        "care_ticks": 9668,
+        "attended_ticks": 4110,
+        "pup_crowd_sum": 1949,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 331,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 122,
+        "old age": 0,
+        "neglect": 94
+      },
+      "parent_survivors": 78,
+      "parent_deaths_by_cause": {
+        "starvation": 122
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 94
+      },
+      "success_after_parent_death": 79,
+      "attendance_observed_care_fraction": 0.42511377741001244,
+      "attended_ticks_per_planned_dependent_tick": 0.3483050847457627,
+      "mean_total_pup_crowding": 0.20159288374017376
+    },
+    {
+      "objective": "offspring",
+      "energy": 10,
+      "background": 0,
+      "disruption": true,
+      "trials": 200,
+      "successes": 102,
+      "rate": 0.51,
+      "seed_rates": [
+        0.6,
+        0.5,
+        0.5,
+        0.5,
+        0.7,
+        0.4,
+        0.55,
+        0.45,
+        0.45,
+        0.45
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 245,
+        "parent_action_ticks": 9560,
+        "parent_crowd_sum": 1957,
+        "care_ticks": 9652,
+        "attended_ticks": 3782,
+        "pup_crowd_sum": 1954,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 332,
+        "counterfactual_blockable_ticks": 332,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 122,
+        "old age": 0,
+        "neglect": 98
+      },
+      "parent_survivors": 78,
+      "parent_deaths_by_cause": {
+        "starvation": 122
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 98
+      },
+      "success_after_parent_death": 75,
+      "attendance_observed_care_fraction": 0.39183588893493576,
+      "attended_ticks_per_planned_dependent_tick": 0.3205084745762712,
+      "mean_total_pup_crowding": 0.20244508910070452
+    },
+    {
+      "objective": "offspring",
+      "energy": 10,
+      "background": 8,
+      "disruption": false,
+      "trials": 200,
+      "successes": 107,
+      "rate": 0.535,
+      "seed_rates": [
+        0.6,
+        0.45,
+        0.45,
+        0.55,
+        0.75,
+        0.4,
+        0.65,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 253,
+        "parent_action_ticks": 9580,
+        "parent_crowd_sum": 18224,
+        "care_ticks": 9627,
+        "attended_ticks": 4107,
+        "pup_crowd_sum": 78947,
+        "third_party_crowd_sum": 77016,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 3635,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 121,
+        "old age": 0,
+        "neglect": 93
+      },
+      "parent_survivors": 79,
+      "parent_deaths_by_cause": {
+        "starvation": 121
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 93
+      },
+      "success_after_parent_death": 79,
+      "attendance_observed_care_fraction": 0.4266126519164849,
+      "attended_ticks_per_planned_dependent_tick": 0.3480508474576271,
+      "mean_total_pup_crowding": 8.20058169730965
+    },
+    {
+      "objective": "offspring",
+      "energy": 10,
+      "background": 8,
+      "disruption": true,
+      "trials": 200,
+      "successes": 3,
+      "rate": 0.015,
+      "seed_rates": [
+        0.0,
+        0.1,
+        0.0,
+        0.0,
+        0.0,
+        0.05,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "zero_success_training_seeds": 8,
+      "counts": {
+        "parent_meals": 373,
+        "parent_action_ticks": 10080,
+        "parent_crowd_sum": 16257,
+        "care_ticks": 6062,
+        "attended_ticks": 459,
+        "pup_crowd_sum": 49963,
+        "third_party_crowd_sum": 48496,
+        "crowd_blocked_ticks": 2480,
+        "counterfactual_blockable_ticks": 2480,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 96,
+        "old age": 0,
+        "neglect": 197
+      },
+      "parent_survivors": 104,
+      "parent_deaths_by_cause": {
+        "starvation": 96
+      },
+      "pup_deaths_by_cause": {
+        "neglect": 197
+      },
+      "success_after_parent_death": 2,
+      "attendance_observed_care_fraction": 0.07571758495546024,
+      "attended_ticks_per_planned_dependent_tick": 0.03889830508474576,
+      "mean_total_pup_crowding": 8.241999340151764
+    },
+    {
+      "objective": "offspring",
+      "energy": 20,
+      "background": 0,
+      "disruption": false,
+      "trials": 200,
+      "successes": 123,
+      "rate": 0.615,
+      "seed_rates": [
+        0.65,
+        0.6,
+        0.55,
+        0.55,
+        0.85,
+        0.5,
+        0.75,
+        0.5,
+        0.6,
+        0.6
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 287,
+        "parent_action_ticks": 12000,
+        "parent_crowd_sum": 2705,
+        "care_ticks": 9780,
+        "attended_ticks": 5549,
+        "pup_crowd_sum": 2674,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 457,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 77
+      },
+      "parent_survivors": 200,
+      "parent_deaths_by_cause": {},
+      "pup_deaths_by_cause": {
+        "neglect": 77
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.5673824130879346,
+      "attended_ticks_per_planned_dependent_tick": 0.4702542372881356,
+      "mean_total_pup_crowding": 0.2734151329243354
+    },
+    {
+      "objective": "offspring",
+      "energy": 20,
+      "background": 0,
+      "disruption": true,
+      "trials": 200,
+      "successes": 123,
+      "rate": 0.615,
+      "seed_rates": [
+        0.65,
+        0.6,
+        0.55,
+        0.55,
+        0.85,
+        0.5,
+        0.75,
+        0.5,
+        0.6,
+        0.6
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 288,
+        "parent_action_ticks": 12000,
+        "parent_crowd_sum": 2706,
+        "care_ticks": 9776,
+        "attended_ticks": 5097,
+        "pup_crowd_sum": 2675,
+        "third_party_crowd_sum": 0,
+        "crowd_blocked_ticks": 456,
+        "counterfactual_blockable_ticks": 456,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 77
+      },
+      "parent_survivors": 200,
+      "parent_deaths_by_cause": {},
+      "pup_deaths_by_cause": {
+        "neglect": 77
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.5213788870703764,
+      "attended_ticks_per_planned_dependent_tick": 0.43194915254237287,
+      "mean_total_pup_crowding": 0.2736292962356792
+    },
+    {
+      "objective": "offspring",
+      "energy": 20,
+      "background": 8,
+      "disruption": false,
+      "trials": 200,
+      "successes": 123,
+      "rate": 0.615,
+      "seed_rates": [
+        0.6,
+        0.6,
+        0.55,
+        0.6,
+        0.85,
+        0.5,
+        0.75,
+        0.5,
+        0.6,
+        0.6
+      ],
+      "zero_success_training_seeds": 0,
+      "counts": {
+        "parent_meals": 298,
+        "parent_action_ticks": 12000,
+        "parent_crowd_sum": 24341,
+        "care_ticks": 9735,
+        "attended_ticks": 5468,
+        "pup_crowd_sum": 80518,
+        "third_party_crowd_sum": 77880,
+        "crowd_blocked_ticks": 0,
+        "counterfactual_blockable_ticks": 4710,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 77
+      },
+      "parent_survivors": 200,
+      "parent_deaths_by_cause": {},
+      "pup_deaths_by_cause": {
+        "neglect": 77
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.5616846430405752,
+      "attended_ticks_per_planned_dependent_tick": 0.4633898305084746,
+      "mean_total_pup_crowding": 8.270980996404726
+    },
+    {
+      "objective": "offspring",
+      "energy": 20,
+      "background": 8,
+      "disruption": true,
+      "trials": 200,
+      "successes": 10,
+      "rate": 0.05,
+      "seed_rates": [
+        0.0,
+        0.1,
+        0.05,
+        0.05,
+        0.05,
+        0.1,
+        0.05,
+        0.1,
+        0.0,
+        0.0
+      ],
+      "zero_success_training_seeds": 3,
+      "counts": {
+        "parent_meals": 474,
+        "parent_action_ticks": 12000,
+        "parent_crowd_sum": 18998,
+        "care_ticks": 6119,
+        "attended_ticks": 566,
+        "pup_crowd_sum": 50617,
+        "third_party_crowd_sum": 48952,
+        "crowd_blocked_ticks": 2639,
+        "counterfactual_blockable_ticks": 2639,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 190
+      },
+      "parent_survivors": 200,
+      "parent_deaths_by_cause": {},
+      "pup_deaths_by_cause": {
+        "neglect": 190
+      },
+      "success_after_parent_death": 0,
+      "attendance_observed_care_fraction": 0.0924987743095277,
+      "attended_ticks_per_planned_dependent_tick": 0.047966101694915254,
+      "mean_total_pup_crowding": 8.272103284850466
+    }
+  ],
+  "paired_contrasts": [
+    {
+      "contrast": "policy_advantage_background_0_disruption_0",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": 0.4774999999999999,
+      "ci95": [
+        0.40499999999999997,
+        0.5549999999999999
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.6,
+        0.5,
+        0.35000000000000003,
+        0.4,
+        0.675,
+        0.30000000000000004,
+        0.65,
+        0.375,
+        0.45000000000000007,
+        0.47500000000000003
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_1",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": 0.4725,
+      "ci95": [
+        0.4000000000000001,
+        0.5475000000000001
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.575,
+        0.525,
+        0.35000000000000003,
+        0.375,
+        0.675,
+        0.30000000000000004,
+        0.625,
+        0.39999999999999997,
+        0.42500000000000004,
+        0.47500000000000003
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_0",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": 0.475,
+      "ci95": [
+        0.39249999999999996,
+        0.5625
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.5499999999999999,
+        0.5,
+        0.4,
+        0.37499999999999994,
+        0.75,
+        0.25,
+        0.625,
+        0.35,
+        0.45000000000000007,
+        0.5
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_1",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": 0.03250000000000001,
+      "ci95": [
+        0.015,
+        0.052500000000000005
+      ],
+      "exact_two_sided_sign_flip_p": 0.015625,
+      "seed_effects": [
+        0.0,
+        0.1,
+        0.025,
+        0.025,
+        0.025,
+        0.075,
+        0.025,
+        0.05,
+        0.0,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.046875
+    },
+    {
+      "contrast": "disruption_effect_survival_background_0",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": -0.005000000000000001,
+      "ci95": [
+        -0.0125,
+        0.0
+      ],
+      "exact_two_sided_sign_flip_p": 0.5,
+      "seed_effects": [
+        0.0,
+        -0.025,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.02500000000000001,
+        0.0,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.5
+    },
+    {
+      "contrast": "disruption_effect_survival_background_8",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": -0.1,
+      "ci95": [
+        -0.13999999999999999,
+        -0.065
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        -0.05,
+        -0.025,
+        -0.1,
+        -0.2,
+        -0.05,
+        -0.2,
+        -0.075,
+        -0.15,
+        -0.1,
+        -0.05
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_0",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": -0.010000000000000009,
+      "ci95": [
+        -0.017500000000000016,
+        -0.0025000000000000022
+      ],
+      "exact_two_sided_sign_flip_p": 0.125,
+      "seed_effects": [
+        -0.025000000000000022,
+        0.0,
+        0.0,
+        -0.025000000000000022,
+        0.0,
+        0.0,
+        -0.025000000000000022,
+        0.0,
+        -0.025000000000000022,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.25
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_8",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": -0.5424999999999999,
+      "ci95": [
+        -0.615,
+        -0.475
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        -0.6,
+        -0.42500000000000004,
+        -0.475,
+        -0.5499999999999999,
+        -0.775,
+        -0.375,
+        -0.6749999999999999,
+        -0.45,
+        -0.55,
+        -0.55
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_x_crowding_x_disruption",
+      "energy": null,
+      "n_training_pairs": 10,
+      "mean": -0.4375,
+      "ci95": [
+        -0.53,
+        -0.35
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        -0.525,
+        -0.425,
+        -0.375,
+        -0.3249999999999999,
+        -0.725,
+        -0.17499999999999993,
+        -0.575,
+        -0.32500000000000007,
+        -0.42500000000000016,
+        -0.5000000000000001
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_0",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": 0.43499999999999994,
+      "ci95": [
+        0.36,
+        0.51
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.6,
+        0.45,
+        0.3,
+        0.4,
+        0.6,
+        0.25,
+        0.6,
+        0.35,
+        0.4,
+        0.4
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_1",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": 0.42000000000000004,
+      "ci95": [
+        0.355,
+        0.48999999999999994
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.5499999999999999,
+        0.45,
+        0.3,
+        0.35,
+        0.6,
+        0.25,
+        0.55,
+        0.4,
+        0.35,
+        0.4
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_0",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": 0.43999999999999995,
+      "ci95": [
+        0.35500000000000004,
+        0.525
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.5499999999999999,
+        0.45,
+        0.35,
+        0.35000000000000003,
+        0.7,
+        0.2,
+        0.6,
+        0.35,
+        0.4,
+        0.45
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_1",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": 0.015000000000000003,
+      "ci95": [
+        0.0,
+        0.035
+      ],
+      "exact_two_sided_sign_flip_p": 0.5,
+      "seed_effects": [
+        0.0,
+        0.1,
+        0.0,
+        0.0,
+        0.0,
+        0.05,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 1.0
+    },
+    {
+      "contrast": "disruption_effect_survival_background_0",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": -0.005,
+      "ci95": [
+        -0.015000000000000003,
+        0.0
+      ],
+      "exact_two_sided_sign_flip_p": 1.0,
+      "seed_effects": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.05,
+        0.0,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 1.0
+    },
+    {
+      "contrast": "disruption_effect_survival_background_8",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": -0.095,
+      "ci95": [
+        -0.135,
+        -0.05500000000000001
+      ],
+      "exact_two_sided_sign_flip_p": 0.00390625,
+      "seed_effects": [
+        -0.05,
+        0.0,
+        -0.1,
+        -0.2,
+        -0.05,
+        -0.2,
+        -0.05,
+        -0.15,
+        -0.1,
+        -0.05
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_0",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": -0.02,
+      "ci95": [
+        -0.03500000000000001,
+        -0.004999999999999999
+      ],
+      "exact_two_sided_sign_flip_p": 0.125,
+      "seed_effects": [
+        -0.050000000000000044,
+        0.0,
+        0.0,
+        -0.050000000000000044,
+        0.0,
+        0.0,
+        -0.04999999999999993,
+        0.0,
+        -0.04999999999999999,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.375
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_8",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": -0.52,
+      "ci95": [
+        -0.595,
+        -0.45
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        -0.6,
+        -0.35,
+        -0.45,
+        -0.55,
+        -0.75,
+        -0.35000000000000003,
+        -0.65,
+        -0.5,
+        -0.5,
+        -0.5
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_x_crowding_x_disruption",
+      "energy": 10,
+      "n_training_pairs": 10,
+      "mean": -0.41,
+      "ci95": [
+        -0.5,
+        -0.32499999999999996
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        -0.49999999999999994,
+        -0.35,
+        -0.35,
+        -0.3,
+        -0.7,
+        -0.14999999999999997,
+        -0.5500000000000002,
+        -0.4,
+        -0.35,
+        -0.44999999999999996
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_0",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": 0.52,
+      "ci95": [
+        0.44499999999999995,
+        0.6000000000000001
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.6,
+        0.5499999999999999,
+        0.4,
+        0.4,
+        0.75,
+        0.35,
+        0.7,
+        0.4,
+        0.5,
+        0.5499999999999999
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_0_disruption_1",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": 0.525,
+      "ci95": [
+        0.445,
+        0.61
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.6,
+        0.6,
+        0.4,
+        0.4,
+        0.75,
+        0.35,
+        0.7,
+        0.4,
+        0.5,
+        0.5499999999999999
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_0",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": 0.51,
+      "ci95": [
+        0.425,
+        0.5999999999999999
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        0.5499999999999999,
+        0.5499999999999999,
+        0.45000000000000007,
+        0.39999999999999997,
+        0.7999999999999999,
+        0.3,
+        0.65,
+        0.35,
+        0.5,
+        0.5499999999999999
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_advantage_background_8_disruption_1",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": 0.05,
+      "ci95": [
+        0.025,
+        0.075
+      ],
+      "exact_two_sided_sign_flip_p": 0.015625,
+      "seed_effects": [
+        0.0,
+        0.1,
+        0.05,
+        0.05,
+        0.05,
+        0.1,
+        0.05,
+        0.1,
+        0.0,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.046875
+    },
+    {
+      "contrast": "disruption_effect_survival_background_0",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": -0.005,
+      "ci95": [
+        -0.015000000000000003,
+        0.0
+      ],
+      "exact_two_sided_sign_flip_p": 1.0,
+      "seed_effects": [
+        0.0,
+        -0.05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 1.0
+    },
+    {
+      "contrast": "disruption_effect_survival_background_8",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": -0.10500000000000001,
+      "ci95": [
+        -0.14,
+        -0.07000000000000002
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        -0.05,
+        -0.05,
+        -0.1,
+        -0.2,
+        -0.05,
+        -0.2,
+        -0.1,
+        -0.15,
+        -0.1,
+        -0.05
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_0",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "exact_two_sided_sign_flip_p": 1.0,
+      "seed_effects": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 1.0
+    },
+    {
+      "contrast": "disruption_effect_offspring_background_8",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": -0.5649999999999998,
+      "ci95": [
+        -0.6399999999999999,
+        -0.495
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        -0.6,
+        -0.5,
+        -0.5,
+        -0.5499999999999999,
+        -0.7999999999999999,
+        -0.4,
+        -0.7,
+        -0.4,
+        -0.6,
+        -0.6
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    },
+    {
+      "contrast": "policy_x_crowding_x_disruption",
+      "energy": 20,
+      "n_training_pairs": 10,
+      "mean": -0.46499999999999997,
+      "ci95": [
+        -0.56,
+        -0.36500000000000005
+      ],
+      "exact_two_sided_sign_flip_p": 0.001953125,
+      "seed_effects": [
+        -0.5499999999999999,
+        -0.5000000000000001,
+        -0.4,
+        -0.35000000000000003,
+        -0.7499999999999999,
+        -0.2,
+        -0.6,
+        -0.25,
+        -0.5,
+        -0.5499999999999999
+      ],
+      "holm_adjusted_p_within_nine_contrasts": 0.017578125
+    }
+  ],
+  "runtime_seconds": 77.89309012400008,
+  "analysis_method": "Equal-weight independent training-seed pairs; bootstrap 100000 paired resamples, seed 20261014; exact two-sided sign flip over 1024 patterns; Holm within each nine-contrast family. Energy-stratified contrasts secondary. Intervals unadjusted.",
+  "interaction_definition": "[(offspring-survival) high/on - high/off] - [(offspring-survival) low/on - low/off]",
+  "integrity": {
+    "trials": 3200,
+    "expected_files": 22,
+    "protected_files_unchanged": 140,
+    "matched_initial_states": true,
+    "population_and_mortality_accounting": true,
+    "runner_hash_matches_manifest": true
+  },
+  "output_sha256": {
+    "offspring_s0.json": "b07a46f24246fef1370e86b1dd350bbad082c9e5b113ae413ee21c381ee53fc1",
+    "manifest.json": "4da076c8afe0fd472c4cbf24e09bc5133accd7f55c859176163fc7f91e1b00b0",
+    "offspring_s2.json": "1bd50523950d277d84188e1d23a375b1b96f43daa4232ce73a2c5bc5bb20696a",
+    "survival_s2.json": "c70915952e56a39b5e5d69d750e78eaeea87b10d8688a01c23443bcdf9e328c5",
+    "offspring_s5.json": "29c08f97179556e8eed3020df18e60833f750bc101fd4a2ebf09ebaf3cb42abe",
+    "offspring_s7.json": "c7912861dc8d271b706232615833114988dd24912d4a5d7ddad04753d6355868",
+    "survival_s0.json": "928867a8d5c1d6d2b1ac8ecbb38896bdcb3588edbc22997f26d898945a68fc6a",
+    "survival_s5.json": "9ec16e76181e7116d768e5b6b6fd366de373603e21206e2a20dcfa6cecce7ee2",
+    "survival_s7.json": "c2f59b61e026f508a5d09ad7ecb83fa334c5c1070c1268749d0812a6cb75f5b0",
+    "survival_s9.json": "45f67f76991d89e8655789294ba48ead4dc4e2a4251170be75b5e713e91cd402",
+    "survival_s6.json": "0f0eafe58e7986e533e3374f255df41da370e28436f0cad9b2fce90a8e3d59dd",
+    "summary.json": "b354e3d6f64e2c30969cdf7e8e0e6eae10866fa7d7b22c70b405a984ea50caf0",
+    "offspring_s8.json": "58f849771958fa676d0dbf879ed7b75dd943f28b33326c50c2f37032645390ac",
+    "survival_s8.json": "073ed7bb44af5737de0509a7ee7a3f8ceedb2f8eac9b9004e79fef41b60fdbd0",
+    "offspring_s4.json": "3bf47d0f1627362ce996e00803a59df44e1a63ed6a46fee54f8ec00c0c3a238a",
+    "offspring_s3.json": "caa0f285c449a5b24b16f771444ffdd63bdc3cc033179b2864211a7b26aa3d1b",
+    "offspring_s1.json": "8978c19100da1d6227eb2a0d4852e8f3f8341bdc898865f9c32295535a336c96",
+    "survival_s4.json": "7d8ba2cf9766b5efe443e30327597fdd063a9e19e0f4e23fdd5d2aeeb862490f",
+    "offspring_s9.json": "f5577664de2086f8a7e42a3fb96edcb7dd892ef3831e41a33f8e7331b925cedb",
+    "survival_s3.json": "32e5d4342f6c25290393790a2a186c6d4478ecfdb909dce75ce823758a62de07",
+    "offspring_s6.json": "9fb4917897a3f9887b747964c441d068e5798ddaab3dcabb3fc4a9f33c19aab8",
+    "survival_s1.json": "218e83c7d5d0eec9d5e30a1f18422f80f43c64ba0dbe8287c93124bfef93a7d7"
+  }
+}

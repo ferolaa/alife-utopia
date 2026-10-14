@@ -7,6 +7,12 @@ venv/
 .vscode/
 results/*.csv
 
+# Immutable Phase 2 trial JSON is preserved byte-for-byte in *_archive/*.json.gz.
+# Keep original local JSON; avoid committing a second 157 MB copy.
+results/controlled_care_v1/*_s*.json
+# All 96 pilot records are exact subsets of the full matrix; retain its metadata.
+results/controlled_care_pilot_v1/*_s*.json
+
 # Figures are kept, unlike the usual convention of ignoring generated images.
 # This is a graded project: the figures should be visible to anyone who opens the
 # repository, without having to install anything and re-run the experiments.
