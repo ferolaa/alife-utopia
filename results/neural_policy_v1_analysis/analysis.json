@@ -1,0 +1,641 @@
+{
+  "contrasts": [
+    {
+      "contrast": "survival_training",
+      "seed_effects": [
+        -0.175,
+        -0.04999999999999999,
+        0.02500000000000001,
+        0.10000000000000003,
+        -0.22500000000000003,
+        -0.275,
+        -0.024999999999999994,
+        0.0,
+        -0.225,
+        -0.15000000000000002
+      ],
+      "mean": -0.1,
+      "ci95": [
+        -0.17250000000000001,
+        -0.02499999999999999
+      ],
+      "exact_p": 0.04296875,
+      "negative_seeds": 7,
+      "zero_seeds": 1,
+      "positive_seeds": 2,
+      "holm_p": 0.0859375
+    },
+    {
+      "contrast": "offspring_training",
+      "seed_effects": [
+        0.44999999999999996,
+        0.42499999999999993,
+        0.47500000000000003,
+        0.39999999999999997,
+        0.35,
+        0.0,
+        0.35,
+        0.24999999999999997,
+        0.275,
+        0.125
+      ],
+      "mean": 0.31,
+      "ci95": [
+        0.215,
+        0.39249999999999996
+      ],
+      "exact_p": 0.00390625,
+      "negative_seeds": 0,
+      "zero_seeds": 1,
+      "positive_seeds": 9,
+      "holm_p": 0.01171875
+    },
+    {
+      "contrast": "survival_masking",
+      "seed_effects": [
+        -0.075,
+        -0.05,
+        -0.05,
+        -0.22500000000000003,
+        0.0,
+        0.04999999999999999,
+        0.0,
+        -0.05,
+        0.0,
+        -0.025
+      ],
+      "mean": -0.0425,
+      "ci95": [
+        -0.09000000000000001,
+        -0.005000000000000003
+      ],
+      "exact_p": 0.09375,
+      "negative_seeds": 6,
+      "zero_seeds": 3,
+      "positive_seeds": 1,
+      "holm_p": 0.09375
+    },
+    {
+      "contrast": "offspring_masking",
+      "seed_effects": [
+        -0.6,
+        -0.575,
+        -0.55,
+        -0.49999999999999994,
+        -0.575,
+        -0.275,
+        -0.45,
+        -0.32499999999999996,
+        -0.45,
+        -0.325
+      ],
+      "mean": -0.4625,
+      "ci95": [
+        -0.53,
+        -0.39249999999999996
+      ],
+      "exact_p": 0.001953125,
+      "negative_seeds": 10,
+      "zero_seeds": 0,
+      "positive_seeds": 0,
+      "holm_p": 0.0078125
+    }
+  ],
+  "seed_results": [
+    {
+      "seed": 0,
+      "initial": 0.25,
+      "survival_normal": 0.075,
+      "offspring_normal": 0.7,
+      "survival_masked": 0.0,
+      "offspring_masked": 0.1,
+      "survival_training": -0.175,
+      "offspring_training": 0.44999999999999996,
+      "survival_masking": -0.075,
+      "offspring_masking": -0.6
+    },
+    {
+      "seed": 1,
+      "initial": 0.15,
+      "survival_normal": 0.1,
+      "offspring_normal": 0.575,
+      "survival_masked": 0.05,
+      "offspring_masked": 0.0,
+      "survival_training": -0.04999999999999999,
+      "offspring_training": 0.42499999999999993,
+      "survival_masking": -0.05,
+      "offspring_masking": -0.575
+    },
+    {
+      "seed": 2,
+      "initial": 0.075,
+      "survival_normal": 0.1,
+      "offspring_normal": 0.55,
+      "survival_masked": 0.05,
+      "offspring_masked": 0.0,
+      "survival_training": 0.02500000000000001,
+      "offspring_training": 0.47500000000000003,
+      "survival_masking": -0.05,
+      "offspring_masking": -0.55
+    },
+    {
+      "seed": 3,
+      "initial": 0.175,
+      "survival_normal": 0.275,
+      "offspring_normal": 0.575,
+      "survival_masked": 0.05,
+      "offspring_masked": 0.075,
+      "survival_training": 0.10000000000000003,
+      "offspring_training": 0.39999999999999997,
+      "survival_masking": -0.22500000000000003,
+      "offspring_masking": -0.49999999999999994
+    },
+    {
+      "seed": 4,
+      "initial": 0.275,
+      "survival_normal": 0.05,
+      "offspring_normal": 0.625,
+      "survival_masked": 0.05,
+      "offspring_masked": 0.05,
+      "survival_training": -0.22500000000000003,
+      "offspring_training": 0.35,
+      "survival_masking": 0.0,
+      "offspring_masking": -0.575
+    },
+    {
+      "seed": 5,
+      "initial": 0.375,
+      "survival_normal": 0.1,
+      "offspring_normal": 0.375,
+      "survival_masked": 0.15,
+      "offspring_masked": 0.1,
+      "survival_training": -0.275,
+      "offspring_training": 0.0,
+      "survival_masking": 0.04999999999999999,
+      "offspring_masking": -0.275
+    },
+    {
+      "seed": 6,
+      "initial": 0.15,
+      "survival_normal": 0.125,
+      "offspring_normal": 0.5,
+      "survival_masked": 0.125,
+      "offspring_masked": 0.05,
+      "survival_training": -0.024999999999999994,
+      "offspring_training": 0.35,
+      "survival_masking": 0.0,
+      "offspring_masking": -0.45
+    },
+    {
+      "seed": 7,
+      "initial": 0.1,
+      "survival_normal": 0.1,
+      "offspring_normal": 0.35,
+      "survival_masked": 0.05,
+      "offspring_masked": 0.025,
+      "survival_training": 0.0,
+      "offspring_training": 0.24999999999999997,
+      "survival_masking": -0.05,
+      "offspring_masking": -0.32499999999999996
+    },
+    {
+      "seed": 8,
+      "initial": 0.225,
+      "survival_normal": 0.0,
+      "offspring_normal": 0.5,
+      "survival_masked": 0.0,
+      "offspring_masked": 0.05,
+      "survival_training": -0.225,
+      "offspring_training": 0.275,
+      "survival_masking": 0.0,
+      "offspring_masking": -0.45
+    },
+    {
+      "seed": 9,
+      "initial": 0.2,
+      "survival_normal": 0.05,
+      "offspring_normal": 0.325,
+      "survival_masked": 0.025,
+      "offspring_masked": 0.0,
+      "survival_training": -0.15000000000000002,
+      "offspring_training": 0.125,
+      "survival_masking": -0.025,
+      "offspring_masking": -0.325
+    }
+  ],
+  "groups": [
+    {
+      "cell": "initial",
+      "energy": null,
+      "trials": 400,
+      "successes": 79,
+      "success_rate": 0.1975,
+      "attended_ticks": 4199,
+      "care_ticks": 15163,
+      "attendance_fraction": 0.27692409153861375,
+      "parent_meals": 293,
+      "parent_deaths": 56,
+      "parent_deaths_by_cause": {
+        "starvation": 56,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 321
+      },
+      "parent_alive_early_stop": 289,
+      "parent_survived_full_trial": 55,
+      "posthumous_independence": 24,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "survival_normal",
+      "energy": null,
+      "trials": 400,
+      "successes": 39,
+      "success_rate": 0.0975,
+      "attended_ticks": 2495,
+      "care_ticks": 13531,
+      "attendance_fraction": 0.18439139753159411,
+      "parent_meals": 887,
+      "parent_deaths": 9,
+      "parent_deaths_by_cause": {
+        "starvation": 9,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 361
+      },
+      "parent_alive_early_stop": 357,
+      "parent_survived_full_trial": 34,
+      "posthumous_independence": 5,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "offspring_normal",
+      "energy": null,
+      "trials": 400,
+      "successes": 203,
+      "success_rate": 0.5075,
+      "attended_ticks": 8374,
+      "care_ticks": 18817,
+      "attendance_fraction": 0.445023117393846,
+      "parent_meals": 405,
+      "parent_deaths": 80,
+      "parent_deaths_by_cause": {
+        "starvation": 80,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 197
+      },
+      "parent_alive_early_stop": 174,
+      "parent_survived_full_trial": 146,
+      "posthumous_independence": 57,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "survival_masked",
+      "energy": null,
+      "trials": 400,
+      "successes": 22,
+      "success_rate": 0.055,
+      "attended_ticks": 1859,
+      "care_ticks": 12748,
+      "attendance_fraction": 0.14582679636021337,
+      "parent_meals": 1031,
+      "parent_deaths": 9,
+      "parent_deaths_by_cause": {
+        "starvation": 9,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 378
+      },
+      "parent_alive_early_stop": 374,
+      "parent_survived_full_trial": 17,
+      "posthumous_independence": 5,
+      "mean_same_state_kl": 0.03490209507511585,
+      "argmax_change_fraction": 0.289804634975876
+    },
+    {
+      "cell": "offspring_masked",
+      "energy": null,
+      "trials": 400,
+      "successes": 18,
+      "success_rate": 0.045,
+      "attended_ticks": 1583,
+      "care_ticks": 12572,
+      "attendance_fraction": 0.12591473114858415,
+      "parent_meals": 863,
+      "parent_deaths": 7,
+      "parent_deaths_by_cause": {
+        "starvation": 7,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 382
+      },
+      "parent_alive_early_stop": 380,
+      "parent_survived_full_trial": 13,
+      "posthumous_independence": 5,
+      "mean_same_state_kl": 0.12668840887658364,
+      "argmax_change_fraction": 0.6060024009603842
+    },
+    {
+      "cell": "initial",
+      "energy": 10,
+      "trials": 200,
+      "successes": 36,
+      "success_rate": 0.18,
+      "attended_ticks": 1948,
+      "care_ticks": 7580,
+      "attendance_fraction": 0.2569920844327177,
+      "parent_meals": 143,
+      "parent_deaths": 56,
+      "parent_deaths_by_cause": {
+        "starvation": 56,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 164
+      },
+      "parent_alive_early_stop": 132,
+      "parent_survived_full_trial": 12,
+      "posthumous_independence": 24,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "survival_normal",
+      "energy": 10,
+      "trials": 200,
+      "successes": 19,
+      "success_rate": 0.095,
+      "attended_ticks": 1208,
+      "care_ticks": 6755,
+      "attendance_fraction": 0.1788304959289415,
+      "parent_meals": 445,
+      "parent_deaths": 9,
+      "parent_deaths_by_cause": {
+        "starvation": 9,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 181
+      },
+      "parent_alive_early_stop": 177,
+      "parent_survived_full_trial": 14,
+      "posthumous_independence": 5,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "offspring_normal",
+      "energy": 10,
+      "trials": 200,
+      "successes": 97,
+      "success_rate": 0.485,
+      "attended_ticks": 3776,
+      "care_ticks": 9397,
+      "attendance_fraction": 0.4018303713951261,
+      "parent_meals": 190,
+      "parent_deaths": 80,
+      "parent_deaths_by_cause": {
+        "starvation": 80,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 103
+      },
+      "parent_alive_early_stop": 80,
+      "parent_survived_full_trial": 40,
+      "posthumous_independence": 57,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "survival_masked",
+      "energy": 10,
+      "trials": 200,
+      "successes": 10,
+      "success_rate": 0.05,
+      "attended_ticks": 888,
+      "care_ticks": 6374,
+      "attendance_fraction": 0.1393159711327267,
+      "parent_meals": 513,
+      "parent_deaths": 9,
+      "parent_deaths_by_cause": {
+        "starvation": 9,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 190
+      },
+      "parent_alive_early_stop": 186,
+      "parent_survived_full_trial": 5,
+      "posthumous_independence": 5,
+      "mean_same_state_kl": 0.03533419162484059,
+      "argmax_change_fraction": 0.29047237790232183
+    },
+    {
+      "cell": "offspring_masked",
+      "energy": 10,
+      "trials": 200,
+      "successes": 10,
+      "success_rate": 0.05,
+      "attended_ticks": 800,
+      "care_ticks": 6321,
+      "attendance_fraction": 0.1265622528081,
+      "parent_meals": 430,
+      "parent_deaths": 7,
+      "parent_deaths_by_cause": {
+        "starvation": 7,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 190
+      },
+      "parent_alive_early_stop": 188,
+      "parent_survived_full_trial": 5,
+      "posthumous_independence": 5,
+      "mean_same_state_kl": 0.1270929816840758,
+      "argmax_change_fraction": 0.6101477199743096
+    },
+    {
+      "cell": "initial",
+      "energy": 20,
+      "trials": 200,
+      "successes": 43,
+      "success_rate": 0.215,
+      "attended_ticks": 2251,
+      "care_ticks": 7583,
+      "attendance_fraction": 0.2968482131082685,
+      "parent_meals": 150,
+      "parent_deaths": 0,
+      "parent_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 157
+      },
+      "parent_alive_early_stop": 157,
+      "parent_survived_full_trial": 43,
+      "posthumous_independence": 0,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "survival_normal",
+      "energy": 20,
+      "trials": 200,
+      "successes": 20,
+      "success_rate": 0.1,
+      "attended_ticks": 1287,
+      "care_ticks": 6776,
+      "attendance_fraction": 0.18993506493506493,
+      "parent_meals": 442,
+      "parent_deaths": 0,
+      "parent_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 180
+      },
+      "parent_alive_early_stop": 180,
+      "parent_survived_full_trial": 20,
+      "posthumous_independence": 0,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "offspring_normal",
+      "energy": 20,
+      "trials": 200,
+      "successes": 106,
+      "success_rate": 0.53,
+      "attended_ticks": 4598,
+      "care_ticks": 9420,
+      "attendance_fraction": 0.4881104033970276,
+      "parent_meals": 215,
+      "parent_deaths": 0,
+      "parent_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 94
+      },
+      "parent_alive_early_stop": 94,
+      "parent_survived_full_trial": 106,
+      "posthumous_independence": 0,
+      "mean_same_state_kl": 0.0,
+      "argmax_change_fraction": 0.0
+    },
+    {
+      "cell": "survival_masked",
+      "energy": 20,
+      "trials": 200,
+      "successes": 12,
+      "success_rate": 0.06,
+      "attended_ticks": 971,
+      "care_ticks": 6374,
+      "attendance_fraction": 0.15233762158770003,
+      "parent_meals": 518,
+      "parent_deaths": 0,
+      "parent_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 188
+      },
+      "parent_alive_early_stop": 188,
+      "parent_survived_full_trial": 12,
+      "posthumous_independence": 0,
+      "mean_same_state_kl": 0.03448033156260711,
+      "argmax_change_fraction": 0.289152860268834
+    },
+    {
+      "cell": "offspring_masked",
+      "energy": 20,
+      "trials": 200,
+      "successes": 8,
+      "success_rate": 0.04,
+      "attended_ticks": 783,
+      "care_ticks": 6251,
+      "attendance_fraction": 0.12525995840665494,
+      "parent_meals": 433,
+      "parent_deaths": 0,
+      "parent_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 0
+      },
+      "pup_deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 192
+      },
+      "parent_alive_early_stop": 192,
+      "parent_survived_full_trial": 8,
+      "posthumous_independence": 0,
+      "mean_same_state_kl": 0.12628635375530378,
+      "argmax_change_fraction": 0.6018828785702888
+    }
+  ],
+  "method": "ten paired training seeds; 100000 paired percentile bootstrap resamples, RNG 20261014; 1024 exact two-sided sign flips; Holm across four prespecified contrasts; fixed-world conditional unadjusted 95% intervals",
+  "input_sha256": {
+    "manifest.json": "1833c7020831691ada773ffbde3961c5a22080ade29e20e5fdf12525bb71503a",
+    "INTEGRITY.json": "8a9200cd8755de79ace9f8aa4a959d0bd20d52129a76c025c8edc16de4366c4d",
+    "summary.json": "b6ac49f2013068ec9a13be2b3a4d98c2453e1b36ec2aaffa1d095167e863869f",
+    "records.json": "1027a1700b01c94834be5269377701dba55b86c8b72bc5e868fb878e5f5f4f1c"
+  },
+  "analysis_source_sha256": "720d80edfc39cdee53ba71ee12ba0bd1f92646a8806eb3413c542c87bc9d61fb"
+}

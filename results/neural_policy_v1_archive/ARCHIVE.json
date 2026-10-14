@@ -1,0 +1,27 @@
+{
+  "format": "ZIP DEFLATE, lossless original bytes",
+  "source_directory": "neural_policy_v1",
+  "files": 4,
+  "trials": 2000,
+  "original_bytes": 93303489,
+  "archive_bytes": 10968136,
+  "archive_sha256": "5d5f0bf7054dedc17e8a34756022201e4b20a801a2344bbc14431bb06996cf6d",
+  "records": {
+    "INTEGRITY.json": {
+      "bytes": 262,
+      "sha256": "8a9200cd8755de79ace9f8aa4a959d0bd20d52129a76c025c8edc16de4366c4d"
+    },
+    "manifest.json": {
+      "bytes": 4330,
+      "sha256": "1833c7020831691ada773ffbde3961c5a22080ade29e20e5fdf12525bb71503a"
+    },
+    "records.json": {
+      "bytes": 93287105,
+      "sha256": "1027a1700b01c94834be5269377701dba55b86c8b72bc5e868fb878e5f5f4f1c"
+    },
+    "summary.json": {
+      "bytes": 11792,
+      "sha256": "b6ac49f2013068ec9a13be2b3a4d98c2453e1b36ec2aaffa1d095167e863869f"
+    }
+  }
+}

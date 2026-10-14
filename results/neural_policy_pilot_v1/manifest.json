@@ -1,0 +1,91 @@
+{
+  "scope": "pilot only",
+  "training_seeds": [
+    0,
+    1
+  ],
+  "world_seeds": [
+    100000,
+    100001,
+    100002
+  ],
+  "parent_energies": [
+    10,
+    20
+  ],
+  "cells": [
+    "initial",
+    "survival_normal",
+    "offspring_normal",
+    "survival_masked",
+    "offspring_masked"
+  ],
+  "expected_trials": 60,
+  "unique_initial_networks_verified": 10,
+  "unique_initial_networks_evaluated": 2,
+  "trained_networks_evaluated": 4,
+  "checkpoint_sha256": {
+    "survival_s0.pt": "e4840e58dfc6701b064bbff40e0da692c336969df02761781b8ef89be7fe63e7",
+    "offspring_s0.pt": "2bd7836236a9aa46ebf356482099293070114ab48326fc5b4b5f2977df33f4fa",
+    "survival_s1.pt": "cdb0f16b0c5db3b04a99ee634175b5caeebcdd13c27cda0d55e0cf9283af235a",
+    "offspring_s1.pt": "bfa66a0724095fb626ef7c75218f3e022506062a320f76e2dc8dcb9dabee25c2",
+    "survival_s2.pt": "957f862f7d286e662e68091389eae4e4a3b2072b46543e7311312dd70c80e9a4",
+    "offspring_s2.pt": "968f2bd7c09e98633a12abddd4bdf9e07f73a116e581682bb6388922ea35aa55",
+    "survival_s3.pt": "2ec36b559c399957c8f679ef54c407b29078f0cc5dede2a4d19ff8dabece61c8",
+    "offspring_s3.pt": "b318fa7d514204d7fa1b6a9ede3d6ec60b0bbd49f3b9205b72cd3dce85f5a4c3",
+    "survival_s4.pt": "10df11c1337b30a297d879d97fdafbf7f90ef2df0cd05126bcecaed9bab7f067",
+    "offspring_s4.pt": "84fa019e32a90b3100c0491b5266b4f42a7ddf5c906eb842670b69889cbe781f",
+    "survival_s5.pt": "3d5be08d0d89147f4fc4648a16d2e85255ec9c552405d286561b4b06a2061149",
+    "offspring_s5.pt": "7586d6e7bfaed60dd399d9b4c41c1837a31637ac3ee587f93a2ce59f214fbb63",
+    "survival_s6.pt": "abe2e859420ab1348cf55c7b875a40b8065dbf67d8bb63a1631d07b6d4334f6f",
+    "offspring_s6.pt": "f8232f5378bb18c6214f93735b95b3a4d01fc34c9224d480c536e18bd03fbab7",
+    "survival_s7.pt": "88f31042b47ce9b8b12ca7c2575e20766d4375b8665ee05d98f7e26ce0f7bf79",
+    "offspring_s7.pt": "dbc6e243a046f8fd0e6da4e14df0424d2d099efe0d01ee89ced81e0832f1be57",
+    "survival_s8.pt": "be5d037764fac0f620cc31909253f566244d93450dcba876554d212e5dc45168",
+    "offspring_s8.pt": "143069b4f6dbb72b3afe533a0550b6335d6991508cf3caa772320c6bbbfabc03",
+    "survival_s9.pt": "0ecfb9be76adf90dc6e55dd46393a31b3692dbe315a3ad8236b401d82ad6a3ab",
+    "offspring_s9.pt": "c4507fd256085d1bc5fa50075507c6d0f63ba85c5c10ebbb59b3946b3cdaa6bd"
+  },
+  "initial_parameter_hashes": {
+    "0": "8418a475b9d93d20bba534ef405c925e2b88b4be254d8e19a2ca8952a7f63022",
+    "1": "ad2d7951f93950eb54b3fe9bbb322274e4b81844cf29c89d82f3e923091403da",
+    "2": "2b767bd4810e077841f0eb91fb66baf07a7245d3ca2f5d133de98bd45a9de130",
+    "3": "66d1d37539caf994fcb33c11f4c737d95563d9a544922d2a29650b8d20a5a7df",
+    "4": "0914c4f5063e236aabecd005ca242ddffdf464f0d8be17a81481764d8abaf903",
+    "5": "517f8689c6ae847e16e0fbf7fde086204327a5ad8527c111058f34a7015e8c5d",
+    "6": "c1bee1b55469060570e80f46491d2815c3a97067a3012c2df094e66248e2e734",
+    "7": "29e919ad8e6487edceb1b6c5e8cf508206f51966f1ddf3e2c1ce05e60f977e8a",
+    "8": "f64a86a32f44c1da1dd093e81ae3c302c27c0b39dcb9e0bb9f4c5a8194bc2b67",
+    "9": "1e102d848e9d15751cb17c91eaa831a4f36cdc97637898ee56013fa65b90dd7d"
+  },
+  "runner_sha256": "6bfa92444edc2b16d83f2025e2bb66f6f332a9836d34e56b339b4acab5b9a114",
+  "original_evaluator_sha256": "a117d7cbc3ecb02798e51ca9d3aece24a2a6d0715886a9120952e1b42f8b6b7a",
+  "base_commit": "3c6a601a7517c20780b0725d77d3663beba2bc5c",
+  "python": "3.12.14",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.5.4",
+  "planned_full_contrasts": {
+    "survival_training": [
+      "survival_normal",
+      "initial"
+    ],
+    "offspring_training": [
+      "offspring_normal",
+      "initial"
+    ],
+    "survival_masking": [
+      "survival_masked",
+      "survival_normal"
+    ],
+    "offspring_masking": [
+      "offspring_masked",
+      "offspring_normal"
+    ]
+  },
+  "limitations": [
+    "Original early stop after pup death; parent follow-up censored.",
+    "Masking is an input-distribution shift; no neural representation claim.",
+    "Original parental-care timing and reward-credit limitations unchanged."
+  ],
+  "evaluation_seconds": 1.1793461709967232
+}
