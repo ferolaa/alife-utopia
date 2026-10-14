@@ -1,82 +1,76 @@
-# alife-utopia
+# Learning Parental Care under Crowding in Artificial Life
 
-An artificial-life simulation for the DLAI (Deep Learning & Applied AI) course project,
-Sapienza University of Rome.
+A two-person research project for **Deep Learning & Applied AI, Sapienza University of Rome**.
 
-## Question
+**Completed submission code:** [breakdown-mechanisms](https://github.com/ferolaa/alife-utopia/tree/breakdown-mechanisms). GitHub's default branch is currently `main`; use the linked research branch. The [verified experiment snapshot](https://github.com/ferolaa/alife-utopia/tree/878838689d5e6d6fa177b0b46864f1f7b44353f7) preserves all completed experiments.
 
-Calhoun's "Universe 25" experiment found that a rodent population given unlimited food
-still collapsed and died out as density rose. This project recreates that enclosure in
-simulation: a walled pen with food at fixed feeders, nest boxes around the perimeter,
-creatures that age, and young that die unless a parent stays close. The creatures are
-driven by small neural networks trained by reinforcement learning in the same pen while
-the population is held low, so they arrive competent at feeding themselves and raising
-young, as Calhoun's mice did. The cap is then lifted and the pen fills up while the
-networks go on learning, with the reward and the environment held fixed so that density is
-the only thing that changes. Mechanisms Calhoun described are switched on one at a time to
-see which of them a competent population can absorb and which it cannot.
+## Research question
 
-## Layout
+Can an offspring reward teach neural agents to care for their young, and how does that behavior respond to crowding-related care disruption and reduced offspring cues?
 
-    src/          the world, the creatures, their networks, and the training code
-    experiments/  one script per experiment; each writes to results/
-    tests/        checks for every part
-    results/      trained policies and the data behind the findings
+Inspired by John B. Calhoun's Universe 25, we use a **simplified, hypothesis-driven artificial-life model**, not a biological replication. Grid agents forage, age, reproduce and care for dependent pups. Controlled assays isolate specified mechanisms; population collapse is neither a required outcome nor a parameter-tuning target.
 
-`python3 tests/test_world.py` and its siblings run the checks. The tests under
-`test_individual.py` need torch; the rest do not.
+## Neural learning
 
-## Status
+[PyTorch `PolicyNet`](src/rl.py) is a small MLP: **12 sensory inputs → 12 tanh hidden neurons → 6 action logits** (234 parameters). Actions are sampled from a categorical policy. Shared-policy **REINFORCE** computes discounted returns (`gamma=0.99`), normalizes nonsingleton return batches, backpropagates the negative log-probability-weighted return loss, and updates weights with **Adam** (`lr=0.01`). It is a one-hidden-layer network, not a deeply stacked architecture.
 
-Work in progress.
+The objectives differ only by an offspring-independence reward: **0.01 per surviving adult tick**, with an additional **1.0 when an own pup becomes independent** for the offspring objective. Ten paired training seeds share exact initial weights and matched episode worlds across objectives. Each of the 20 models was trained for **120 iterations × 500 ticks**. Subsequent evaluations freeze the policies; no evaluation learning occurs.
 
-## Simulation semantics and current limitations
+Worlds and initial conditions are matched across comparisons. Statistical inference uses **ten training-seed pairs**, not individual trials as independent network replicates. The same checkpoints are reused across investigations; normal neural-analysis evaluations replay Phase 1 rather than constitute an independent replication.
 
-Adult ticks increment age, release any finished nest occupancy, and settle maturation
-before spending metabolic and crowding energy. The agent then acts, eats at its resulting
-square, and is checked for starvation and old age. Eating can rescue an energy deficit;
-it cannot prevent death from old age.
+## Completed findings
 
-Initial food requests must fit the distinct squares inside the configured feeder regions.
-Overlapping regions and walls reduce capacity. Infeasible requests raise an error before
-partial placement; the simulation does not expand the food region or reduce the requested
-budget silently. Limited-food regrowth stops at available capacity, and all replenishment
-uses the configured feeder spread.
+The primary behavioral outcome is an assigned pup reaching independence, not merely moving toward a pup. Attendance, feeding, mortality and population accounting provide supporting measurements.
 
-`UNIVERSE_25` uses 60 immediately replenished food items, four feeders, and spread
-three. Its opt-in `feeder_regions_disjoint` placement rule keeps each 7×7 food region
-fully inside the walls and prevents overlap. Every seed therefore has exactly 196 legal
-food squares and the same 60/196 (30.6%) occupancy. Other configurations retain the
-original unconstrained placement unless they explicitly opt in.
+| Investigation | Verified finding | Evidence |
+|---|---|---|
+| **1. Reward learning** | Survival-only **9.75%** versus offspring reward **50.75%** independence: **+41.0 percentage points**, paired 95% CI **33.25–49.0**. | [Review](docs/PHASES_1_2_REVIEW.md), [figure](results/report_figures_v1/phase1_paired_independence.pdf) |
+| **2. Controlled crowding** | With eight resource-neutral background bodies, enabling programmed care disruption reduced offspring-policy independence from **57.5% to 3.25%**. The policy × crowding × disruption contrast was **−43.75 points**. | [Review](docs/PHASES_1_2_REVIEW.md), [figure](results/report_figures_v1/phase2_independence.pdf) |
+| **3. Developmental cue attenuation** | After matched childhood exposure and uncrowded transfer, programmed 30% own-pup cue attenuation reduced offspring-policy success from **57% to 42%**: **−15 points**, CI **−21 to −9.5**. | [Review](docs/PHASE3_FULL.md), [figure](results/developmental_care_v1_analysis/phase3.pdf) |
+| **4. Neural controls and ablation** | Offspring-trained versus exact untrained initializations: **+31 points**, CI **21.5–39.25**. Masking only own-pup direction/need inputs: **−46.25 points**, CI **−53 to −39.25**. | [Review](docs/NEURAL_POLICY_FULL.md), [figure](results/neural_policy_v1_analysis/neural_policy.pdf) |
 
-Placement samples four distinct cells of a randomly offset 7×7 tiling using the local
-seeded world RNG. This constructive method avoids random rejection failures, reports
-impossible placement capacity clearly, and restricts feeder centres to a common lattice;
-it is not uniform sampling over all disjoint layouts. Existing perimeter insets, when
-requested, are respected. Nest placement rules, rewards and network architecture are
-unchanged. Food/nest overlap and distances still vary and should be measured.
+These results support objective-specific learning and functional reliance on offspring cues. Survival training did **not** demonstrate improved caregiving: its comparison with initialization was nonsignificant after Holm correction. Masking is an input-distribution shift, not evidence of semantic hidden representations. Persistence of developmental attenuation is programmed, not discovered neural damage or biological trauma.
 
-With the previous unconstrained geometry, the 560 planned world seeds had capacities
-of 60–196 squares: seed 3082's saturated region forced eaten food to reappear on the
-same square, allowing repeated feeding without movement. Fixing capacity removes that
-seed-dependent saturation confound without selecting for population growth or collapse.
-The original request of 260 items remains infeasible at spread three. Replenishment can
-still return food to an eaten square by chance, and does not guarantee unrestricted
-individual access; record starvation, meals, stationary eating, and food/nest accessibility.
+![Trained versus untrained policies and offspring-input ablation](results/neural_policy_v1_analysis/neural_policy.png)
 
-Regression checks cover all planned training seeds (episode seed = training seed * 1000
-+ iteration), campaign/comparison seeds 0–2 and representation seeds 100–105. A guard
-set of all five training seeds for 120 iterations covers 600 distinct world seeds.
-Matched configurations start with identical feeders, food and nests for the same world
-seed. The geometric capacity guarantee also holds for other seeds with this preset.
+Intervals are unadjusted and conditional on fixed evaluation worlds. Exact sign-flip tests assume null sign exchangeability; multiplicity adjustments apply within the documented comparison families.
 
-Campaign neighbour and clustering measurements describe the tick-start occupancy snapshot.
-Clustering compares measured counts with the uniform-peer expectation at the same observed
-positions, clipping neighbourhoods at walls. Population, birth, and death records describe
-the end of the tick.
+## Run and verify without retraining
 
-Parental care retains the existing timing: attendance uses the parent's position after
-adult actions, while care-blocking and intrusion use tick-start crowding. Switching care
-to a fully pre-action or post-action snapshot would change pup survival dynamics and needs
-a scientific decision. Dead-individual trajectory handling and delayed reward credit
-across learning windows also remain unresolved.
+Use the completed branch and CPU environment. Install [uv](https://docs.astral.sh/uv/) first:
+
+```bash
+git clone --branch breakdown-mechanisms https://github.com/ferolaa/alife-utopia.git
+cd alife-utopia
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-reproduction.txt
+.venv/bin/python -m pytest -q                    # 286 tests
+.venv/bin/python experiments/verify_completed.py # saved Phases 1–2
+mkdir -p work
+.venv/bin/python experiments/archive_neural_policy.py restore results/neural_policy_v1_archive/records.zip results/neural_policy_v1_archive/ARCHIVE.json work/neural_raw_new
+.venv/bin/python experiments/verify_neural_policy.py --data work/neural_raw_new --out work/neural_verification_new.json
+.venv/bin/python experiments/analyze_neural_policy.py --data work/neural_raw_new --out work/neural_figures_new
+```
+
+Every output path must be **new**. These commands verify saved evidence and regenerate the neural figure; they do not retrain or run a full experiment. Exact reproducibility was verified in the recorded Python 3.12.14 CPU environment. Dependency installation on a newly provisioned machine remains untested. See the phase-specific instructions below for all other verification and figure commands.
+
+## Code, checkpoints and data
+
+| Investigation | Runner | Saved evidence | Reproduction instructions |
+|---|---|---|---|
+| Reward comparison | [final_rewards.py](experiments/final_rewards.py) | [20 checkpoints, histories and evaluations](results/final_reward_v1/) | [Phases 1–2](docs/REPRODUCIBILITY.md) |
+| Controlled crowding | [controlled_care.py](experiments/controlled_care.py) | [analysis](results/controlled_care_v1_analysis/), [lossless archive](results/controlled_care_v1_archive/) | [Phases 1–2](docs/REPRODUCIBILITY.md) |
+| Developmental assay | [developmental_care.py](experiments/developmental_care.py) | [analysis](results/developmental_care_v1_analysis/), [lossless archive](results/developmental_care_v1_archive/) | [Phase 3](docs/PHASE3_REPRODUCIBILITY.md) |
+| Neural controls | [neural_policy_evaluation.py](experiments/neural_policy_evaluation.py) | [analysis](results/neural_policy_v1_analysis/), [lossless archive](results/neural_policy_v1_archive/) | [Neural evaluation](docs/NEURAL_REPRODUCIBILITY.md) |
+
+Archives preserve original bytes with SHA-256 integrity records. The original Phase 3 count-field defect is retained transparently alongside its [correction sidecar](results/developmental_care_v1_analysis/METADATA_CORRECTION.json). Earlier legacy results remain available but are not the evidence for the claims above.
+
+## Scope and limitations
+
+- Care is a proximity-based rule; background bodies and care disruption are explicit interventions, not a complete social model. Food replenishment does not guarantee individual access.
+- Natural-colony starvation and the 120-agent training/evaluation cap limit population conclusions. Controlled assays do not establish inevitable population breakdown.
+- Some pups reach independence after parent death. Phase 1/neural parent follow-up ends at pup death, so raw mortality and feeding totals have unequal exposure durations.
+- Parental attendance uses post-action positions while care-blocking uses tick-start crowding. Delayed reward credit and dead-individual trajectories in individual-policy training remain limitations; the final models use episodic shared-policy training.
+- Ten training seeds and fixed world panels limit generalization. No trained linear baseline establishes a need for nonlinear depth.
+
+[Model semantics](docs/MODEL_SEMANTICS.md) provides implementation details. [Submission checklist](docs/SUBMISSION_CHECKLIST.md) separates verified course requirements from items the students must confirm. The official report and AI-use statement are separate deliverables, not this README.
