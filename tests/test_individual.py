@@ -299,9 +299,9 @@ def test_a_reused_slot_does_not_inherit_the_dead_creatures_momentum():
     assert np.allclose(at_birth, pop.brain_of(newborn).weights, atol=1e-7)
 
 
-def test_momentum_does_carry_over_if_the_slot_is_not_cleared():
-    # The counterpart to the test above: this is what goes wrong without forget_slot, and
-    # it documents why that call is not optional.
+def test_inactive_newborn_does_not_move_even_with_stale_momentum():
+    # Inactive weights must stay fixed even if slot-reset was omitted. Resetting
+    # moments is still needed before the newborn eventually takes its own action.
     pop = Population(capacity=2)
     founder = pop.founder(a_policy())
     doomed = pop.inherit(founder)
@@ -314,7 +314,7 @@ def test_momentum_does_carry_over_if_the_slot_is_not_cleared():
     at_birth = pop.brain_of(newborn).weights.copy()
     pop.learn(opt, _one_step(pop, founder, 1.0))
     moved = not np.allclose(at_birth, pop.brain_of(newborn).weights, atol=1e-7)
-    assert moved, "expected stale momentum to disturb the newborn"
+    assert not moved, "inactive newborn weights changed through stale momentum"
 
 
 

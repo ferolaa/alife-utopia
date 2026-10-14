@@ -46,6 +46,7 @@ class World:
         food_respawn_rate: float = 0.0,
         wrap_edges: bool = True,
         rng: random.Random | None = None,
+        feeder_spread: int = 3,
     ):
         self.width = width
         self.height = height
@@ -53,6 +54,9 @@ class World:
         self.food_respawn_rate = food_respawn_rate
         self.wrap_edges = wrap_edges
         self.rng = rng or random.Random()
+        self.feeder_spread = feeder_spread
+        self._food_region_key = None
+        self._food_region = set()
 
         # Food is stored as a set of squares. Food is always sparse here, so a set gives
         # constant time lookups for "is there food on this square".
@@ -83,6 +87,7 @@ class World:
 
         # Neighbour counts for every square, rebuilt each tick alongside the index.
         self._crowding = None
+        self._crowding_radius = None
 
         self.scatter_food(n_food)
 
@@ -125,14 +130,47 @@ class World:
 
     # ---------------------------------------------------------------------- food
 
-    def place_feeders(self, n: int, inset: int = 0) -> None:
+    def place_feeders(self, n: int, inset: int = 0, disjoint_regions: bool = False) -> None:
         """Put n feeding sites down. Food will only appear around these.
 
         inset keeps them that many squares away from the walls. It is used when the nest
         boxes are around the walls, so that a feeder cannot land among them. If it did, that
         run would have a corner where a creature could eat without ever leaving its young,
         and the travel that makes the two compete would be gone.
+
+        With disjoint_regions, sample distinct cells of a randomly offset tiling.
+        Each cell holds one full food region, so capacity is seed-independent.
+        This opt-in constructive sampler restricts centres to a common lattice;
+        it is not uniform sampling over all possible non-overlapping layouts.
         """
+        if disjoint_regions:
+            if self.wrap_edges:
+                raise ValueError("Disjoint feeder placement requires a non-wrapping world")
+            if self.feeders:
+                raise ValueError("Disjoint feeder placement requires an empty feeder set")
+            if n < 0 or inset < 0 or self.feeder_spread < 0:
+                raise ValueError("Feeder count, inset and spread must be nonnegative")
+            side = 2 * self.feeder_spread + 1
+            # inset constrains feeder centres; margin also keeps each region in bounds.
+            margin = max(0, inset - self.feeder_spread)
+            width, height = self.width - 2 * margin, self.height - 2 * margin
+            nx, ny = max(0, width // side), max(0, height // side)
+            capacity = nx * ny
+            if n > capacity:
+                raise ValueError(
+                    f"Cannot place {n} disjoint feeder regions: placement capacity is "
+                    f"{capacity} for {self.width}x{self.height}, spread={self.feeder_spread}, "
+                    f"inset={inset}"
+                )
+            if not n:
+                return
+            x0 = margin + self.rng.randrange(width - nx * side + 1)
+            y0 = margin + self.rng.randrange(height - ny * side + 1)
+            centres = [(x0 + ix * side + self.feeder_spread,
+                        y0 + iy * side + self.feeder_spread)
+                       for ix in range(nx) for iy in range(ny)]
+            self.feeders.update(self.rng.sample(centres, n))
+            return
         attempts = 0
         limit = max(n, 1) * 200
         while len(self.feeders) < n and attempts < limit:
@@ -143,18 +181,50 @@ class World:
                 continue
             self.feeders.add((x, y))
 
-    def scatter_food(self, n: int, spread: int = 3) -> None:
+    def _food_squares(self, spread: int | None = None) -> set[tuple[int, int]]:
+        """Distinct legal food squares, accounting for overlap and world boundaries."""
+        spread = self.feeder_spread if spread is None else spread
+        if spread < 0:
+            raise ValueError("feeder_spread must be nonnegative")
+        key = (self.width, self.height, self.wrap_edges, tuple(sorted(self.feeders)), spread)
+        if key != self._food_region_key:
+            if self.feeders:
+                self._food_region = {
+                    self.normalise(fx + dx, fy + dy)
+                    for fx, fy in self.feeders
+                    for dx in range(-spread, spread + 1)
+                    for dy in range(-spread, spread + 1)
+                }
+            else:
+                self._food_region = {(x, y) for x in range(self.width)
+                                     for y in range(self.height)}
+            self._food_region_key = key
+        return self._food_region
+
+    def scatter_food(self, n: int, spread: int | None = None) -> None:
         """Place n new food items.
 
         With feeders present, food appears within `spread` squares of one of them, so
         eating means going to where the food is, and where the food is, everyone else is
         too. Without feeders it falls anywhere, which is the older uniform behaviour and is
-        kept so the two can be compared.
+        kept so the two can be compared. An infeasible request raises before placement;
+        a feasible request always places exactly n new items. Explicit spread overrides
+        apply to this call only; replenishment uses the world's configured spread.
         """
+        if n < 0:
+            raise ValueError("food count must be nonnegative")
+        spread = self.feeder_spread if spread is None else spread
+        region = self._food_squares(spread)
+        available = region - self.food
+        if n > len(available):
+            raise ValueError(
+                f"Cannot place {n} new food items: food capacity is {len(region)} squares "
+                f"({len(available)} free) for feeder_spread={spread}"
+            )
         attempts = 0
         added = 0
         limit = n * 20
-        feeders = list(self.feeders)
+        feeders = sorted(self.feeders)
         while added < n and attempts < limit:
             attempts += 1
             if feeders:
@@ -168,6 +238,9 @@ class World:
             if square not in self.food:
                 self.food.add(square)
                 added += 1
+        # Rejection sampling can stall near capacity even for feasible requests.
+        if added < n:
+            self.food.update(self.rng.sample(sorted(region - self.food), n - added))
 
     def has_food(self, x: int, y: int) -> bool:
         return (x, y) in self.food
@@ -176,8 +249,8 @@ class World:
         """Eat the food on this square. Returns True if there was food there.
 
         When food is unlimited, an eaten item immediately reappears somewhere else, so the
-        total never drops. That is the utopia setting. Resources are never the constraint
-        on the population.
+        total never drops. This fixes the global food budget; individual agents can
+        still fail to reach food in time.
         """
         square = (x, y)
         if square not in self.food:
@@ -192,7 +265,7 @@ class World:
 
         food_respawn_rate is the average number of new items per tick, and it can be more
         than one. The whole part is always added. The fractional part is added with a
-        matching probability, so that over many ticks the average comes out right.
+        matching probability, subject to the capacity of the configured food region.
 
         This rate sets the carrying capacity of the world. One food item returns
         energy_from_food energy, and each agent burns energy_cost_per_tick every tick, so
@@ -203,10 +276,10 @@ class World:
             return
         whole = int(self.food_respawn_rate)
         if whole:
-            self.scatter_food(whole)
+            self.scatter_food(min(whole, len(self._food_squares() - self.food)))
         remainder = self.food_respawn_rate - whole
         if remainder and self.rng.random() < remainder:
-            self.scatter_food(1)
+            self.scatter_food(min(1, len(self._food_squares() - self.food)))
 
     # ------------------------------------------------------------------- sensing
 
@@ -324,7 +397,7 @@ class World:
         # exclude is always the asking agent itself, standing on this very square, so
         # removing it is just subtracting one.
         crowding = self._crowding
-        if crowding is not None:
+        if crowding is not None and radius == self._crowding_radius:
             total = int(crowding[x, y])
             if exclude is not None:
                 total -= 1
@@ -335,6 +408,7 @@ class World:
         if not occupancy:
             return 0
         width, height, wrap = self.width, self.height, self.wrap_edges
+        seen = set()
 
         for ox, oy in _offsets_nearest_first(radius):
             if wrap:
@@ -345,6 +419,9 @@ class World:
                 if not (0 <= sx < width and 0 <= sy < height):
                     continue
                 square = (sx, sy)
+            if square in seen:
+                continue
+            seen.add(square)
             here = occupancy.get(square)
             if here:
                 total += len(here)
@@ -366,6 +443,7 @@ class World:
         self._occupancy = {}
         for agent in self.agents:
             self._occupancy.setdefault((agent.x, agent.y), []).append(agent)
+        self._crowding_radius = crowding_radius
         self._crowding = (
             self._build_crowding_grid(crowding_radius)
             if crowding_radius is not None
@@ -379,8 +457,14 @@ class World:
             counts[x, y] = len(here)
 
         total = np.zeros_like(counts)
-        for ox in range(-radius, radius + 1):
-            for oy in range(-radius, radius + 1):
+        # A wrapped neighbourhood must visit each square at most once. In a walled
+        # world, shifts beyond an axis length have no overlap.
+        rx = min(radius, self.width - 1)
+        ry = min(radius, self.height - 1)
+        xs = range(self.width) if self.wrap_edges and 2 * radius + 1 >= self.width else range(-rx, rx + 1)
+        ys = range(self.height) if self.wrap_edges and 2 * radius + 1 >= self.height else range(-ry, ry + 1)
+        for ox in xs:
+            for oy in ys:
                 if self.wrap_edges:
                     total += np.roll(np.roll(counts, ox, axis=0), oy, axis=1)
                 else:
@@ -401,23 +485,29 @@ class World:
         """Agents per square, across the whole grid."""
         return len(self.agents) / (self.width * self.height)
 
-    def clustering(self, neighbour_counts, radius: int) -> float:
-        """How much more crowded agents are than an even spread would make them.
+    def clustering(self, neighbour_counts, radius: int, positions=None) -> float:
+        """Observed mean neighbours divided by the uniform-peer expectation.
 
-        One means evenly spread. Above one means they are gathering, which is the thing
-        Calhoun called the behavioural sink.
-
-        The comparison is against (n - 1) * patch / cells, which is what each agent would
-        see if every other agent were placed independently at random: each of the other
-        n - 1 agents has a patch/cells chance of landing in view. An earlier version used
-        density * patch - 1, which is close for a dense population but collapses towards
-        zero for a sparse one and sends the ratio to absurd values in exactly the case of a
-        small population in a large pen.
+        Each peer has patch/cells probability of being near an observed position.
+        With walls, that patch is clipped separately for each position. positions
+        must correspond to the counts; callers measuring tick-start occupancy must
+        call this before movement, births and deaths change the population.
         """
         n = len(self.agents)
         if n < 2 or not neighbour_counts:
             return 0.0
-        patch = (2 * radius + 1) ** 2
+        if positions is None:
+            positions = [(a.x, a.y) for a in self.agents]
+        if len(positions) != len(neighbour_counts):
+            raise ValueError("clustering positions must correspond to neighbour counts")
+        if self.wrap_edges:
+            patch = min(self.width, 2 * radius + 1) * min(self.height, 2 * radius + 1)
+        else:
+            patch = sum(
+                (min(self.width - 1, x + radius) - max(0, x - radius) + 1)
+                * (min(self.height - 1, y + radius) - max(0, y - radius) + 1)
+                for x, y in positions
+            ) / len(positions)
         expected = (n - 1) * patch / (self.width * self.height)
         if expected <= 0:
             return 0.0

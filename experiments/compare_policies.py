@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     rows = []
     for s in seeds:
-        policy = PolicyNet()
+        policy = PolicyNet(seed=0)
         policy.load_state_dict(torch.load(ROOT / "results" / f"pen_policy_s{s}.pt"))
         brain = policy.to_brain()
 

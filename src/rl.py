@@ -25,6 +25,7 @@ exactly that one term, so whatever separates the results is that term and nothin
 from __future__ import annotations
 
 import random
+from contextlib import nullcontext
 
 import numpy as np
 import torch
@@ -35,6 +36,7 @@ from agent import Agent, draw_lifespan
 from brain import ACTIONS, Brain
 from evaluate import care_under_conflict, food_seeking_score, pup_seeking_score
 from world import World
+from randomness import seeded_run
 
 # Reward for being alive one more tick. Both objectives include it, so both learn to eat.
 SURVIVAL_REWARD = 0.01
@@ -51,10 +53,14 @@ class PolicyNet(nn.Module):
     comes from how the weights were found, not from what the network could represent.
     """
 
-    def __init__(self):
+    def __init__(self, seed: int | None = None):
         super().__init__()
-        self.hidden = nn.Linear(Brain.N_INPUTS, Brain.N_HIDDEN)
-        self.out = nn.Linear(Brain.N_HIDDEN, Brain.N_OUTPUTS)
+        context = torch.random.fork_rng(devices=[]) if seed is not None else nullcontext()
+        with context:
+            if seed is not None:
+                torch.random.default_generator.manual_seed(seed)
+            self.hidden = nn.Linear(Brain.N_INPUTS, Brain.N_HIDDEN)
+            self.out = nn.Linear(Brain.N_HIDDEN, Brain.N_OUTPUTS)
 
     def forward(self, senses: torch.Tensor) -> torch.Tensor:
         return self.out(torch.tanh(self.hidden(senses)))
@@ -97,14 +103,15 @@ def _build_world(cfg, rng):
         # are in place.
         width=cfg.width, height=cfg.height, n_food=0,
         food_unlimited=cfg.food_unlimited, food_respawn_rate=cfg.food_respawn_rate,
-        wrap_edges=cfg.wrap_edges, rng=rng,
+        wrap_edges=cfg.wrap_edges, rng=rng, feeder_spread=cfg.feeder_spread,
     )
     if cfg.n_feeders:
         # Kept clear of the nesting band, and of a feeder's own spread of food, so that no
         # food at all lands among the nest boxes.
         inset = (cfg.perimeter_band + cfg.feeder_spread
                  if cfg.nests_enabled and cfg.nests_on_perimeter else 0)
-        world.place_feeders(cfg.n_feeders, inset=inset)
+        world.place_feeders(cfg.n_feeders, inset=inset,
+                            disjoint_regions=cfg.feeder_regions_disjoint)
     world.scatter_food(cfg.n_food, spread=cfg.feeder_spread)
     if cfg.nests_enabled:
         world.scatter_nests(cfg.n_nests, on_perimeter=cfg.nests_on_perimeter,
@@ -112,6 +119,7 @@ def _build_world(cfg, rng):
     return world
 
 
+@seeded_run
 def run_episode(cfg, policy: PolicyNet, reward_offspring: bool, seed: int,
                 senses_sink: list | None = None):
     """Run one simulation where every creature is driven by the shared policy.
@@ -234,8 +242,7 @@ def train(cfg, reward_offspring: bool, iterations: int = 40, lr: float = 0.01,
     tells you what it ended up doing but not whether the behaviour appeared early, grew
     steadily, or never appeared at all, and that difference is the interesting part.
     """
-    torch.manual_seed(seed)
-    policy = PolicyNet()
+    policy = PolicyNet(seed=seed)
     optimiser = torch.optim.Adam(policy.parameters(), lr=lr)
     history = []
 
@@ -261,7 +268,9 @@ def train(cfg, reward_offspring: bool, iterations: int = 40, lr: float = 0.01,
         returns_t = torch.tensor(all_returns, dtype=torch.float32)
         # Centre and scale the returns. Without this the gradient is dominated by how long
         # a creature happened to live rather than by whether its choices were good ones.
-        returns_t = (returns_t - returns_t.mean()) / (returns_t.std() + 1e-8)
+        # A singleton has no variance; retain its raw return so it can still learn.
+        if returns_t.numel() > 1:
+            returns_t = (returns_t - returns_t.mean()) / (returns_t.std(unbiased=False) + 1e-8)
 
         loss = -(torch.stack(all_log_probs) * returns_t).mean()
         optimiser.zero_grad()
@@ -285,6 +294,7 @@ def train(cfg, reward_offspring: bool, iterations: int = 40, lr: float = 0.01,
     return policy, history
 
 
+@seeded_run
 def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
                   probe_every: int = 500, gamma: float = 0.99, seed: int = 0,
                   lr_scale: float = 1.0, verbose: bool = True):
@@ -333,7 +343,9 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
             log_probs.clear(); rewards.clear()
             return 0.0
         returns_t = torch.tensor(returns, dtype=torch.float32)
-        returns_t = (returns_t - returns_t.mean()) / (returns_t.std() + 1e-8)
+        # A singleton has no variance; retain its raw return so it can still learn.
+        if returns_t.numel() > 1:
+            returns_t = (returns_t - returns_t.mean()) / (returns_t.std(unbiased=False) + 1e-8)
         loss = -(torch.stack(steps) * returns_t).mean() * lr_scale
         optimiser.zero_grad()
         loss.backward()
@@ -348,6 +360,10 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
         pups_in_care = [(a, a.parent) for a in world.agents
                         if a.alive and a.is_dependent and a.parent is not None]
 
+        measured = [world.count_neighbours(a.x, a.y, cfg.crowding_radius, exclude=a)
+                    for a in movers]
+        clustering = world.clustering(measured, cfg.crowding_radius,
+                                      positions=[(a.x, a.y) for a in movers])
         chosen: dict = {}
         if movers:
             # Read this tick's occupancy snapshot, not the count cached by the last act.
@@ -410,11 +426,11 @@ def run_enclosure(cfg, policy: PolicyNet, optimiser, update_every: int = 200,
             "died_starving": toll["starvation"], "died_old": toll["old age"],
             "nests_free": len(world.nests) - len(world.occupied_nests),
         }
-        measured = [a.neighbours for a in world.agents if a.neighbours is not None]
         record["mean_neighbours"] = (sum(measured) / len(measured)) if measured else 0.0
-        record["clustering"] = world.clustering(measured, cfg.crowding_radius)
+        record["clustering"] = clustering
 
-        if (tick + 1) % update_every == 0:
+        if ((tick + 1) % update_every == 0
+                or tick == cfg.n_ticks - 1 or world.population == 0):
             record["loss"] = flush()
 
         if probe_every and tick % probe_every == 0:

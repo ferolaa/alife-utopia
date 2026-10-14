@@ -49,7 +49,7 @@ def collect(policy, episodes: int = 6, seed: int = 100) -> np.ndarray:
 
 
 def main(label: str):
-    policy = PolicyNet()
+    policy = PolicyNet(seed=0)
     policy.load_state_dict(torch.load(ROOT / "results" / f"{label}.pt"))
     brain = policy.to_brain()
 
