@@ -1,0 +1,262 @@
+{
+  "groups": [
+    {
+      "objective": "survival",
+      "disrupted_childhood": false,
+      "damage_enabled": false,
+      "assigned_cohort": 6,
+      "childhood_survivors": 6,
+      "mature_survivors": 6,
+      "adults_evaluated": 6,
+      "independence_successes": 2,
+      "independence_fraction": 0.3333333333333333,
+      "cohort_recruitment_fraction": 0.3333333333333333,
+      "parent_survivors": 6,
+      "counts": {
+        "sensory_audit_ticks": 360,
+        "parent_meals": 29,
+        "care_ticks": 231,
+        "attended_ticks": 76,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 4
+      },
+      "impairments": [
+        0.0
+      ]
+    },
+    {
+      "objective": "survival",
+      "disrupted_childhood": false,
+      "damage_enabled": true,
+      "assigned_cohort": 6,
+      "childhood_survivors": 6,
+      "mature_survivors": 6,
+      "adults_evaluated": 6,
+      "independence_successes": 2,
+      "independence_fraction": 0.3333333333333333,
+      "cohort_recruitment_fraction": 0.3333333333333333,
+      "parent_survivors": 6,
+      "counts": {
+        "sensory_audit_ticks": 360,
+        "parent_meals": 29,
+        "care_ticks": 231,
+        "attended_ticks": 76,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 4
+      },
+      "impairments": [
+        0.0
+      ]
+    },
+    {
+      "objective": "survival",
+      "disrupted_childhood": true,
+      "damage_enabled": false,
+      "assigned_cohort": 6,
+      "childhood_survivors": 6,
+      "mature_survivors": 6,
+      "adults_evaluated": 6,
+      "independence_successes": 2,
+      "independence_fraction": 0.3333333333333333,
+      "cohort_recruitment_fraction": 0.3333333333333333,
+      "parent_survivors": 6,
+      "counts": {
+        "sensory_audit_ticks": 360,
+        "parent_meals": 29,
+        "care_ticks": 231,
+        "attended_ticks": 76,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 4
+      },
+      "impairments": [
+        0.0
+      ]
+    },
+    {
+      "objective": "survival",
+      "disrupted_childhood": true,
+      "damage_enabled": true,
+      "assigned_cohort": 6,
+      "childhood_survivors": 6,
+      "mature_survivors": 6,
+      "adults_evaluated": 6,
+      "independence_successes": 2,
+      "independence_fraction": 0.3333333333333333,
+      "cohort_recruitment_fraction": 0.3333333333333333,
+      "parent_survivors": 6,
+      "counts": {
+        "sensory_audit_ticks": 360,
+        "parent_meals": 34,
+        "care_ticks": 233,
+        "attended_ticks": 99,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 4
+      },
+      "impairments": [
+        0.3
+      ]
+    },
+    {
+      "objective": "offspring",
+      "disrupted_childhood": false,
+      "damage_enabled": false,
+      "assigned_cohort": 6,
+      "childhood_survivors": 6,
+      "mature_survivors": 6,
+      "adults_evaluated": 6,
+      "independence_successes": 5,
+      "independence_fraction": 0.8333333333333334,
+      "cohort_recruitment_fraction": 0.8333333333333334,
+      "parent_survivors": 6,
+      "counts": {
+        "sensory_audit_ticks": 360,
+        "parent_meals": 6,
+        "care_ticks": 327,
+        "attended_ticks": 263,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 1
+      },
+      "impairments": [
+        0.0
+      ]
+    },
+    {
+      "objective": "offspring",
+      "disrupted_childhood": false,
+      "damage_enabled": true,
+      "assigned_cohort": 6,
+      "childhood_survivors": 6,
+      "mature_survivors": 6,
+      "adults_evaluated": 6,
+      "independence_successes": 5,
+      "independence_fraction": 0.8333333333333334,
+      "cohort_recruitment_fraction": 0.8333333333333334,
+      "parent_survivors": 6,
+      "counts": {
+        "sensory_audit_ticks": 360,
+        "parent_meals": 6,
+        "care_ticks": 327,
+        "attended_ticks": 263,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 1
+      },
+      "impairments": [
+        0.0
+      ]
+    },
+    {
+      "objective": "offspring",
+      "disrupted_childhood": true,
+      "damage_enabled": false,
+      "assigned_cohort": 6,
+      "childhood_survivors": 6,
+      "mature_survivors": 6,
+      "adults_evaluated": 6,
+      "independence_successes": 5,
+      "independence_fraction": 0.8333333333333334,
+      "cohort_recruitment_fraction": 0.8333333333333334,
+      "parent_survivors": 6,
+      "counts": {
+        "sensory_audit_ticks": 360,
+        "parent_meals": 6,
+        "care_ticks": 327,
+        "attended_ticks": 263,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 1
+      },
+      "impairments": [
+        0.0
+      ]
+    },
+    {
+      "objective": "offspring",
+      "disrupted_childhood": true,
+      "damage_enabled": true,
+      "assigned_cohort": 6,
+      "childhood_survivors": 6,
+      "mature_survivors": 6,
+      "adults_evaluated": 6,
+      "independence_successes": 4,
+      "independence_fraction": 0.6666666666666666,
+      "cohort_recruitment_fraction": 0.6666666666666666,
+      "parent_survivors": 6,
+      "counts": {
+        "sensory_audit_ticks": 360,
+        "parent_meals": 5,
+        "care_ticks": 319,
+        "attended_ticks": 225,
+        "pup_meals": 0
+      },
+      "deaths_by_cause": {
+        "starvation": 0,
+        "old age": 0,
+        "neglect": 2
+      },
+      "impairments": [
+        0.3
+      ]
+    }
+  ],
+  "training_pair_effects": [
+    {
+      "training_seed": 0,
+      "survival": 0.0,
+      "offspring": -0.33333333333333337,
+      "objective_interaction": -0.33333333333333337
+    },
+    {
+      "training_seed": 1,
+      "survival": 0.0,
+      "offspring": 0.0,
+      "objective_interaction": 0.0
+    }
+  ],
+  "inference": "Pilot descriptive only: two independent training pairs; no significance claims. Missing adult assessments are separate attrition, not adult care failures.",
+  "trajectories": 48,
+  "expected_trajectories": 48,
+  "total_seconds": 4.043069811999885,
+  "technical_gates": {
+    "complete_unique_matrix": true,
+    "childhood_survival": true,
+    "mature_survival": true,
+    "exposure_exact": true,
+    "trait_exact_and_preserved": true,
+    "controls_identical": true,
+    "bridge_identical": true,
+    "initial_assessment_matching": true,
+    "full_followup": true,
+    "food_stock": true,
+    "childhood_physics_match": true,
+    "sensory_audit": true,
+    "parent_survival_measured": true
+  },
+  "checkpoint_integrity_verified": true
+}

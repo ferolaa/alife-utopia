@@ -1,0 +1,32 @@
+{
+  "raw_files": 1602,
+  "trajectories": 1600,
+  "childhood_survivors": 1600,
+  "transfer_survivors": 1600,
+  "assessment_parent_survivors": 1600,
+  "prior_protected_files_unchanged": 269,
+  "metadata_issue_disclosed": true,
+  "original_outputs_edited": false,
+  "experiment_rerun": false,
+  "preflight_tests": 265,
+  "final_tests": 267,
+  "core_commit": "79b7a29df0ed53c6ef818f93ee2708354274fb83",
+  "analysis_artifact_sha256": {
+    "phase3.pdf": "410f53b569defd2faa0a4dee43164b5454d4f097ac27035762808a45c156149d",
+    "raw_run_runner_source.txt": "1572cc321cdc5c2d01e6c94b684257d876dcfc51b6ce893bf564314c0a199bb6",
+    "REPORT.md": "dd81ea9bcbc982b9846f8b553be44370e82287119043dae5dae6eb267d50097f",
+    "phase3.png": "c4e2d2168b2b6c2581d4fb0d27cfbf4e19241dbed60b3ed55938eebe394ebf73",
+    "training_seed_effects.csv": "c70b3df88cd428cea5787a15412b62aa5cb2b8474379f5fe3b1da84e662ae4bc",
+    "CAPTION.md": "71afc3b312f0831f4bf5ac4f352ad109bcb57e7c5fc126aa3865d4a8c886d5b2",
+    "pilot_runner_source.txt": "5dd00083ea767b0307defbdf5bbc80c524f9674552c84abe9700f3441f7f9936",
+    "METADATA_CORRECTION.json": "0d6beec38544453ea8b479150185744b500ff38e36fa6eef7a08f916029e178f",
+    "verification.json": "323e4e9f559dc06eeba99ed35319c5d5ddfe1b05643cdcc674864c80475972e7",
+    "analysis.json": "39c9817c3dc6788ff401c3550a4cc5522796ad428db942d4b6778feda4cc897a"
+  },
+  "current_phase3_code_sha256": {
+    "experiments/developmental_care.py": "3a7a8d1c80a972f6a66ad201f20f3bd878497e05257ecd1d4509147edd905f3d",
+    "experiments/analyze_developmental_care.py": "1eb1fe07d5640f51d261561813d34ddf0e19d1c53e6ec122f7c071fe7e7d9827",
+    "experiments/verify_developmental_care.py": "f40a8a3ab917ff54d813b4a73e3ab6482d5936795463fbfd6695fbd660c1b118",
+    "tests/test_developmental_care.py": "d5436aaca63e60fa847cae6e089a75a318d5a17a1f842ebb8ef849f9539cb7d8"
+  }
+}

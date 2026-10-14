@@ -1,0 +1,12 @@
+{
+  "issue": "expected-count local variable overwritten by last checkpoint trained-policy hash; metadata only",
+  "original_expected_trajectories": "c6536fc49602b8ab204d943aa6b5d30baaf9ba3b014e00e1c9098ba96dce5892",
+  "correct_expected_trajectories": 1600,
+  "observed_trajectories": 1600,
+  "raw_output_files": 1602,
+  "corrected_runner_sha256": "3a7a8d1c80a972f6a66ad201f20f3bd878497e05257ecd1d4509147edd905f3d",
+  "original_runner_sha256": "1572cc321cdc5c2d01e6c94b684257d876dcfc51b6ce893bf564314c0a199bb6",
+  "original_outputs_edited": false,
+  "experiment_rerun": false,
+  "evidence": "All 1600 distinct prespecified filenames/keys exist; complete matrix technical gate independently checks actual count. No simulation, RNG, outcome, or inference code was changed."
+}

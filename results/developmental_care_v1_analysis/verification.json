@@ -1,0 +1,39 @@
+{
+  "trajectories": 1600,
+  "files": 1602,
+  "controls_identical_contexts": 400,
+  "sensory_audits": 96000,
+  "verified_checkpoints": 20,
+  "matched_replays": 40,
+  "statistical_contrasts": [
+    {
+      "contrast": "survival",
+      "mean": -0.009999999999999998,
+      "ci95": [
+        -0.045,
+        0.015000000000000003
+      ],
+      "p": 1.0
+    },
+    {
+      "contrast": "offspring",
+      "mean": -0.15,
+      "ci95": [
+        -0.21000000000000002,
+        -0.095
+      ],
+      "p": 0.001953125
+    },
+    {
+      "contrast": "objective_interaction",
+      "mean": -0.14,
+      "ci95": [
+        -0.205,
+        -0.085
+      ],
+      "p": 0.001953125
+    }
+  ],
+  "all_integrity_checks_passed": true,
+  "metadata_correction_required": true
+}
