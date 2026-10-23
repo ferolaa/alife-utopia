@@ -34,13 +34,21 @@ def provenance():
 
 class Experiment:
     def __init__(self, cfg, learner_config=LearnerConfig(), rewards=RewardConfig(),
-                 seeds=SeedBlocks(), validation_every=1):
+                 seeds=SeedBlocks(), validation_every=1, *, validation_decisions=None,
+                 assigned_care=False, care_energies=(10, 20)):
         if validation_every < 0 or learner_config.seed < 0:
             raise ValueError('nonnegative validation frequency and training seed required')
         if learner_config.seed * 10000 >= seeds.train_size:
             raise ValueError('training replicate is outside seed block')
         if rewards.objective == 'offspring' and (not cfg.parental_care_enabled or cfg.dependency_ticks <= 0):
             raise ValueError('offspring-independence reward requires positive dependency with parental care')
+        if validation_decisions is not None and validation_decisions <= 0:
+            raise ValueError('decision validation interval must be positive')
+        self.validation_decisions_interval = validation_decisions
+        self.next_validation_decision = validation_decisions
+        self.assigned_care = assigned_care
+        self.care_energies = tuple(care_energies)
+        self.validation_history = []
         self.cfg, self.rewards, self.seeds = cfg, rewards, seeds
         self.learner = Learner(learner_config)
         self.validation_every = validation_every
@@ -63,15 +71,43 @@ class Experiment:
                       discounted_colony_return=sum(self.learner.config.gamma**e.tick * e.amount for e in episode.events),
                       episode_metrics=episode.metrics, training_seconds=seconds,
                       checkpoint_id=f'episode-{self.episode_index:06d}.pt', validation=None)
-        if self.validation_every and self.episode_index % self.validation_every == 0:
-            records = evaluate(self.cfg, self.learner.policy, self.seeds, rewards=self.rewards)
-            self.validation_decisions += sum(r['adult_decisions'] for r in records)
-            record['validation'] = dict(summary=summarize(records), worlds=records)
+        if self.validation_decisions_interval is not None:
+            crossed = []
+            while self.training_decisions >= self.next_validation_decision:
+                crossed.append(self.next_validation_decision)
+                self.next_validation_decision += self.validation_decisions_interval
+            if crossed:
+                record['validation'] = self.validate(crossed)
+        elif self.validation_every and self.episode_index % self.validation_every == 0:
+            # Phase 1 API compatibility only; approved pilots use decision thresholds.
+            record['validation'] = self.validate([])
         record['validation_decisions'] = self.validation_decisions
         self.history.append(record)
         return record
 
-    def train_to_budget(self, decisions, max_episodes):
+    def validate(self, thresholds):
+        """One frozen panel per boundary, shared if several thresholds were crossed."""
+        from .care import evaluate_assigned
+        records = evaluate(self.cfg, self.learner.policy, self.seeds, rewards=self.rewards)
+        assigned = (evaluate_assigned(self.cfg, self.learner.policy, self.seeds, self.care_energies)
+                    if self.assigned_care else None)
+        natural_cost = sum(r['adult_decisions'] for r in records)
+        assigned_cost = assigned['summary']['adult_decisions'] if assigned else 0
+        self.validation_decisions += natural_cost + assigned_cost
+        result = dict(thresholds=list(thresholds), actual_training_decisions=self.training_decisions,
+                      optimizer_updates=self.learner.updates, summary=summarize(records), worlds=records,
+                      assigned=assigned, natural_validation_decisions=natural_cost,
+                      assigned_validation_decisions=assigned_cost,
+                      cumulative_validation_decisions=self.validation_decisions)
+        self.validation_history.append(result)
+        return result
+
+    def validate_initial(self):
+        if self.episode_index != 0 or self.validation_history:
+            raise ValueError('initial validation must run exactly once before training')
+        return self.validate([0])
+
+    def train_to_budget(self, decisions, max_episodes, *, max_overshoot=None):
         """Whole episodes only; report bounded overshoot rather than truncate MC.
 
         The final overshoot is < horizon * max_population decisions. Equal target
@@ -83,15 +119,21 @@ class Experiment:
         for _ in range(max_episodes):
             self.step()
             if self.training_decisions >= decisions:
+                if max_overshoot is not None and self.training_decisions - decisions > max_overshoot:
+                    raise RuntimeError('prespecified decision-budget overshoot exceeded')
                 return dict(target=decisions, realized=self.training_decisions,
                             overshoot=self.training_decisions-decisions)
         raise RuntimeError('episode guard reached before budget; no silent partial campaign')
 
     def checkpoint(self, path):
         path = Path(path)
-        payload = dict(schema=1, provenance=provenance(), config=asdict(self.cfg),
+        payload = dict(schema=2, provenance=provenance(), config=asdict(self.cfg),
                        rewards=asdict(self.rewards), seeds=asdict(self.seeds),
                        validation_every=self.validation_every, learner=self.learner.state(),
+                       validation_decisions_interval=self.validation_decisions_interval,
+                       next_validation_decision=self.next_validation_decision,
+                       assigned_care=self.assigned_care, care_energies=self.care_energies,
+                       validation_history=self.validation_history,
                        episode_index=self.episode_index, training_decisions=self.training_decisions,
                        training_ticks=self.training_ticks, validation_decisions=self.validation_decisions,
                        history=self.history)
@@ -103,7 +145,7 @@ class Experiment:
     @classmethod
     def restore(cls, path):
         data = torch.load(path, map_location='cpu', weights_only=True)
-        if data['schema'] != 1 or data['provenance']['environment_version'] != ENVIRONMENT_VERSION:
+        if data['schema'] != 2 or data['provenance']['environment_version'] != ENVIRONMENT_VERSION:
             raise ValueError('checkpoint schema/environment mismatch')
         current = provenance()
         for key in ('python', 'torch', 'numpy', 'source_sha256', 'device', 'torch_threads'):
@@ -112,9 +154,12 @@ class Experiment:
         blocks = data['seeds']
         blocks['validation'], blocks['final_test'] = tuple(blocks['validation']), tuple(blocks['final_test'])
         result = cls(SimConfig(**data['config']), LearnerConfig(**data['learner']['config']),
-                     RewardConfig(**data['rewards']), SeedBlocks(**blocks), data['validation_every'])
+                     RewardConfig(**data['rewards']), SeedBlocks(**blocks), data['validation_every'],
+                     validation_decisions=data['validation_decisions_interval'],
+                     assigned_care=data['assigned_care'], care_energies=data['care_energies'])
         result.learner = Learner.restore(data['learner'])
-        for key in ('episode_index', 'training_decisions', 'training_ticks', 'validation_decisions', 'history'):
+        for key in ('episode_index', 'training_decisions', 'training_ticks', 'validation_decisions', 'history',
+                    'next_validation_decision', 'validation_history'):
             setattr(result, key, data[key])
         return result
 

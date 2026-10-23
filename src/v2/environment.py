@@ -37,7 +37,7 @@ def fingerprint(world):
 
 
 def collect(cfg, policy, world_seed, rewards=RewardConfig(), *, action_seed=None,
-            max_ticks=None, initial=None):
+            max_ticks=None, initial=None, observer=None):
     """A finite-horizon world task. max_ticks is an external truncation, not terminal.
 
     Environment interaction count = sampled adult decisions, including fatal ones.
@@ -61,6 +61,8 @@ def collect(cfg, policy, world_seed, rewards=RewardConfig(), *, action_seed=None
     births = deaths = independent = attended = care_ticks = adult_survived = 0
     population = []
     successful = set()
+    action_counts = {action: 0 for action in ACTIONS}
+    reproduction_failures = cap_rejections = 0
     causes = {'starvation': 0, 'old age': 0, 'neglect': 0}
     limit = min(cfg.n_ticks, max_ticks) if max_ticks is not None else cfg.n_ticks
     elapsed = 0
@@ -68,6 +70,8 @@ def collect(cfg, policy, world_seed, rewards=RewardConfig(), *, action_seed=None
         if not world.agents:
             break
         elapsed = tick + 1
+        if observer is not None:
+            observer(world, tick, "before")
         world.rebuild_occupancy(cfg.crowding_radius)
         movers = [a for a in world.agents if a.alive and a.age + 1 >= a.dependent_until]
         pups = [(a, ownership.get(a)) for a in world.agents if a.alive and a.is_dependent]
@@ -83,11 +87,14 @@ def collect(cfg, policy, world_seed, rewards=RewardConfig(), *, action_seed=None
             for i, a in enumerate(movers):
                 record = Transition(tick, ids[a], tuple(observations[i]), int(actions[i]),
                                     float(logp[i, actions[i]]))
+                action_counts[ACTIONS[record.action]] += 1
                 records[a] = record
                 episode.transitions.append(record)
         newborns = []
         for a in movers:
             child = a.act(world, cfg, rng, action=ACTIONS[records[a].action])
+            if records[a].action == 5 and child is None:
+                reproduction_failures += 1
             if child is not None:
                 if len(world.agents) + len(newborns) < cfg.max_population:
                     ids[child] = len(ids)
@@ -96,6 +103,7 @@ def collect(cfg, policy, world_seed, rewards=RewardConfig(), *, action_seed=None
                     newborns.append(child)
                     births += 1
                 else:
+                    cap_rejections += 1
                     if child.nest is not None:
                         world.release_nest(*child.nest)
                         child.nest = None
@@ -133,6 +141,8 @@ def collect(cfg, policy, world_seed, rewards=RewardConfig(), *, action_seed=None
         world.agents = survivors + newborns
         world.respawn_step()
         population.append(world.population)
+        if observer is not None:
+            observer(world, tick, "after")
     episode.truncated = bool(world.agents and limit < cfg.n_ticks and elapsed == limit)
     # Mark the final decision of each surviving actor on external truncation. A pup
     # may have no decisions yet. Finite task horizons are not external truncations.
@@ -149,6 +159,8 @@ def collect(cfg, policy, world_seed, rewards=RewardConfig(), *, action_seed=None
         final_population=world.population, peak_population=max([len(ids)-births, *population]),
         population_history=population, deaths_by_cause=causes,
         adult_decisions=episode.decisions, surviving_adult_ticks=adult_survived,
+        action_counts=action_counts, reproduction_failures=reproduction_failures,
+        cap_rejections=cap_rejections,
         care_ticks=care_ticks, attended_ticks=attended,
         attendance_fraction=attended/care_ticks if care_ticks else None,
         independent_offspring=independent, eligible_births=eligible,

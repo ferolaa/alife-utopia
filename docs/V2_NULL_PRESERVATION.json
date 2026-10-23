@@ -1,0 +1,36 @@
+{
+  "archive": "/workspace/dlai-care-review-v3-001/negative-pilot-and-diagnosis-lossless.zip",
+  "sha256": "00f64866d9182c2c61acc8bd2cc56258d3b7929c8ad6afc02c2bd7764ab7eee9",
+  "members": 507,
+  "data_files": 506,
+  "bytes": 57963551,
+  "verified_every_member": true,
+  "inventory": "/workspace/dlai-care-review-v3-001/NULL_INCLUSION.json",
+  "baseline_checks": "/workspace/dlai-care-review-v3-001/pre-change-baselines.json",
+  "final_test_worlds_instantiated": 0,
+  "schema": 1,
+  "created_utc_date": "2026-10-23",
+  "preserved_v1": "ce129bef00de069d171c99b797f142f0711fb626",
+  "preserved_v2": "66fe988f5774c744f245db2270278fb69747896a",
+  "foundation_bundle": {
+    "path": "/workspace/dlai-care-review-v3-001/v2-foundation.bundle",
+    "sha256": "33e7bee13de68e9d9944f530a21c56e659831075f06d1ecdb88622171ff85091",
+    "git_bundle_verify": "passed; complete history"
+  },
+  "original_archives": {
+    "/workspace/dlai-pilot-v2-001.zip": "71bb3551fac59b8d37a8291b91997755c52af1944ab54fc003a3c7beb28dbcec",
+    "/workspace/dlai-diagnostics-v2-001.zip": "2b59b7fc2f7304f9f33e9c1995593aed56c05142b26231c23d9d8f47b36fbd04"
+  },
+  "negative_result_discarded": false,
+  "original_manifest_entries_verified": {
+    "pilot": 142,
+    "diagnosis": 84
+  },
+  "cause_provenance": {
+    "direct_historical_failure_count": 271342,
+    "causes_recorded_during_original_training": false,
+    "reconstructed_historical_episodes": 32,
+    "unreconstructable_preupdate_episodes": 244,
+    "failed_attempts_with_unknown_cause": 238467
+  }
+}
